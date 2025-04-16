@@ -1,0 +1,89 @@
+---
+interface Props {
+    texto: string;
+    color?: string;
+    backgroundColor?: string;
+}
+
+const { 
+    texto, 
+    color = "white",
+    backgroundColor = "black" 
+} = Astro.props;
+---
+
+<div class="separador-container" style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}>
+    <div class="separador">
+        <div class="linea"></div>
+        <h2 class="texto">{texto}</h2>
+        <div class="linea"></div>
+    </div>
+</div>
+
+<style>
+    .separador-container {
+        width: 100%;
+        padding: 4rem 1rem;
+        background-color: var(--bg-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .separador {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .linea {
+        flex-grow: 1;
+        height: 2px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            var(--text-color) 50%,
+            transparent
+        );
+        opacity: 0.3;
+    }
+
+    .texto {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        text-transform: uppercase;
+        margin: 0;
+        text-align: center;
+        white-space: nowrap;
+        letter-spacing: 0.1em;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    @media (max-width: 768px) {
+        .separador-container {
+            padding: 3rem 1rem;
+        }
+
+        .separador {
+            gap: 1rem;
+        }
+
+        .texto {
+            font-size: 1.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .texto {
+            font-size: 1.5rem;
+        }
+
+        .separador {
+            gap: 0.75rem;
+        }
+    }
+</style>

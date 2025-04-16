@@ -1,0 +1,234 @@
+---
+// Definir las propiedades de entrada para el componente
+interface Props {
+    apiUrl?: string;
+    buttonText?: string;
+}
+
+// Desestructurar las propiedades de entrada con valores por defecto
+const { 
+    apiUrl = "https://localhost:44376/ApiHandler/ApiHandler.ashx",
+    buttonText = "Consultar API" 
+} = Astro.props;
+---
+
+<div class="modal-container">
+    <button class="modal-button" id="modal-button">
+        {buttonText}
+    </button>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Respuesta de la API</h2>
+                <button class="close-button" id="close-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando datos...</p>
+                </div>
+                <div class="response" id="response"></div>
+                <div class="error" id="error"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos de tu modal */
+    .modal-container {
+        position: relative;
+    }
+
+    .modal-button {
+        background: linear-gradient(45deg, #00c6ff, #0072ff);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 198, 255, 0.2);
+    }
+
+    .modal-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 198, 255, 0.3);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+    }
+
+    .modal.active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #1a1a1a;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 600px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .close-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .close-button:hover {
+        color: #00c6ff;
+    }
+
+    .modal-body {
+        color: white;
+    }
+
+    .loading {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .loading.active {
+        display: flex;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        border-top-color: #00c6ff;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .response {
+        display: none;
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre-wrap;
+    }
+
+    .response.active {
+        display: block;
+    }
+
+    .error {
+        display: none;
+        color: #ff4d4d;
+        padding: 1rem;
+        background-color: rgba(255, 77, 77, 0.1);
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .error.active {
+        display: block;
+    }
+</style>
+
+<script>
+    const modalButton = document.getElementById('modal-button');
+    const modal = document.getElementById('modal');
+    const closeButton = document.getElementById('close-button');
+    const loading = document.getElementById('loading');
+    const response = document.getElementById('response');
+    const error = document.getElementById('error');
+
+    // Obtener la URL de la API desde el atributo data
+    const apiUrl = document.currentScript?.getAttribute('data-api-url') || 'https://localhost:44376/ApiHandler/ApiHandler.ashx';
+
+    modalButton?.addEventListener('click', async () => {
+        modal?.classList.add('active');
+        loading?.classList.add('active');
+        response?.classList.remove('active');
+        error?.classList.remove('active');
+
+        try {
+            const url = `${apiUrl}`;
+            console.log('Haciendo petición a:', url);
+            
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            // Verificar el tipo de contenido
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('La API no está devolviendo JSON. Verifica la URL y la configuración del servidor.');
+            }
+
+            const data = await res.json();
+            response!.textContent = JSON.stringify(data, null, 2);
+            response?.classList.add('active');
+        } catch (err) {
+            let errorMessage = 'Error desconocido';
+            
+            if (err instanceof Error) {
+                errorMessage = err.message;
+            } else if (typeof err === 'string') {
+                errorMessage = err;
+            }
+
+            error!.textContent = `Error: ${errorMessage}\n\nSugerencias:\n1. Verifica que la API esté corriendo\n2. Asegúrate de que la URL sea correcta\n3. Comprueba que el servidor esté configurado para devolver JSON`;
+            error?.classList.add('active');
+        } finally {
+            loading?.classList.remove('active');
+        }
+    });
+
+    closeButton?.addEventListener('click', () => {
+        modal?.classList.remove('active');
+    });
+
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+</script>

@@ -1,11 +1,93 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
+import Menu from '../components/Menu.astro';
+import Nav from '../components/Nav.astro';
+import Separador from '../components/Separador.astro';
+import ModalApi from '../components/ModalApi.astro';
+import UsuariosListaDos from '../components/RC_UsuariosLista.jsx';
+import UsuariosListado from '../components/UsuariosLista.svelte';
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+	<br>
+	<br>
+	<br>
+	<br>
+	<Nav items={[
+		{
+			title: "Inicio",
+			description: "Página principal de nuestro sitio",
+			icon: "home",
+			link: "/"
+		},
+		{
+			title: "Servicios",
+			description: "Conoce nuestros servicios",
+			icon: "work",
+			link: "/servicios"
+		},
+		{
+			title: "Contacto",
+			description: "Ponte en contacto con nosotros",
+			icon: "email",
+			link: "/contacto"
+		},
+		{
+			title: "Acerca de",
+			description: "Conoce más sobre nosotros",
+			icon: "info",
+			link: "/acerca"
+		}
+	]} />
+	
+	<div style="text-align: center; margin: 20px;">
+		<a href="/crud" style="
+			display: inline-block;
+			padding: 10px 20px;
+			background-color: #007bff;
+			color: white;
+			text-decoration: none;
+			border-radius: 5px;
+			font-weight: bold;
+			transition: background-color 0.3s;
+		">
+			Ir al CRUD
+		</a>
+	</div>
+
+	<UsuariosListaDos client:load />
+
+	<ModalApi />
+	<Menu items={[
+		{
+			title: "Inicio",
+			description: "Página principal de nuestro sitio",
+			icon: "home",
+			link: "/"
+		},
+		{
+			title: "Servicios",
+			description: "Conoce nuestros servicios",
+			icon: "work",
+			link: "/servicios"
+		},
+		{
+			title: "Contacto",
+			description: "Ponte en contacto con nosotros",
+			icon: "email",
+			link: "/contacto"
+		},
+		{
+			title: "Acerca de",
+			description: "Conoce más sobre nosotros",
+			icon: "info",
+			link: "/acerca"
+		}
+	]} />
+
+	<!-- <UsuariosListado client:load /> -->
+
+	<Separador texto="Ejemplo de separador" />
 </Layout>
