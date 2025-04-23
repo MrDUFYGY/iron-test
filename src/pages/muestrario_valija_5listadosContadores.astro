@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import "../styles/global.css";
+---
+
+<Layout>
+
+    <div class="flex flex-col space-y-4">
+        <h1 class="text-2xl font-bold">Listados contables</h1>
+        <p class="text-gray-600">Suba los archivos de los listados contables por turno</p>
+    </div>
+
+
+<!-- Sección: Subida de archivos por turno -->
+<div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Turno 1 -->
+    <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Turno 1 – Listado contable</label>
+      <input type="file" disabled
+             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 file:cursor-not-allowed">
+      <p class="text-xs text-gray-400 italic mt-1">Aún no funcional</p>
+    </div>
+  
+    <!-- Turno 2 -->
+    <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Turno 2 – Listado contable</label>
+      <input type="file" disabled
+             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 file:cursor-not-allowed">
+      <p class="text-xs text-gray-400 italic mt-1">Aún no funcional</p>
+    </div>
+  
+    <!-- Turno 3 -->
+    <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Turno 3 – Listado contable</label>
+      <input type="file" disabled
+             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 file:cursor-not-allowed">
+      <p class="text-xs text-gray-400 italic mt-1">Aún no funcional</p>
+    </div>
+  
+  </div>
+  
+
+
+</Layout>

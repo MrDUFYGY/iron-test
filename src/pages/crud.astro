@@ -116,116 +116,109 @@ import Nav from '../components/Nav.astro';
 	</div>
 
     <script type="module">
-	const apiUrl = 'https://localhost:44376/ApiHandler/AlumnoAPI.ashx';
+const apiUrl = "https://localhost:44376/ApiHandler/AlumnoAPI_Csharp.ashx";
+const form = document.getElementById("crudForm");
+const actualizarBtn = document.getElementById("actualizarBtn");
 
-	const form = document.getElementById('crudForm');
-	const actualizarBtn = document.getElementById('actualizarBtn');
-	let idEditando = null;
+let editandoId = null;
 
-	async function cargarDatos() {
-		const res = await fetch(apiUrl);
-		const data = await res.json();
-		dibujarTabla(data);
-	}
+form.addEventListener("submit", async (e) => {
+	e.preventDefault();
 
-	function dibujarTabla(datos) {
-		const tbody = document.getElementById('tablaDatos');
-		tbody.innerHTML = '';
-		datos.forEach(item => {
-			const tr = document.createElement('tr');
-			tr.innerHTML = `
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.matricula}</td>
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.nombre}</td>
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.carrera}</td>
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.semestre}</td>
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.email}</td>
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.telefono}</td>
-				<td style="padding: 8px; border-bottom: 1px solid #ddd;">
-					<button onclick="editarItem('${item.id}')" style="...">Editar</button>
-					<button onclick="eliminarItem('${item.id}')" style="...">Eliminar</button>
-				</td>
-			`;
-			tbody.appendChild(tr);
-		});
-	}
-
-	if (form) {
-		form.addEventListener('submit', async function (e) {
-			e.preventDefault();
-			const datos = obtenerDatosFormulario();
-
-			if (datos) {
-				await fetch(apiUrl, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ action: 'create', data: datos })
-				});
-				form.reset();
-				idEditando = null;
-				cargarDatos();
-			}
-		});
-	}
-
-	if (actualizarBtn) {
-		actualizarBtn.addEventListener('click', async function () {
-			if (idEditando) {
-				const datos = obtenerDatosFormulario();
-				if (datos) {
-					datos.id = idEditando;
-					await fetch(apiUrl, {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ action: 'update', data: datos })
-					});
-					form.reset();
-					idEditando = null;
-					cargarDatos();
-				}
-			}
-		});
-	}
-
-	window.editarItem = async function (id) {
-		const res = await fetch(`${apiUrl}?id=${id}`);
-		const item = await res.json();
-
-		document.getElementById('matricula').value = item.matricula;
-		document.getElementById('nombre').value = item.nombre;
-		document.getElementById('carrera').value = item.carrera;
-		document.getElementById('semestre').value = item.semestre;
-		document.getElementById('email').value = item.email;
-		document.getElementById('telefono').value = item.telefono;
-
-		idEditando = item.id;
+	const alumno = {
+		matricula: form.matricula.value,
+		nombre: form.nombre.value,
+		carrera: form.carrera.value,
+		semestre: parseInt(form.semestre.value),
+		email: form.email.value,
+		telefono: form.telefono.value,
 	};
 
-	window.eliminarItem = async function (id) {
+	if (editandoId) {
+		alumno.id = editandoId;
 		await fetch(apiUrl, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ action: 'delete', id })
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(alumno)
 		});
-		cargarDatos();
-	};
-
-	function obtenerDatosFormulario() {
-		const matricula = document.getElementById('matricula').value.trim();
-		const nombre = document.getElementById('nombre').value.trim();
-		const carrera = document.getElementById('carrera').value.trim();
-		const semestre = parseInt(document.getElementById('semestre').value);
-		const email = document.getElementById('email').value.trim();
-		const telefono = document.getElementById('telefono').value.trim();
-
-		if (matricula && nombre && carrera && semestre && email && telefono) {
-			return { matricula, nombre, carrera, semestre, email, telefono };
-		}
-		return null;
+		editandoId = null;
+	} else {
+		await fetch(apiUrl, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(alumno)
+		});
 	}
 
-	// Carga inicial
-	cargarDatos();
-</script>
+	form.reset();
+	cargarAlumnos();
+});
+
+actualizarBtn.addEventListener("click", () => {
+	alert("Para actualizar un alumno, haz clic en el botón editar de la tabla.");
+});
+
+async function cargarAlumnos() {
+	const res = await fetch(apiUrl);
+	const alumnos = await res.json();
+
+	const tbody = document.querySelector("table tbody");
+	tbody.innerHTML = "";
+
+	alumnos.forEach((a) => {
+		const tr = document.createElement("tr");
+
+		tr.innerHTML = `
+			<td>${a.Matricula}</td>
+			<td>${a.Nombre}</td>
+			<td>${a.Carrera}</td>
+			<td>${a.Semestre}</td>
+			<td>${a.Email}</td>
+			<td>${a.Telefono}</td>
+			<td>
+				<button onclick="editarAlumno(${a.Id})" style="margin-right: 5px;">Editar</button>
+				<button onclick="eliminarAlumno(${a.Id})">Eliminar</button>
+			</td>
+		`;
+
+		tbody.appendChild(tr);
+	});
+}
+
+window.editarAlumno = async function (id) {
+	const res = await fetch(apiUrl);
+	const alumnos = await res.json();
+	const alumno = alumnos.find(a => a.id === id);
+
+	if (!alumno) return;
+
+	form.matricula.value = alumno.matricula;
+	form.nombre.value = alumno.nombre;
+	form.carrera.value = alumno.carrera;
+	form.semestre.value = alumno.semestre;
+	form.email.value = alumno.email;
+	form.telefono.value = alumno.telefono;
+
+	editandoId = alumno.id;
+};
+
+window.eliminarAlumno = async function (id) {
+	if (!confirm("¿Estás seguro de eliminar este alumno?")) return;
+
+	await fetch(`${apiUrl}?id=${id}`, {
+		method: "DELETE"
+	});
+
+	cargarAlumnos();
+};
+
+cargarAlumnos();
+
+	</script>
 
 
 

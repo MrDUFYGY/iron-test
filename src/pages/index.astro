@@ -1,4 +1,5 @@
 ---
+import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
 import Menu from '../components/Menu.astro';
 import Nav from '../components/Nav.astro';
@@ -15,32 +16,41 @@ import UsuariosListado from '../components/UsuariosLista.svelte';
 	<br>
 	<br>
 	<br>
-	<Nav items={[
+	<!-- <div class="max-w-sm bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
+		<img class="w-full h-48 object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-T96ZDntOXfRsoyF5i3J68JJq_w6nv9MtYA&s" alt="Imagen de prueba">
+		<div class="p-4">
+			<h3 class="text-xl font-semibold text-gray-800 mb-2">Título de la Card</h3>
+			<p class="text-gray-600 text-sm mb-4">Este es un pequeño texto descriptivo dentro de una tarjeta para hacer pruebas visuales.</p>
+			<button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">Acción</button>
+		</div>
+	</div> -->
+	<Menu items={[
+
 		{
-			title: "Inicio",
-			description: "Página principal de nuestro sitio",
-			icon: "home",
-			link: "/"
+			title: "Caratula",
+			description: "Muestrario de caratula digital",
+			icon: "1.- caratula",
+			link: "/muestrario_valija_1caratula"
 		},
 		{
-			title: "Servicios",
-			description: "Conoce nuestros servicios",
-			icon: "work",
-			link: "/servicios"
+			title: "Resultados Busqueda",
+			description: "Muestrario de resultados de busqueda",
+			icon: "3.- resultadosBusqueda",
+			link: "/muestrario_valija_3resultadosBusqueda"
 		},
 		{
-			title: "Contacto",
-			description: "Ponte en contacto con nosotros",
-			icon: "email",
-			link: "/contacto"
-		},
-		{
-			title: "Acerca de",
-			description: "Conoce más sobre nosotros",
-			icon: "info",
-			link: "/acerca"
+			title: "Listados Contadores",
+			description: "Muestrario de listados contadores",
+			icon: "5.- listadosContadores",
+			link: "/muestrario_valija_5listadosContadores"
 		}
 	]} />
+	  
+
+
+
+
+
 	
 	<div style="text-align: center; margin: 20px;">
 		<a href="/crud" style="
@@ -60,32 +70,7 @@ import UsuariosListado from '../components/UsuariosLista.svelte';
 	<UsuariosListaDos client:load />
 
 	<ModalApi />
-	<Menu items={[
-		{
-			title: "Inicio",
-			description: "Página principal de nuestro sitio",
-			icon: "home",
-			link: "/"
-		},
-		{
-			title: "Servicios",
-			description: "Conoce nuestros servicios",
-			icon: "work",
-			link: "/servicios"
-		},
-		{
-			title: "Contacto",
-			description: "Ponte en contacto con nosotros",
-			icon: "email",
-			link: "/contacto"
-		},
-		{
-			title: "Acerca de",
-			description: "Conoce más sobre nosotros",
-			icon: "info",
-			link: "/acerca"
-		}
-	]} />
+
 
 	<!-- <UsuariosListado client:load /> -->
 
