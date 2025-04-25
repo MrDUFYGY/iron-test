@@ -6,10 +6,9 @@ import "../styles/global.css";
 <Layout>
 
     <div class="flex flex-col space-y-4">
-        <h1 class="text-2xl font-bold">Listados contables</h1>
-        <p class="text-gray-600">Suba los archivos de los listados contables por turno</p>
+        <h1 class="text-2xl font-bold">Hojas de medición</h1>
+        <p class="text-gray-600">Suba las hojas de medición por turno</p>
     </div>
-
 
 <!-- Sección: Subida de archivos por turno -->
 <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -17,7 +16,7 @@ import "../styles/global.css";
     <!-- Turno 1 -->
     <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
       <div class="flex justify-between items-center mb-2">
-        <label class="block text-sm font-medium text-gray-700">Turno 1 – Listado contable</label>
+        <label class="block text-sm font-medium text-gray-700">Turno 1 – Hoja de medición</label>
         <div class="flex space-x-2">
           <div class="w-2 h-2 rounded-full bg-gray-300" id="punto1-turno1"></div>
           <div class="w-2 h-2 rounded-full bg-gray-300" id="punto2-turno1"></div>
@@ -31,7 +30,7 @@ import "../styles/global.css";
     <!-- Turno 2 -->
     <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
       <div class="flex justify-between items-center mb-2">
-        <label class="block text-sm font-medium text-gray-700">Turno 2 – Listado contable</label>
+        <label class="block text-sm font-medium text-gray-700">Turno 2 – Hoja de medición</label>
         <div class="flex space-x-2">
           <div class="w-2 h-2 rounded-full bg-gray-300" id="punto1-turno2"></div>
           <div class="w-2 h-2 rounded-full bg-gray-300" id="punto2-turno2"></div>
@@ -45,7 +44,7 @@ import "../styles/global.css";
     <!-- Turno 3 -->
     <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
       <div class="flex justify-between items-center mb-2">
-        <label class="block text-sm font-medium text-gray-700">Turno 3 – Listado contable</label>
+        <label class="block text-sm font-medium text-gray-700">Turno 3 – Hoja de medición</label>
         <div class="flex space-x-2">
           <div class="w-2 h-2 rounded-full bg-gray-300" id="punto1-turno3"></div>
           <div class="w-2 h-2 rounded-full bg-gray-300" id="punto2-turno3"></div>
@@ -56,13 +55,12 @@ import "../styles/global.css";
       <p class="text-xs text-gray-400 italic mt-1">Archivo PDF requerido</p>
     </div>
   
-  </div>
-  
+</div>
 
 <!-- Modal de confirmación -->
 <dialog id="modal-confirmacion" class="rounded-lg p-0 w-full max-w-[80%]">
   <div class="p-6 bg-white rounded-lg shadow-lg relative">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirmar archivo</h2>
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirmar hoja de medición</h2>
     <div class="mb-4 border rounded overflow-hidden h-80">
       <iframe id="preview-pdf" class="w-full h-full" title="Vista previa PDF"></iframe>
     </div>
@@ -85,12 +83,12 @@ import "../styles/global.css";
   </a>
 
   <!-- Botón de sellar que se habilita cuando se suben los 3 PDFs -->
-  <a href="/" id="btn-sellar" class="px-6 py-2 bg-blue-600 text-white rounded-md opacity-50 cursor-not-allowed transition" disabled>
+  <button id="btn-sellar" class="px-6 py-2 bg-blue-600 text-white rounded-md opacity-50 cursor-not-allowed transition" disabled>
     Sellar y guardar
-  </a>
+  </button>
 </div>
 
-<script type="module">
+<script>
   // Función para verificar si todos los PDFs están confirmados
   function verificarPDFs() {
     const punto1Turno1 = document.getElementById('punto1-turno1');
@@ -98,6 +96,8 @@ import "../styles/global.css";
     const punto1Turno3 = document.getElementById('punto1-turno3');
     
     const btnSellar = document.getElementById('btn-sellar');
+
+    if (!punto1Turno1 || !punto1Turno2 || !punto1Turno3 || !btnSellar) return;
 
     // Verificar si todos los puntos tienen la clase bg-green-500
     const todosConfirmados = [punto1Turno1, punto1Turno2, punto1Turno3].every(punto => 
@@ -123,15 +123,14 @@ import "../styles/global.css";
   // Observar cambios de clase en cada punto
   ['punto1-turno1', 'punto1-turno2', 'punto1-turno3'].forEach(id => {
     const elemento = document.getElementById(id);
-    observer.observe(elemento, { attributes: true });
+    if (elemento) {
+      observer.observe(elemento, { attributes: true });
+    }
   });
 
   // Verificación inicial
   verificarPDFs();
 </script>
-
-
-
 
 <script type="module">
   // Función para manejar la subida de archivos
@@ -144,8 +143,10 @@ import "../styles/global.css";
     const btnCancelar = document.getElementById('btn-cancelar');
     const btnConfirmar = document.getElementById('btn-confirmar');
 
+    if (!input || !punto1 || !punto2 || !modal || !previewPdf || !btnCancelar || !btnConfirmar) return;
+
     input.addEventListener('change', (e) => {
-      const file = e.target.files[0];
+      const file = e.target.files?.[0];
       if (file && file.type === 'application/pdf') {
         // Crear URL del archivo para el iframe
         const fileUrl = URL.createObjectURL(file);

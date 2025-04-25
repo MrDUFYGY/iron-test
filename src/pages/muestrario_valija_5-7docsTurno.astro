@@ -1,0 +1,623 @@
+---
+import Layout from '../layouts/Layout.astro';
+import "../styles/global.css";
+---
+
+<Layout>
+  <div class="container mx-auto">
+    <!-- Diálogo de confirmación -->
+    <div id="confirm-dialog" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-4xl w-full relative z-50">
+        <h3 class="text-lg font-semibold mb-4">Confirmar carga de archivo</h3>
+        <div class="mb-4 border rounded overflow-hidden h-96">
+          <iframe id="preview-pdf" class="w-full h-full" title="Vista previa PDF"></iframe>
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button id="cancel-upload" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Cancelar</button>
+          <button id="confirm-upload" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Confirmar</button>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Sistema de Carga de Archivos</h1>
+    
+    <!-- Contenedor principal -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      
+      <!-- Pestañas de navegación -->
+      <div class="flex border-b border-gray-200 mb-6" id="tabs">
+        <button class="px-4 py-2 border-b-2 border-blue-500 text-blue-600 font-medium relative" 
+                data-tab="turno1">Turno 1
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden" id="turno1-pending">0</span>
+        </button>
+        <button class="px-4 py-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 relative" 
+                data-tab="turno2">Turno 2
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden" id="turno2-pending">0</span>
+        </button>
+        <button class="px-4 py-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 relative" 
+                data-tab="turno3">Turno 3
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden" id="turno3-pending">0</span>
+        </button>
+      </div>
+      
+      <!-- Indicador de progreso -->
+      <div class="mb-6">
+        <div class="w-full bg-gray-200 rounded-full h-2.5">
+          <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" id="progress-bar" style="width: 0%"></div>
+        </div>
+        <div class="flex justify-between mt-2 text-sm text-gray-600">
+          <span>0/9 archivos</span>
+        </div>
+      </div>
+      
+      <!-- Contenido de las pestañas -->
+      <div id="tab-content">
+        <!-- Turno 1 -->
+        <div id="turno1" class="tab-panel">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Archivos del Turno 1</h2>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Listados de Contadores</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno1-archivo1" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno1-archivo1-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno1-archivo1-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+            
+            <!-- Sección de Ventas en Tienda -->
+            <div class="mt-6 mb-6">
+              <h3 class="text-lg font-semibold mb-4 text-gray-700">Ventas en Tienda</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="border border-gray-300 px-4 py-2 text-left">Familia</th>
+                      <th class="border border-gray-300 px-4 py-2 text-right">Número de operaciones</th>
+                      <th class="border border-gray-300 px-4 py-2 text-right">Cantidad</th>
+                      <th class="border border-gray-300 px-4 py-2 text-right">Ventas brutas</th>
+                      <th class="border border-gray-300 px-4 py-2 text-right">Devoluciones</th>
+                      <th class="border border-gray-300 px-4 py-2 text-right">Dtos.</th>
+                      <th class="border border-gray-300 px-4 py-2 text-right">Ventas netas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-300 px-4 py-2">OTROS PRODUCTOS</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">3</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">3.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">45.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">0.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">0.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">45.00</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-300 px-4 py-2">SNACKS</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">1</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">1.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">62.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">0.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">0.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">62.00</td>
+                    </tr>
+                    <tr class="bg-gray-50 font-semibold">
+                      <td class="border border-gray-300 px-4 py-2">Total tienda</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">4</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">4.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">107.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">0.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">0.00</td>
+                      <td class="border border-gray-300 px-4 py-2 text-right">107.00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Hojas de liquidacion de Open Pos</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno1-archivo2" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno1-archivo2-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno1-archivo2-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+            
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Mediciones con comprobante</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno1-archivo3" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno1-archivo3-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno1-archivo3-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+          </div>
+          
+          <div class="mt-8 flex justify-end">
+            <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 next-btn" data-next="turno2">
+              Siguiente Turno
+            </button>
+          </div>
+        </div>
+        
+        <!-- Turno 2 -->
+        <div id="turno2" class="tab-panel hidden">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Archivos del Turno 2</h2>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Listados de Contadores</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno2-archivo1" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno2-archivo1-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno2-archivo1-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+            
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Hojas de liquidacion de Open Pos</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno2-archivo2" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno2-archivo2-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno2-archivo2-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+            
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Mediciones con comprobante</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno2-archivo3" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno2-archivo3-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno2-archivo3-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+          </div>
+          
+          <div class="mt-8 flex justify-between">
+            <button class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 prev-btn" data-prev="turno1">
+              Turno Anterior
+            </button>
+            <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 next-btn" data-next="turno3">
+              Siguiente Turno
+            </button>
+          </div>
+        </div>
+        
+        <!-- Turno 3 -->
+        <div id="turno3" class="tab-panel hidden">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">Archivos del Turno 3</h2>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Listados de Contadores</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno3-archivo1" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno3-archivo1-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno3-archivo1-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+            
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Hojas de liquidacion de Open Pos</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno3-archivo2" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno3-archivo2-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno3-archivo2-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+            
+            <div class="file-upload-container">
+              <label class="block text-gray-700 mb-2">Mediciones con comprobante</label>
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="turno3-archivo3" accept=".pdf">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="mt-1 text-xs text-gray-600">Haz clic para seleccionar o arrastra un archivo aquí</p>
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno3-archivo3-status1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" id="turno3-archivo3-status2"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+          </div>
+          
+          <div class="mt-8 flex justify-between">
+            <button class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 prev-btn" data-prev="turno2">
+              Turno Anterior
+            </button>
+            <button class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" id="submit-all">
+              Enviar Todos los Archivos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Resumen de archivos cargados -->
+    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen de Archivos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <h3 class="font-medium text-gray-700 mb-2">Turno 1</h3>
+          <ul class="list-disc list-inside text-sm text-gray-600" id="turno1-summary">
+            <li>Sin archivos seleccionados</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-medium text-gray-700 mb-2">Turno 2</h3>
+          <ul class="list-disc list-inside text-sm text-gray-600" id="turno2-summary">
+            <li>Sin archivos seleccionados</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-medium text-gray-700 mb-2">Turno 3</h3>
+          <ul class="list-disc list-inside text-sm text-gray-600" id="turno3-summary">
+            <li>Sin archivos seleccionados</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // Funcionalidad de pestañas
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('[data-tab]');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+      const progressBar = document.getElementById('progress-bar');
+      const nextButtons = document.querySelectorAll('.next-btn');
+      const prevButtons = document.querySelectorAll('.prev-btn');
+      const fileInputs = document.querySelectorAll('input[type="file"]');
+      const submitButton = document.getElementById('submit-all');
+      const confirmDialog = document.getElementById('confirm-dialog');
+      const confirmUploadBtn = document.getElementById('confirm-upload');
+      const cancelUploadBtn = document.getElementById('cancel-upload');
+      const previewPdf = document.getElementById('preview-pdf');
+      
+      let currentFileInput = null;
+      let currentFile = null;
+      let currentFileUrl = null;
+      let uploadedFiles = new Set();
+
+      // Función para actualizar el progreso
+      function updateProgress() {
+        const totalFiles = fileInputs.length;
+        const uploadedCount = uploadedFiles.size;
+        const progress = (uploadedCount / totalFiles) * 100;
+        
+        progressBar.style.width = `${progress}%`;
+        progressBar.parentElement.nextElementSibling.querySelector('span').textContent = `${uploadedCount}/${totalFiles} archivos`;
+        
+        // Actualizar contadores por turno
+        updateTurnoPending('turno1', 3);
+        updateTurnoPending('turno2', 3);
+        updateTurnoPending('turno3', 3);
+      }
+
+      // Función para actualizar el contador de archivos pendientes por turno
+      function updateTurnoPending(turnoId, totalFiles) {
+        const pendingElement = document.getElementById(`${turnoId}-pending`);
+        if (!pendingElement) return;
+
+        const turnoFiles = Array.from(fileInputs).filter(input => input.id.startsWith(turnoId));
+        const uploadedCount = turnoFiles.filter(input => uploadedFiles.has(input.id)).length;
+        const pendingCount = totalFiles - uploadedCount;
+
+        if (pendingCount > 0) {
+          pendingElement.textContent = pendingCount;
+          pendingElement.classList.remove('hidden');
+        } else {
+          pendingElement.classList.add('hidden');
+        }
+      }
+
+      // Función para mostrar el diálogo de confirmación
+      function showConfirmDialog(fileInput, file) {
+        currentFileInput = fileInput;
+        currentFile = file;
+        currentFileUrl = URL.createObjectURL(file);
+        previewPdf.src = currentFileUrl;
+        confirmDialog.classList.remove('hidden');
+      }
+
+      // Función para ocultar el diálogo de confirmación
+      function hideConfirmDialog() {
+        confirmDialog.classList.add('hidden');
+        if (currentFileUrl) {
+          URL.revokeObjectURL(currentFileUrl);
+          currentFileUrl = null;
+        }
+        currentFileInput = null;
+        currentFile = null;
+      }
+
+      // Función para actualizar el estado de las marcas de validación
+      function updateValidationStatus(inputId, status1, status2) {
+        const status1Element = document.getElementById(`${inputId}-status1`);
+        const status2Element = document.getElementById(`${inputId}-status2`);
+        const container = document.getElementById(inputId).closest('.file-upload-container');
+        
+        if (status1Element) {
+          status1Element.classList.remove('bg-gray-200', 'bg-green-500', 'bg-red-500');
+          status1Element.classList.add(status1);
+        }
+        
+        if (status2Element) {
+          status2Element.classList.remove('bg-gray-200', 'bg-green-500', 'bg-red-500');
+          status2Element.classList.add(status2);
+        }
+
+        // Actualizar el borde del contenedor
+        if (status1 === 'bg-green-500') {
+          container.querySelector('.relative').classList.add('border-green-500');
+          container.querySelector('.relative').classList.remove('border-gray-300');
+        } else {
+          container.querySelector('.relative').classList.remove('border-green-500');
+          container.querySelector('.relative').classList.add('border-gray-300');
+        }
+      }
+
+      // Event listeners para el diálogo de confirmación
+      confirmUploadBtn.addEventListener('click', () => {
+        if (currentFileInput && currentFile) {
+          const container = currentFileInput.closest('.file-upload-container');
+          const fileNameElement = container.querySelector('.file-name');
+          
+          fileNameElement.textContent = currentFile.name;
+          updateValidationStatus(currentFileInput.id, 'bg-green-500', 'bg-gray-200');
+          uploadedFiles.add(currentFileInput.id);
+          
+          updateProgress();
+          updateSummary();
+        }
+        hideConfirmDialog();
+      });
+
+      cancelUploadBtn.addEventListener('click', () => {
+        if (currentFileInput) {
+          currentFileInput.value = '';
+          updateValidationStatus(currentFileInput.id, 'bg-gray-200', 'bg-gray-200');
+          uploadedFiles.delete(currentFileInput.id);
+          updateProgress();
+        }
+        hideConfirmDialog();
+      });
+
+      // Event listeners para los inputs de archivo
+      fileInputs.forEach(input => {
+        input.addEventListener('change', function(e) {
+          const file = this.files[0];
+          if (file) {
+            if (file.type === 'application/pdf') {
+              showConfirmDialog(this, file);
+            } else {
+              alert('Por favor, selecciona solo archivos PDF');
+              this.value = '';
+              updateValidationStatus(this.id, 'bg-red-500', 'bg-gray-200');
+            }
+          }
+        });
+
+        // Manejo de arrastrar y soltar
+        const container = input.closest('.file-upload-container');
+        container.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          container.classList.add('border-blue-500');
+        });
+
+        container.addEventListener('dragleave', () => {
+          container.classList.remove('border-blue-500');
+        });
+
+        container.addEventListener('drop', (e) => {
+          e.preventDefault();
+          container.classList.remove('border-blue-500');
+          
+          const file = e.dataTransfer.files[0];
+          if (file) {
+            if (file.type === 'application/pdf') {
+              input.files = e.dataTransfer.files;
+              showConfirmDialog(input, file);
+            } else {
+              alert('Por favor, arrastra solo archivos PDF');
+              updateValidationStatus(input.id, 'bg-red-500', 'bg-gray-200');
+            }
+          }
+        });
+      });
+      
+      // Función para cambiar de pestaña
+      function switchTab(tabId) {
+        // Ocultar todos los paneles
+        tabPanels.forEach(panel => {
+          panel.classList.add('hidden');
+        });
+        
+        // Mostrar el panel seleccionado
+        document.getElementById(tabId).classList.remove('hidden');
+        
+        // Actualizar estilos de las pestañas
+        tabs.forEach(tab => {
+          if (tab.dataset.tab === tabId) {
+            tab.classList.add('border-blue-500', 'text-blue-600');
+            tab.classList.remove('border-transparent', 'text-gray-500');
+          } else {
+            tab.classList.remove('border-blue-500', 'text-blue-600');
+            tab.classList.add('border-transparent', 'text-gray-500');
+          }
+        });
+      }
+      
+      // Event listeners para las pestañas
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          switchTab(tab.dataset.tab);
+        });
+      });
+      
+      // Event listeners para los botones de siguiente
+      nextButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          switchTab(button.dataset.next);
+        });
+      });
+      
+      // Event listeners para los botones de anterior
+      prevButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          switchTab(button.dataset.prev);
+        });
+      });
+      
+      // Función para actualizar el resumen
+      function updateSummary() {
+        const turno1Files = [
+          document.getElementById('turno1-archivo1').files[0],
+          document.getElementById('turno1-archivo2').files[0],
+          document.getElementById('turno1-archivo3').files[0]
+        ];
+        
+        const turno2Files = [
+          document.getElementById('turno2-archivo1').files[0],
+          document.getElementById('turno2-archivo2').files[0],
+          document.getElementById('turno2-archivo3').files[0]
+        ];
+        
+        const turno3Files = [
+          document.getElementById('turno3-archivo1').files[0],
+          document.getElementById('turno3-archivo2').files[0],
+          document.getElementById('turno3-archivo3').files[0]
+        ];
+        
+        // Actualizar resumen del turno 1
+        const turno1Summary = document.getElementById('turno1-summary');
+        turno1Summary.innerHTML = '';
+        
+        if (turno1Files.some(file => file)) {
+          turno1Files.forEach((file, index) => {
+            if (file) {
+              const li = document.createElement('li');
+              li.textContent = `Archivo ${index + 1}: ${file.name}`;
+              turno1Summary.appendChild(li);
+            }
+          });
+        } else {
+          turno1Summary.innerHTML = '<li>Sin archivos seleccionados</li>';
+        }
+        
+        // Actualizar resumen del turno 2
+        const turno2Summary = document.getElementById('turno2-summary');
+        turno2Summary.innerHTML = '';
+        
+        if (turno2Files.some(file => file)) {
+          turno2Files.forEach((file, index) => {
+            if (file) {
+              const li = document.createElement('li');
+              li.textContent = `Archivo ${index + 1}: ${file.name}`;
+              turno2Summary.appendChild(li);
+            }
+          });
+        } else {
+          turno2Summary.innerHTML = '<li>Sin archivos seleccionados</li>';
+        }
+        
+        // Actualizar resumen del turno 3
+        const turno3Summary = document.getElementById('turno3-summary');
+        turno3Summary.innerHTML = '';
+        
+        if (turno3Files.some(file => file)) {
+          turno3Files.forEach((file, index) => {
+            if (file) {
+              const li = document.createElement('li');
+              li.textContent = `Archivo ${index + 1}: ${file.name}`;
+              turno3Summary.appendChild(li);
+            }
+          });
+        } else {
+          turno3Summary.innerHTML = '<li>Sin archivos seleccionados</li>';
+        }
+      }
+      
+      // Event listener para el botón de enviar
+      submitButton.addEventListener('click', function() {
+        // Aquí iría la lógica para enviar los archivos al servidor
+        alert('Archivos listos para enviar. Aquí implementarías la lógica de envío al servidor.');
+      });
+    });
+  </script>
+    
+</Layout>

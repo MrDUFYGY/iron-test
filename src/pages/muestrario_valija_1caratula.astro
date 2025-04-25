@@ -6,10 +6,6 @@ import Nav from '../components/Nav.astro';
 
 <Layout>
 
-    
-
-
-
 <div class=" mx-auto bg-white rounded-xl shadow-md">
     <div class="border-b-2 border-gray-200 pb-4 mb-6">
         <div class="flex justify-between items-start mb-4">
@@ -405,17 +401,19 @@ import Nav from '../components/Nav.astro';
             </div>
         </div>
 
-        <!-- Botón -->
-        <div class="text-center mt-6">
+        <!-- Botones -->
+        <div class="text-center mt-6 space-x-4">
             <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-medium text-lg">
                 Sellar y Enviar
             </button>
+            <a href="/" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block">
+                Guardar
+            </a>
         </div>
     </form>
 </div>
 
-
-<script>
+    <script>
     function validarFormulario() {
         alert("Formulario enviado correctamente.");
         return false; // Para evitar recargar por ahora
@@ -458,7 +456,6 @@ import Nav from '../components/Nav.astro';
         importeResumenInput.addEventListener('input', calcularDiferencia);
     }
 </script>
-
 
 </Layout>
 
