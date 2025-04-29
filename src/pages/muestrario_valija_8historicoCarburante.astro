@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Input from '../components/ConfirmInput.astro';
+import Huella from '../components/ConfirmHuella.astro';
 
+import '../styles/global.css';
 ---
 
 <Layout>
@@ -84,22 +87,10 @@ import Layout from '../layouts/Layout.astro';
         </div>
     </section>
 
-    <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
-        <div class="flex justify-between items-center mb-2">
-          <label class="block text-sm font-medium text-gray-700">Subir talón de banco</label>
-          <div class="flex items-center">
-            <span id="estado-archivo1" class="text-sm text-gray-500">Pendiente</span>
-            <div id="check-archivo1" class="ml-2 hidden">
-              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <input type="file" id="input-archivo1" accept=".pdf"
-               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-        <p class="text-xs text-gray-400 italic mt-1">Archivo PDF requerido</p>
-      </div>
+    <div class="border  border-gray-300 rounded-md p-4 bg-gray-50">
+        <Input inputId="input-archivo1" punto1Id="punto1-archivo1" punto2Id="punto2-archivo1" titulo="Subir talón de banco" />
+        <Huella />
+    </div>
 
 
 

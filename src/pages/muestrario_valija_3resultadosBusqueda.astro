@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Input from '../components/ConfirmInput.astro';
+import Huella from '../components/ConfirmHuella.astro';
+
 import "../styles/global.css";
 
 ---
@@ -159,40 +162,14 @@ import "../styles/global.css";
     <div class="space-y-4">
   
       <!-- Subir archivo 1 -->
-      <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
-        <div class="flex justify-between items-center mb-2">
-          <label class="block text-sm font-medium text-gray-700">Subir talón de banco</label>
-          <div class="flex items-center">
-            <span id="estado-archivo1" class="text-sm text-gray-500">Pendiente</span>
-            <div id="check-archivo1" class="ml-2 hidden">
-              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <input type="file" id="input-archivo1" accept=".pdf"
-               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-        <p class="text-xs text-gray-400 italic mt-1">Archivo PDF requerido</p>
-      </div>
+      <Input 
+      inputId="input-turno1" 
+      punto1Id="punto1-turno1" 
+      punto2Id="punto2-turno1" 
+      titulo="Turno 1 – Hoja de medición" 
+      />
   
-      <!-- Subir archivo 2 -->
-      <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
-        <div class="flex justify-between items-center mb-2">
-          <label class="block text-sm font-medium text-gray-700">Subir evidencia de firma</label>
-          <div class="flex items-center">
-            <span id="estado-archivo2" class="text-sm text-gray-500">Pendiente</span>
-            <div id="check-archivo2" class="ml-2 hidden">
-              <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <input type="file" id="input-archivo2" accept=".pdf"
-               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-        <p class="text-xs text-gray-400 italic mt-1">Archivo PDF requerido</p>
-      </div>
+      <Huella />
   
     </div>
   

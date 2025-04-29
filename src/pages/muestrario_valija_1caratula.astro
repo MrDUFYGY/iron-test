@@ -2,6 +2,8 @@
 import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import Huella from '../components/ConfirmHuella.astro';
+
 ---
 
 <Layout>
@@ -24,7 +26,7 @@ import Nav from '../components/Nav.astro';
         </div>
     </div>
 
-    <form id="formulario" onsubmit="return validarFormulario()" class="space-y-8">
+    <form id="formulario" class="space-y-8">
         <!-- Puntos de Amarre -->
         <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
             <h2 class="font-bold uppercase mb-4 text-gray-800">Puntos de Amarre:</h2>
@@ -403,60 +405,76 @@ import Nav from '../components/Nav.astro';
 
         <!-- Botones -->
         <div class="text-center mt-6 space-x-4">
-            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-medium text-lg">
-                Sellar y Enviar
-            </button>
-            <a href="/" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block">
+            <Huella />
+            <button id="guardar" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block">
                 Guardar
-            </a>
+            </button>
         </div>
     </form>
 </div>
 
     <script>
-    function validarFormulario() {
-        alert("Formulario enviado correctamente.");
-        return false; // Para evitar recargar por ahora
-    }
+        //se crea una funcion para evitar que las otras funciones se mezclen
+        function main() {
+            //funcion para validar el formulario
+            function validarFormulario() {
+                alert("Formulario enviado correctamente.");
+                return false; // Para evitar recargar por ahora
+            }
 
-    function calcularDiferencia() {
-        const importeTrasladoInput = document.getElementById('importeTraslado') as HTMLInputElement;
-        const importeResumenInput = document.getElementById('importeResumen') as HTMLInputElement;
-        const diferenciaInput = document.getElementById('diferencia') as HTMLInputElement;
+            //funcion para calcular la diferencia
+            function calcularDiferencia() {
+                const importeTrasladoInput = document.getElementById('importeTraslado') as HTMLInputElement;
+                const importeResumenInput = document.getElementById('importeResumen') as HTMLInputElement;
+                const diferenciaInput = document.getElementById('diferencia') as HTMLInputElement;
 
-        if (!importeTrasladoInput || !importeResumenInput || !diferenciaInput) return;
+                if (!importeTrasladoInput || !importeResumenInput || !diferenciaInput) return;
 
-        const importeTraslado = parseFloat(importeTrasladoInput.value) || 0;
-        const importeResumen = parseFloat(importeResumenInput.value) || 0;
-        const diferencia = importeTraslado - importeResumen;
+                const importeTraslado = parseFloat(importeTrasladoInput.value) || 0;
+                const importeResumen = parseFloat(importeResumenInput.value) || 0;
+                const diferencia = importeTraslado - importeResumen;
+                
+                diferenciaInput.value = diferencia.toFixed(2);
+                
+                // Cambiar color según la diferencia
+                if (diferencia === 0) {
+                    diferenciaInput.classList.remove('text-red-600', 'text-green-600');
+                    diferenciaInput.classList.add('text-gray-600');
+                } else if (diferencia > 0) {
+                    diferenciaInput.classList.remove('text-red-600', 'text-gray-600');
+                    diferenciaInput.classList.add('text-green-600');
+                } else {
+                    diferenciaInput.classList.remove('text-green-600', 'text-gray-600');
+                    diferenciaInput.classList.add('text-red-600');
+                }
+            }
+
+            // Agregar event listeners a los inputs
+            const importeTrasladoInput = document.getElementById('importeTraslado');
+            const importeResumenInput = document.getElementById('importeResumen');
         
-        diferenciaInput.value = diferencia.toFixed(2);
-        
-        // Cambiar color según la diferencia
-        if (diferencia === 0) {
-            diferenciaInput.classList.remove('text-red-600', 'text-green-600');
-            diferenciaInput.classList.add('text-gray-600');
-        } else if (diferencia > 0) {
-            diferenciaInput.classList.remove('text-red-600', 'text-gray-600');
-            diferenciaInput.classList.add('text-green-600');
-        } else {
-            diferenciaInput.classList.remove('text-green-600', 'text-gray-600');
-            diferenciaInput.classList.add('text-red-600');
+            if (importeTrasladoInput) {
+                importeTrasladoInput.addEventListener('input', calcularDiferencia);
+            }
+            if (importeResumenInput) {
+                importeResumenInput.addEventListener('input', calcularDiferencia);
+            }
+
+            const form = document.getElementById('formulario');
+            if (form) {
+              form.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+              });
+            }
+
+            const botonGuardar = document.getElementById('guardar');
+            if (botonGuardar) {
+                botonGuardar.addEventListener('click', validarFormulario);
+            }
         }
-    }
-
-    // Agregar event listeners a los inputs
-    const importeTrasladoInput = document.getElementById('importeTraslado');
-    const importeResumenInput = document.getElementById('importeResumen');
-
-    if (importeTrasladoInput) {
-        importeTrasladoInput.addEventListener('input', calcularDiferencia);
-    }
-    if (importeResumenInput) {
-        importeResumenInput.addEventListener('input', calcularDiferencia);
-    }
-</script>
+        
+        // Ejecuta la función principal cuando la página se haya cargado
+        window.addEventListener('load', main);
+    </script>
 
 </Layout>
-
-
