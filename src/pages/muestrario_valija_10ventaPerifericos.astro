@@ -1,0 +1,336 @@
+---
+import Layout from '../layouts/Layout.astro';
+// Asegúrate de que global.css exista o elimina la importación si no es necesaria
+// import "../styles/global.css"; 
+---
+
+<Layout>
+  <div class="container mx-auto p-6">
+    <div id="confirm-dialog" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-4xl w-full relative z-50">
+        {/* Texto Cambiado */}
+        <h3 class="text-lg font-semibold mb-4">Confirmar carga de Hoja de Inventariado</h3> 
+        <div class="mb-4 border rounded overflow-hidden h-96">
+          <iframe id="preview-pdf" class="w-full h-full" title="Vista previa PDF"></iframe>
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button id="cancel-upload" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Cancelar</button>
+          <button id="confirm-upload" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Confirmar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      {/* Texto Cambiado */}
+      <h1 class="text-2xl font-bold text-center mb-8 text-gray-800">Carga de Hojas de Inventariado</h1>
+
+      <div id="inputs-container" class="space-y-4">
+        <div class="input-group flex items-center space-x-4">
+          <div class="flex-grow">
+            <div class="file-upload-container">
+              {/* Texto Cambiado */}
+              <label class="block text-gray-700 mb-2">Hoja de Inventariado</label> 
+              <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" data-input-id="1">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  {/* Texto Cambiado */}
+                  <p class="mt-1 text-xs text-gray-600">Haz clic o arrastra una Hoja de Inventariado aquí</p> 
+                </div>
+                <div class="absolute top-2 right-2 flex space-x-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-200" data-status-1="1"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-200" data-status-2="1"></div>
+                </div>
+              </div>
+              <p class="file-name mt-2 text-xs text-gray-500"></p>
+            </div>
+          </div>
+          <button class="add-input-btn mt-6 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 flex justify-end">
+        {/* Texto Cambiado */}
+        <button id="submit-all" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          Enviar Hojas
+        </button>
+      </div>
+
+      <div class="mt-8">
+        {/* Texto Cambiado */}
+        <h2 class="text-lg font-semibold mb-4 text-gray-700">Hojas de Inventariado Seleccionadas</h2>
+        <ul id="files-summary" class="list-disc list-inside text-sm text-gray-600">
+          {/* Texto Cambiado (aunque es genérico, ajustado para contexto si fuera necesario) */}
+          <li>Sin hojas seleccionadas</li> 
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', function() {
+    const inputsContainer = document.getElementById('inputs-container');
+    const confirmDialog = document.getElementById('confirm-dialog');
+    const confirmUploadBtn = document.getElementById('confirm-upload');
+    const cancelUploadBtn = document.getElementById('cancel-upload');
+    const previewPdf = document.getElementById('preview-pdf');
+    const submitButton = document.getElementById('submit-all');
+    const filesSummary = document.getElementById('files-summary');
+
+    let currentFileInput = null;
+    let currentFile = null;
+    let currentFileUrl = null;
+    let uploadedFiles = new Map();
+    let inputCounter = 1;
+
+    // Función para crear un nuevo grupo de input
+    function createNewInputGroup() {
+      inputCounter++;
+      const inputGroup = document.createElement('div');
+      inputGroup.className = 'input-group flex items-center space-x-4';
+      
+      // --- HTML para el nuevo input ---
+      inputGroup.innerHTML = `
+        <div class="flex-grow">
+          <div class="file-upload-container">
+            {/* Texto Cambiado */}
+            <label class="block text-gray-700 mb-2">Hoja de Inventariado</label> 
+            <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+              <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf" data-input-id="${inputCounter}">
+              <div class="text-center">
+                <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                {/* Texto Cambiado */}
+                <p class="mt-1 text-xs text-gray-600">Haz clic o arrastra otra Hoja de Inventariado aquí</p> 
+              </div>
+              <div class="absolute top-2 right-2 flex space-x-2">
+                <div class="w-3 h-3 rounded-full bg-gray-200" data-status-1="${inputCounter}"></div>
+                <div class="w-3 h-3 rounded-full bg-gray-200" data-status-2="${inputCounter}"></div>
+              </div>
+            </div>
+            <p class="file-name mt-2 text-xs text-gray-500"></p>
+          </div>
+        </div>
+        <button class="remove-input-btn mt-6 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      `;
+      // --- Fin HTML ---
+
+      setupFileInput(inputGroup.querySelector('input[type="file"]'));
+      setupRemoveButton(inputGroup.querySelector('.remove-input-btn'));
+      
+      return inputGroup;
+    }
+
+    // Función para mostrar el diálogo de confirmación
+    function showConfirmDialog(fileInput, file) {
+      currentFileInput = fileInput;
+      currentFile = file;
+      currentFileUrl = URL.createObjectURL(file);
+      previewPdf.src = currentFileUrl;
+      confirmDialog.classList.remove('hidden');
+      confirmDialog.classList.add('flex'); // Asegura display flex
+    }
+
+    // Función para ocultar el diálogo de confirmación
+    function hideConfirmDialog() {
+      confirmDialog.classList.add('hidden');
+      confirmDialog.classList.remove('flex');
+       if (previewPdf.src) {
+         previewPdf.src = 'about:blank'; // Limpia iframe
+       }
+      if (currentFileUrl) {
+        URL.revokeObjectURL(currentFileUrl);
+        currentFileUrl = null;
+      }
+      currentFileInput = null;
+      currentFile = null;
+    }
+
+    // Función para actualizar el estado de validación (sin cambios de texto)
+    function updateValidationStatus(inputId, status1Color, status2Color) {
+       const status1Element = document.querySelector(`[data-status-1="${inputId}"]`);
+       const status2Element = document.querySelector(`[data-status-2="${inputId}"]`);
+       const inputElement = document.querySelector(`[data-input-id="${inputId}"]`);
+       const containerDiv = inputElement ? inputElement.closest('.relative') : null;
+
+       if (status1Element) {
+         status1Element.className = `w-3 h-3 rounded-full ${status1Color}`;
+       }
+       if (status2Element) {
+         status2Element.className = `w-3 h-3 rounded-full ${status2Color}`;
+       }
+
+       if (containerDiv) {
+         containerDiv.classList.remove('border-green-500', 'border-red-500', 'border-gray-300');
+         if (status1Color === 'bg-green-500') {
+           containerDiv.classList.add('border-green-500');
+         } else if (status1Color === 'bg-red-500') {
+           containerDiv.classList.add('border-red-500');
+         } else {
+           containerDiv.classList.add('border-gray-300');
+         }
+       }
+     }
+
+    // Función para actualizar el resumen de archivos
+    function updateFilesSummary() {
+      if (uploadedFiles.size === 0) {
+        // Texto Cambiado (aunque es genérico)
+        filesSummary.innerHTML = '<li>Sin hojas seleccionadas</li>'; 
+        return;
+      }
+
+      filesSummary.innerHTML = '';
+      uploadedFiles.forEach((file, inputId) => {
+        const li = document.createElement('li');
+        // Texto Cambiado
+        li.textContent = `Hoja ${inputId}: ${file.name}`; 
+        filesSummary.appendChild(li);
+      });
+    }
+
+    // Configurar input de archivo (sin cambios de texto relevantes aquí)
+    function setupFileInput(input) {
+      const container = input.closest('.file-upload-container');
+      const visualContainer = container.querySelector('.relative');
+      const inputId = input.dataset.inputId;
+
+      input.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) {
+          if (file.type === 'application/pdf') {
+            showConfirmDialog(this, file);
+          } else {
+            alert('Por favor, selecciona solo archivos PDF.');
+            this.value = '';
+            updateValidationStatus(inputId, 'bg-red-500', 'bg-gray-200');
+          }
+        } else {
+           // Si se cancela, resetear
+           updateValidationStatus(inputId, 'bg-gray-200', 'bg-gray-200');
+           container.querySelector('.file-name').textContent = '';
+           uploadedFiles.delete(inputId);
+           updateFilesSummary();
+        }
+      });
+
+      // Configurar drag and drop (sin cambios de texto)
+      visualContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        visualContainer.classList.add('border-blue-500');
+        visualContainer.classList.remove('border-gray-300');
+      });
+
+      visualContainer.addEventListener('dragleave', () => {
+        if (!visualContainer.classList.contains('border-green-500') && !visualContainer.classList.contains('border-red-500')) {
+            visualContainer.classList.remove('border-blue-500');
+            visualContainer.classList.add('border-gray-300');
+        }
+      });
+
+      visualContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        visualContainer.classList.remove('border-blue-500');
+        
+        const file = e.dataTransfer.files[0];
+        if (file) {
+          if (file.type === 'application/pdf') {
+            input.files = e.dataTransfer.files;
+            showConfirmDialog(input, file);
+          } else {
+            alert('Por favor, arrastra solo archivos PDF.');
+            updateValidationStatus(inputId, 'bg-red-500', 'bg-gray-200');
+             if (!visualContainer.classList.contains('border-green-500')) {
+                 visualContainer.classList.add('border-gray-300');
+             }
+          }
+        }
+      });
+    }
+
+    // Configurar botón de eliminar (sin cambios de texto)
+    function setupRemoveButton(button) {
+      button.addEventListener('click', function() {
+        const inputGroup = this.closest('.input-group');
+        const input = inputGroup.querySelector('input[type="file"]');
+        uploadedFiles.delete(input.dataset.inputId);
+        inputGroup.remove();
+        updateFilesSummary();
+      });
+    }
+
+    // Event listeners para el diálogo de confirmación (sin cambios de texto)
+    confirmUploadBtn.addEventListener('click', () => {
+      if (currentFileInput && currentFile) {
+        const inputId = currentFileInput.dataset.inputId;
+        const container = currentFileInput.closest('.file-upload-container');
+        const fileNameElement = container.querySelector('.file-name');
+        
+        fileNameElement.textContent = currentFile.name;
+        updateValidationStatus(inputId, 'bg-green-500', 'bg-gray-200');
+        uploadedFiles.set(inputId, currentFile);
+        
+        updateFilesSummary();
+      }
+      hideConfirmDialog();
+    });
+
+    cancelUploadBtn.addEventListener('click', () => {
+      if (currentFileInput) {
+         const inputId = currentFileInput.dataset.inputId;
+         currentFileInput.value = '';
+         const container = currentFileInput.closest('.file-upload-container');
+         container.querySelector('.file-name').textContent = '';
+         updateValidationStatus(inputId, 'bg-gray-200', 'bg-gray-200');
+         uploadedFiles.delete(inputId);
+         updateFilesSummary();
+      }
+      hideConfirmDialog();
+    });
+
+    // Event listener para el botón de agregar input (sin cambios de texto)
+    document.querySelector('.add-input-btn').addEventListener('click', function() {
+      const newInputGroup = createNewInputGroup();
+      inputsContainer.appendChild(newInputGroup);
+    });
+
+    // Event listener para el botón de enviar
+    submitButton.addEventListener('click', function(e) {
+       e.preventDefault();
+      if (uploadedFiles.size === 0) {
+        // Texto Cambiado
+        alert('Por favor, selecciona al menos una hoja de inventariado antes de enviar.'); 
+        return;
+      }
+      
+      // Lógica de envío (simulada)
+      const formData = new FormData();
+        uploadedFiles.forEach((file, id) => {
+            formData.append(`hoja_${id}`, file, file.name); // Nombre de campo más descriptivo
+        });
+
+       // Texto Cambiado
+      alert(`Hojas listas para enviar (${uploadedFiles.size}). Revisa la consola para ver FormData (simulado).`); 
+      console.log("FormData listo para enviar:", formData);
+      
+       // Aquí implementarías la lógica real de envío con fetch u otra librería
+       /* fetch('/api/upload-inventory', { method: 'POST', body: formData }) ... */
+    });
+
+    // Configurar el primer input (sin cambios de texto)
+    setupFileInput(document.querySelector('input[type="file"]'));
+  });
+</script>
+
+</Layout>
