@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Huella from '../components/ConfirmHuella.astro';
+import DinamicInput from '../components/DinamicInput.astro';
 ---
 
 <Layout>
@@ -27,6 +28,7 @@ import Huella from '../components/ConfirmHuella.astro';
     <section>
         <h2 class="text-lg font-semibold text-center mb-3 text-gray-700">Listado de ventas por periodo</h2>
         <div class="overflow-x-auto shadow-sm border border-gray-200 rounded">
+            
             <table class="w-full border-collapse text-sm min-w-[900px]">
                 <thead class="bg-gray-100 text-gray-600">
                     <tr>
@@ -81,8 +83,9 @@ import Huella from '../components/ConfirmHuella.astro';
                     </tr>
                 </tfoot>
             </table>
+            <DinamicInput />
+            <Huella />
         </div>
-        <Huella />
     </section>
 
 </div>

@@ -55,18 +55,31 @@ import "../styles/global.css";
 
       <!-- Botón de envío -->
       <div class="mt-8 flex justify-end">
-        <button id="submit-all" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-          Enviar Archivos
-        </button>
+
         <Huella />
       </div>
 
       <!-- Resumen de archivos -->
-      <div class="mt-8">
-        <h2 class="text-lg font-semibold mb-4 text-gray-700">Archivos Seleccionados</h2>
-        <ul id="files-summary" class="list-disc list-inside text-sm text-gray-600">
-          <li>Sin archivos seleccionados</li>
-        </ul>
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h2 class="text-lg font-semibold mb-4 text-gray-700">Archivos Seleccionados</h2>
+          <ul id="files-summary" class="list-disc list-inside text-sm text-gray-600">
+            <li>Sin archivos seleccionados</li>
+          </ul>
+        </div>
+
+            <!-- Columna Derecha: Nota informativa -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md shadow-sm h-full">
+      <h3 class="text-yellow-800 font-semibold mb-2">Nota:</h3>
+      <ol class="list-decimal pl-5 space-y-1 text-sm text-gray-700">
+        <li>Solo se envían las que fueron pagadas en efectivo y que comprueban el monto en póliza</li>
+        <li>Deben venir firmadas por el empleado</li>
+        <li>En caso de nómina ejecutiva o corporativa, debe separarse como otro archivo de "nomina"</li>
+        
+      </ol>
+    </div>
+  </div>
+
       </div>
     </div>
   </div>

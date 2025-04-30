@@ -16,10 +16,7 @@ import Huella from '../components/ConfirmHuella.astro';
 		<title>Astro Basics</title>
 	</head>
 	<body>
-		<br>
-		<br>
-		<br>
-		<br>
+
 	
 <!-- 		<Nav items={[
 			{
@@ -47,7 +44,10 @@ import Huella from '../components/ConfirmHuella.astro';
 				link: "/acerca"
 			}
 		]} /> -->
-		<slot />
+		<div class="px-6">
+
+			<slot />
+		</div>
 	</body>
 </html>
 
@@ -60,7 +60,6 @@ import Huella from '../components/ConfirmHuella.astro';
 
 	}
 	body{
-		padding-left: 6vw;
-		padding-right: 6vw;
+
 	}
 </style>
