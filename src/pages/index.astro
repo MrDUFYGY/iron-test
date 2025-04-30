@@ -10,6 +10,7 @@ import UsuariosListaDos from '../components/RC_UsuariosLista.jsx';
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
+<Separador texto="MENU DE PROCESOS - DEMO" /> 
 <Layout>
 
 	<!-- <div class="max-w-sm bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
@@ -82,23 +83,17 @@ import UsuariosListaDos from '../components/RC_UsuariosLista.jsx';
 			description: "ventas por periodo",
 			icon: "9.- Consulta de Ventas por Periodo",
 			link: "/muestrario_valija_9resultadoVentasxPeriordo"
-		},
-		{
-			title: "Carga de Hojas de Venta de Periféricos",
-			description: "Carga de Hojas de Venta de Periféricos",
-			icon: "10.- Carga de Hojas de Venta de Periféricos",
-			link: "/muestrario_valija_10ventaPerifericos"
-		},
+		},		
 		{
 			title: "Resultados de Mermas y Regularización",
 			description: "Resultados de Mermas y Regularización",
-			icon: "11.- Resultados de Mermas y Regularización",
-			link: "/muestrario_valija_11resultadosMermasRegul"
+			icon: "10.- Resultados de Mermas y Regularización",
+			link: "/muestrario_valija_10resultadosMermasRegul"
 		},
 		{
 			title: "Reporte de Inventario",
 			description: "Reporte de Inventario",
-			icon: "12.- Reporte de Inventario",
+			icon: "Reporte de Inventario",
 			link: "/zzz"
 		},
 
@@ -110,7 +105,7 @@ import UsuariosListaDos from '../components/RC_UsuariosLista.jsx';
 
 
 	
-	<div style="text-align: center; margin: 20px;">
+	<!-- <div style="text-align: center; margin: 20px;">
 		<a href="/crud" style="
 			display: inline-block;
 			padding: 10px 20px;
@@ -123,8 +118,8 @@ import UsuariosListaDos from '../components/RC_UsuariosLista.jsx';
 		">
 			Ir al CRUD
 		</a>
-	</div>
-
+	</div> -->
+<!-- 
 	<UsuariosListaDos client:load />
 
 	<ModalApi />
@@ -132,5 +127,4 @@ import UsuariosListaDos from '../components/RC_UsuariosLista.jsx';
 
 	<!-- <UsuariosListado client:load /> -->
 
-	<Separador texto="Ejemplo de separador" />
 </Layout>
