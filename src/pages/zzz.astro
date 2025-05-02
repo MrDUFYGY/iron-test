@@ -1,45 +1,220 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import Layout from '../layouts/Layout.astro';
 
-const files = [
-  { name: 'File 1', url: '/file1.jpg' },
-  { name: 'File 2', url: '/file2.jpg' },
-  { name: 'File 3', url: '/file3.jpg' },
-];
+const fechaActual = new Date();
+const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+});
+const horaActual = fechaActual.toLocaleTimeString('es-MX', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+});
 ---
 
-
 <Layout>
-
-    <div class="bg-gray-100">
-      <p>1.-RECUENTO DE PERIFÉRICOS DEL DÍA LUNES Y FIN DE MES.</p>
-      <p>2.-EN CASO DE RECEPCIÓN DE PERIFÉRICOS:<br>
-      HOJA DE CBOS, FACTURA CON LA LEYENDA DE SE RECIBIÓ COMPLETO,<br>
-      SELLO DE ESTACIÓN, NOMBRE Y FIRMA DE QUIEN RECIBIÓ</p>
-      <p>3.-JARREOS:<br>
-      CON CORREO, CARÁTULA, HOJA DE EXTRACCIÓN, HOJA DE RETORNOS Y TICKETS.</p>
-      <p>4.- BITÁCORAS<br>
-      LEGIBLES Y VISIBLES (SUJETA A REVISIÓN)<br>
-      EN CASO DE TENER OP MANUALES ADJUNTAR FORMATO DE CARGA MANUAL.</p>
-    </div>
-
-
-    <h1 class="text-center font-bold">Files from Database</h1>
-    <div class="files-container p-4 shadow-md">
-      {files.map((file) => (
-        <div class="file-item border border-gray-300 p-4 rounded-md flex">
-          <h2>{file.name}</h2>
-          <img src={file.url} alt={file.name} width="200" />
+<div class="mx-auto bg-white rounded-xl shadow-md p-6">
+    <div class="border-b-2 border-gray-200 pb-4 mb-6">
+        <div class="flex justify-between items-start mb-4">
+            <h1 class="text-xl font-bold uppercase">Vista previa de resúmenes</h1>
+            <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded">HD-141</span>
         </div>
-      ))}
+        <div class="flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="font-semibold mr-2">Operadora:</span>
+                <span class="bg-gray-100 px-3 py-1 rounded font-medium">HIDROSINA PLUS SAPI DE C.V.</span>
+            </div>
+            <div class="text-right">
+                <span class="font-semibold">Fecha:</span>
+                <span class="ml-2">19 de abril de 2025</span>
+            </div>
+        </div>
+        <div class="mt-2 text-sm text-gray-600">
+            <span class="font-semibold">Fecha y hora de vista previa:</span>
+            <span class="ml-2">{fechaFormateada} - {horaActual}</span>
+        </div>
     </div>
-    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Generate Report</button>
-  
-    <style>
+
+    <div class="space-y-6">
+        <!-- Resumen de Liquidación -->
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <h2 class="font-bold uppercase mb-3 text-gray-800">Resumen de Liquidación</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Documento:</span>
+                        <button onclick="abrirPDF('resumen_liquidacion')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Ver PDF
+                        </button>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Importe teórico:</span>
+                        <span class="text-right font-medium">207,565.14</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Recaudación:</span>
+                        <span class="text-right font-medium">207,565.14</span>
+                    </div>
+                    <div class="flex justify-between font-semibold bg-yellow-50 p-2 rounded">
+                        <span>Diferencia:</span>
+                        <span class="text-right">0.00</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold">Total:</p>
+                    <p class="text-2xl font-bold bg-yellow-50 p-2 rounded inline-block">207,565.14</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movimientos de Periféricos -->
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <h2 class="font-bold uppercase mb-3 text-gray-800">Movimientos de Periféricos</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Documento:</span>
+                        <button onclick="abrirPDF('movimientos_perifericos')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Ver PDF
+                        </button>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Total ventas:</span>
+                        <span class="text-right font-medium">107.00$</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Devoluciones:</span>
+                        <span class="text-right font-medium">0.00$</span>
+                    </div>
+                    <div class="flex justify-between font-semibold bg-yellow-50 p-2 rounded">
+                        <span>Neto:</span>
+                        <span class="text-right">107.00$</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporte de Regularización -->
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <h2 class="font-bold uppercase mb-3 text-gray-800">Reporte de Regularización</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Documento:</span>
+                        <button onclick="abrirPDF('reporte_regularizacion')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Ver PDF
+                        </button>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Estado:</span>
+                        <span class="text-right font-medium text-green-600">Regularizado</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Fecha de regularización:</span>
+                        <span class="text-right font-medium">19/04/2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ficha del Banco -->
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <h2 class="font-bold uppercase mb-3 text-gray-800">Ficha del Banco</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Documento:</span>
+                        <button onclick="abrirPDF('ficha_banco')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Ver PDF
+                        </button>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Importe depositado:</span>
+                        <span class="text-right font-medium">112,XXX.XX</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Fecha de depósito:</span>
+                        <span class="text-right font-medium">19/04/2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex justify-center space-x-4 mt-6">
+            <button class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition">
+                Volver
+            </button>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+                Confirmar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Diálogo para visualizar PDFs -->
+<div id="pdfDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-4 max-w-4xl w-full mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold" id="pdfTitle"></h3>
+            <button onclick="cerrarPDF()" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="aspect-[4/3] bg-gray-100 rounded">
+            <iframe id="pdfViewer" class="w-full h-full" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    function abrirPDF(tipo) {
+        const dialog = document.getElementById('pdfDialog');
+        const viewer = document.getElementById('pdfViewer');
+        const title = document.getElementById('pdfTitle');
         
-    </style>
+        // Configurar el título según el tipo de documento
+        const titulos = {
+            'resumen_liquidacion': 'Resumen de Liquidación',
+            'movimientos_perifericos': 'Movimientos de Periféricos',
+            'reporte_regularizacion': 'Reporte de Regularización',
+            'ficha_banco': 'Ficha del Banco'
+        };
+        
+        title.textContent = titulos[tipo];
+        
+        // Aquí deberías reemplazar con la ruta real de tus PDFs
+        viewer.src = `/assets/${tipo}.pdf`;
+        
+        dialog.classList.remove('hidden');
+        dialog.classList.add('flex');
+    }
 
-</Layout>
-  
-
-
+    function cerrarPDF() {
+        const dialog = document.getElementById('pdfDialog');
+        const viewer = document.getElementById('pdfViewer');
+        
+        viewer.src = '';
+        dialog.classList.remove('flex');
+        dialog.classList.add('hidden');
+    }
+</script>
+</Layout> 

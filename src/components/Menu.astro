@@ -18,7 +18,7 @@ const { items } = Astro.props;
 <div class="menu-container">
   <div class="menu-grid">
     {items.map((item) => (
-      <a href={item.link} class={`menu-card ${item.sugerencia ? 'sugerencia' : ''}`}>
+      <div class={`menu-card ${item.sugerencia ? 'sugerencia' : ''}`}>
         <div class="card-top">
           <div class="card-icon">
             <span class="material-icons">{item.icon}</span>
@@ -28,12 +28,16 @@ const { items } = Astro.props;
             <p>{item.description}</p>
           </div>
         </div>
-        <div class="validaciones">
-          <span class={`badge badge-gerente ${item.validadoGerente ? 'lleno' : ''}`}>Gerente</span>
-          <span class={`badge badge-corporativo ${item.validadoCorporativo ? 'lleno' : ''}`}>Corporativo</span>
+        <div class="card-actions">
+          <a href={item.link} class={`action-button button-estacion ${item.validadoGerente ? 'confirmado' : ''}`}>
+            <span class="button-text">Estacion</span>
+          </a>
+          <a href={item.link.replace('muestrario', 'visor')} class={`action-button button-corporativo ${item.validadoCorporativo ? 'confirmado' : ''}`}>
+            <span class="button-text">Corporativo</span>
+          </a>
           {item.sugerencia && <span class="badge badge-sugerencia">Sugerencia</span>}
         </div>
-      </a>
+      </div>
     ))}
   </div>
 </div>
@@ -56,7 +60,6 @@ const { items } = Astro.props;
     background: #1e293b;
     border-radius: 12px;
     padding: 1.5rem;
-    text-decoration: none;
     color: #f8fafc;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -74,8 +77,8 @@ const { items } = Astro.props;
   }
 
   .menu-card.sugerencia {
-    border-color: #facc15;
-    background-color: #fef9c3;
+    border-color: #92400e;
+    background-color: #fef3c7;
     color: #78350f;
   }
 
@@ -101,7 +104,7 @@ const { items } = Astro.props;
     color: inherit;
   }
 
-  .validaciones {
+  .card-actions {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
@@ -109,38 +112,58 @@ const { items } = Astro.props;
     margin-top: 1.5rem;
   }
 
-  .badge {
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid;
+  }
+
+  .button-estacion {
+    border-color: #22c55e;
+    color: #22c55e;
+    background: transparent;
+  }
+
+  .button-corporativo {
+    border-color: #eab308;
+    color: #eab308;
+    background: transparent;
+  }
+
+  .action-button:hover {
+    transform: scale(1.05);
+  }
+
+  .action-button.confirmado {
+    background-color: #22c55e;
+    color: white;
+    border-color: #22c55e;
+  }
+
+  .button-corporativo.confirmado {
+    background-color: #eab308;
+    color: #333;
+    border-color: #eab308;
+  }
+
+  .button-icon {
+    font-size: 1.25rem;
+  }
+
+  .badge-sugerencia {
     padding: 0.25rem 0.6rem;
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: bold;
-    border: 2px solid;
+    border: 2px solid #92400e;
+    color: #92400e;
     background-color: transparent;
   }
-
-  .badge-gerente {
-    border-color: #22c55e;
-    color: #22c55e;
-  }
-
-  .badge-corporativo {
-    border-color: #eab308;
-    color: #eab308;
-  }
-
-  .badge-sugerencia {
-    border-color: #f59e0b;
-    color: #f59e0b;
-  }
-
-  .badge.lleno.badge-gerente {
-    background-color: #22c55e;
-    color: #fff;
-  }
-
-  .badge.lleno.badge-corporativo {
-    background-color: #eab308;
-    color: #333;
-  }
-
 </style>
