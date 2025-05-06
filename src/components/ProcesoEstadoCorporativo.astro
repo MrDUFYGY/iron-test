@@ -1,0 +1,41 @@
+---
+export interface Props {
+  estatus: 'Verificado' | 'Visto' | 'Observacion' | 'Confirmado';
+  url: string;
+  alerta?: boolean;
+}
+const { estatus, url, alerta = false } = Astro.props;
+
+const color = estatus === 'Verificado'
+  ? 'text-blue-600'
+  : estatus === 'Visto'
+    ? 'text-yellow-600'
+    : estatus === 'Observacion'
+      ? 'text-orange-600'
+      : estatus === 'Confirmado'
+        ? 'text-green-600'
+        : 'text-gray-700';
+
+const icono = estatus === 'Verificado' 
+  ? '' 
+  : estatus === 'Observacion'
+    ? '⚠'
+    : estatus === 'Confirmado'
+      ? '✓'
+      : '';
+---
+<div class="flex items-center gap-2 min-w-[180px] justify-end">
+  <span class={`font-semibold text-sm min-w-[80px] flex items-end gap-2 justify-end ${color}`}>
+    {alerta && (
+      <span title="Alerta" class="flex items-center justify-center">
+      </span>
+    )}
+    {icono && <span>{icono}</span>}
+    {estatus}
+  </span>
+  <a href={url} class="text-blue-600 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+  </a>
+</div> 

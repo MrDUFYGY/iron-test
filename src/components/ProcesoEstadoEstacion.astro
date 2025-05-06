@@ -1,26 +1,33 @@
 ---
 export interface Props {
-  estatus: 'Iniciado' | 'Sellado' | 'Verificado';
+  estatus: 'Pendiente' | 'Iniciado' | 'Sellado' | 'Verificado' | 'Alerta';
   url: string;
   alerta?: boolean;
 }
 const { estatus, url, alerta = false } = Astro.props;
-const color = estatus === 'Iniciado'
+
+const color = estatus === 'Pendiente'
   ? 'text-blue-600'
-  : estatus === 'Sellado'
-    ? 'text-yellow-700'
-    : estatus === 'Verificado'
-      ? 'text-green-600'
-      : 'text-gray-700';
-const icono = estatus === 'Verificado' ? '✓' : '';
+  : estatus === 'Iniciado'
+    ? 'text-gray-600'
+    : estatus === 'Sellado'
+      ? 'text-yellow-700'
+      : estatus === 'Verificado'
+        ? 'text-green-600'
+        : estatus === 'Alerta'
+          ? 'text-orange-600'
+          : 'text-gray-700';
+
+const icono = estatus === 'Verificado' 
+  ? '✓' 
+  : estatus === 'Alerta'
+    ? '⚠'
+    : '';
 ---
 <div class="flex items-center gap-2 min-w-[180px] justify-end">
-  <span class={`font-semibold text-sm min-w-[80px] flex items-center gap-1 ${color}`}>
+  <span class={`font-semibold text-sm min-w-[80px] flex items-end gap-2 justify-end ${color}`}>
     {alerta && (
       <span title="Alerta" class="flex items-center justify-center">
-        <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 2a1 1 0 0 1 .894.553l7 14A1 1 0 0 1 17 18H3a1 1 0 0 1-.894-1.447l7-14A1 1 0 0 1 10 2zm0 4a1 1 0 0 0-.993.883L9 7v4a1 1 0 0 0 1.993.117L11 11V7a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-        </svg>
       </span>
     )}
     {icono && <span>{icono}</span>}

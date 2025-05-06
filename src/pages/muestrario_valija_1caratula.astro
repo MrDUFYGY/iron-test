@@ -3,8 +3,7 @@ import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Huella from '../components/ConfirmHuella.astro';
-import EstadoBoton from '../components/EstadoBoton.astro';
-import ProcesoEstado from '../components/ProcesoEstado.astro';
+import ProcesoEstado from '../components/ProcesoEstadoEstacion.astro';
 
 const fechaActual = new Date();
 const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
@@ -67,23 +66,23 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
                     <div class="space-y-2 bg-white p-3 rounded-b-lg">
                         <div class="flex items-center justify-between">
                             <span class="text-gray-700">a) Litros vendidos</span>
-                            <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                            <ProcesoEstado estatus="Pendiente" url="/muestrario_valija_2hojaLiquidacion" />
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-gray-700">b) Ventas de Periféricos</span>
-                            <ProcesoEstado estatus="Sellado" url="/sellar" />
+                            <ProcesoEstado estatus="Iniciado" url="/sellar" />
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-gray-700">c) Vales, clientes y Tarjeta Inteligente</span>
-                            <ProcesoEstado estatus="Verificado" url="/verificar" />
+                            <ProcesoEstado estatus="Sellado" url="/verificar" />
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-gray-700">d) Fajillas</span>
-                            <ProcesoEstado estatus="Verificado" url="/assets/simulacion.pdf" alerta={true} />
+                            <ProcesoEstado estatus="Alerta" url="/assets/simulacion.pdf" alerta={true} />
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-gray-700">e) Gastos</span>
-                            <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                            <ProcesoEstado estatus="Verificado" url="/muestrario_valija_2hojaLiquidacion" />
                         </div>
                     </div>
                 </div>
@@ -92,11 +91,11 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
                 <div class="space-y-2">
                     <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                         <span class="text-gray-700">2.- Verificar "Formas de cobro" Vs "Resumen de liquidación" del día (1/3)</span>
-                        <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                        <ProcesoEstado estatus="Pendiente" url="/assets/simulacion.pdf" />
                     </div>
                     <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                         <span class="text-gray-700">3.- Verificar litros jarros = litros retorno (Listado de Contadores)</span>
-                        <ProcesoEstado estatus="Sellado" url="/sellar" />
+                        <ProcesoEstado estatus="Iniciado" url="/sellar" />
                     </div>
                     <!-- Punto 4 con subpuntos -->
                     <div>
@@ -132,15 +131,15 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
                     </div>
                     <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                         <span class="text-gray-700">5.- Verificar listado de contadores por turno vs resumen de liquidación</span>
-                        <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                        <ProcesoEstado estatus="Sellado" url="/muestrario_valija_2hojaLiquidacion" />
                     </div>
                     <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                         <span class="text-gray-700">6.- Verificar en "Recepción de carburantes" litros capturados, IVA Flete, vs facturas Pemex</span>
-                        <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                        <ProcesoEstado estatus="Verificado" url="/muestrario_valija_2hojaLiquidacion" />
                     </div>
                     <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                         <span class="text-gray-700">7.- Verificar en "Listado Remisiones de periféricos" proveedor, claves y unidades</span>
-                        <ProcesoEstado estatus="Sellado" url="/sellar" />
+                        <ProcesoEstado estatus="Alerta" url="/sellar" alerta={true} />
                     </div>
                 </div>
             </div>
@@ -152,82 +151,82 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
             <div class="space-y-2 text-sm">
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">1.- Resumen de liquidación (1/3)</span>
-                    <ProcesoEstado estatus="Verificado" url="/assets/simulacion.pdf" />
+                    <ProcesoEstado estatus="Sellado" url="/assets/simulacion.pdf" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">2.- Movimientos de Periféricos (1/3)</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_2hojaLiquidacion" alerta={true} />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">3.- Reporte "Regularización de existencias"</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_2hojaLiquidacion" />
+                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_2hojaLiquidacion" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">4.- Ficha del Banco y Traslado de valores</span>
-                    <ProcesoEstado estatus="Sellado" url="/sellar" />
+                    <ProcesoEstado estatus="Pendiente" url="/sellar" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">5.- Apuntes contables</span>
-                    <ProcesoEstado estatus="Verificado" url="/assets/simulacion.pdf" />
+                    <ProcesoEstado estatus="Iniciado" url="/assets/simulacion.pdf" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">6.- Hojas de corte de Periféricos (Turno 1,2 y 3)</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Sellado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">7.- Comprobantes de gastos (Nómina,etc)</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" alerta={true} />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">8.- Libro de Tanques (día15 y último mes y cuando se realicen jarros)</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">9.- Tira de venta real, listado de contadores, y Listado de Mediciones</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">10.- Hoja de corte por cambio de turno solo si se trabaja fuera del sistema</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" alerta={true} />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">11.- Listado de remisión de periféricos con soportes</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Sellado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">12.- Recepción de carburantes con soportes</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">13.- Jarreo</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" alerta={true} />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">14.- Vales por Empresa</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Sellado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">15.- Corte de terminales con vouchers</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
                 </div>
 
                 <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                     <span class="text-gray-700">16.- Lista de placas con tag</span>
-                    <ProcesoEstado estatus="Iniciado" url="/muestrario_valija_3resumenes" />
+                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" alerta={true} />
                 </div>
             </div>
         </div>
@@ -252,7 +251,6 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
 
         <!-- Botones -->
         <div class="text-center mt-6 space-x-4">
-            <Huella />
             <button id="guardar" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block">
                 Guardar
             </button>
@@ -260,6 +258,7 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
     </form>
 </div>
 
+<Huella />
     <script>
         //se crea una funcion para evitar que las otras funciones se mezclen
         function main() {
