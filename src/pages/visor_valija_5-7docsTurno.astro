@@ -1,5 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import DocumentoEstado from '../components/DocumentoEstado.astro';
+
+// Las declaraciones de tipo para Window parecen causar conflictos en este contexto.
+// Eliminaremos las declaraciones explícitas de las funciones globales por ahora
+// y manejaremos los eventos a través de addEventListener.
+// interface Window {
+//   handleAreaClick: (id: string) => void;
+//   documentoSeleccionado: string | null;
+//   closeConfirmModal: () => void;
+//   confirmarDocumentoSeleccionado: () => void;
+//   openPdfViewer: (id: string) => void;
+//   closeModal: () => void;
+//   showValidationDialog: () => void;
+//   closeValidationDialog: () => void;
+// }
+
+// declare const window: Window;
 ---
 
 <Layout>
@@ -11,7 +28,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="bg-white rounded-lg p-6 max-w-6xl w-full h-[90vh] relative">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-semibold" id="modal-title">Visualización de Documento</h3>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <button id="close-pdf-modal-btn" class="text-gray-500 hover:text-gray-700">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -77,30 +94,12 @@ import Layout from '../layouts/Layout.astro';
         <div class="flex items-center mb-1">
           <h3 class="font-medium text-gray-700 text-lg">Listado de Contadores.</h3>
           <div class="flex-1 border-b border-black mx-4"></div>
-          <button id="validate-files-btn" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+          <button id="validate-contadores-btn" data-section="contadores" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
         </div>
-        <div class="flex gap-x-10 px-8">
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-yellow-50" onclick="openPdfViewer('contador-turno1')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 1</span>
-              <span class="font-semibold text-base text-yellow-600">En espera</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo subido</div>
-          </div>
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-yellow-50" onclick="openPdfViewer('contador-turno2')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 2</span>
-              <span class="font-semibold text-base text-yellow-600">En espera</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo subido</div>
-          </div>
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-yellow-50" onclick="openPdfViewer('contador-turno3')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 3</span>
-              <span class="font-semibold text-base text-yellow-600">En espera</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo subido</div>
-          </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="espera" turno="Turno 1" docId="contador-turno1" />
+          <DocumentoEstado estado="espera" turno="Turno 2" docId="contador-turno2" />
+          <DocumentoEstado estado="espera" turno="Turno 3" docId="contador-turno3" />
         </div>
       </div>
 
@@ -109,30 +108,12 @@ import Layout from '../layouts/Layout.astro';
         <div class="flex items-center mb-1">
           <h3 class="font-medium text-gray-700 text-lg">Hojas de Open Pos</h3>
           <div class="flex-1 border-b border-black mx-4"></div>
-          <button class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+          <button id="validate-openpos-btn" data-section="openpos" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
         </div>
-        <div class="flex gap-x-10 px-8">
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-gray-100" onclick="openPdfViewer('openpos-turno1')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 1</span>
-              <span class="font-semibold text-base text-gray-500">Faltante</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo no subido</div>
-          </div>
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-gray-100" onclick="openPdfViewer('openpos-turno2')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 2</span>
-              <span class="font-semibold text-base text-gray-500">Faltante</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo no subido</div>
-          </div>
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-gray-100" onclick="openPdfViewer('openpos-turno3')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 3</span>
-              <span class="font-semibold text-base text-gray-500">Faltante</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo no subido</div>
-          </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="faltante" turno="Turno 1" docId="openpos-turno1" />
+          <DocumentoEstado estado="faltante" turno="Turno 2" docId="openpos-turno2" />
+          <DocumentoEstado estado="faltante" turno="Turno 3" docId="openpos-turno3" />
         </div>
       </div>
 
@@ -141,86 +122,92 @@ import Layout from '../layouts/Layout.astro';
         <div class="flex items-center mb-1">
           <h3 class="font-medium text-gray-700 text-lg">Hoja de Mediciones con Comprobante</h3>
           <div class="flex-1 border-b border-black mx-4"></div>
-          <button class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+          <button id="validate-comprobante-btn" data-section="comprobante" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
         </div>
-        <div class="flex gap-x-10 px-8">
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-green-50" onclick="openPdfViewer('comprobante-turno1')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 1</span>
-              <span class="font-semibold text-base text-green-600">Confirmado</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo subido</div>
-          </div>
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-green-50" onclick="openPdfViewer('comprobante-turno2')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 2</span>
-              <span class="font-semibold text-base text-green-600">Confirmado</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo subido</div>
-          </div>
-          <div class="border-4 border-gray-300 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl hover:bg-green-50" onclick="openPdfViewer('comprobante-turno3')">
-            <div class="flex justify-between items-start mb-2">
-              <span class="font-bold text-base text-gray-800">Turno 3</span>
-              <span class="font-semibold text-base text-green-600">Confirmado</span>
-            </div>
-            <div class="text-base text-gray-500">Archivo subido</div>
-          </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="confirmado" turno="Turno 1" docId="comprobante-turno1" />
+          <DocumentoEstado estado="confirmado" turno="Turno 2" docId="comprobante-turno2" />
+          <DocumentoEstado estado="confirmado" turno="Turno 3" docId="comprobante-turno3" />
         </div>
       </div>
 
-      
+      <!-- Inventarios -->
+      <div class="mb-8">
+        <div class="flex items-center mb-1">
+          <h3 class="font-medium text-gray-700 text-lg">Inventarios</h3>
+          <div class="flex-1 border-b border-black mx-4"></div>
+          <button id="validate-inventarios-btn" data-section="inventarios" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+        </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="faltante" turno="Turno 1" docId="inventarios-turno1" />
+          <DocumentoEstado estado="faltante" turno="Turno 2" docId="inventarios-turno2" />
+          <DocumentoEstado estado="faltante" turno="Turno 3" docId="inventarios-turno3" />
+        </div>
+      </div>
 
     </div>
   </div>
 
   <script>
-    // Declarar las funciones en el ámbito global
-    window.handleAreaClick = function(id: string) {
-      const status = document.getElementById(`${id}-status`);
-      if (status && status.textContent === 'Archivo no subido') {
-        alert('No hay archivo disponible para visualizar');
-        return;
-      }
+    // Las funciones ahora son locales al scope del script
 
-      // Abrir el modal de confirmación
-      window.documentoSeleccionado = id;
-      const confirmModal = document.getElementById('confirm-modal');
-      if (confirmModal) {
-        confirmModal.classList.remove('hidden');
-        confirmModal.style.display = 'flex';
+    function handleAreaClick(event: Event) {
+      const item = event.currentTarget as HTMLElement;
+      if (item) {
+        const id = item.dataset.docId;
+        if (!id) return;
+
+        const status = document.getElementById(`${id}-status`);
+        if (status && status.textContent === 'Archivo no subido') {
+          alert('No hay archivo disponible para visualizar');
+          return;
+        }
+
+        // Abrir el modal de confirmación
+        const confirmModal = document.getElementById('confirm-modal');
+        if (confirmModal) {
+          confirmModal.dataset.documentoSeleccionado = id; // Almacenar ID en el modal
+          confirmModal.classList.remove('hidden');
+          confirmModal.style.display = 'flex';
+        }
       }
     };
 
-    window.closeConfirmModal = function() {
+    function closeConfirmModal() {
       const confirmModal = document.getElementById('confirm-modal');
       if (confirmModal) {
         confirmModal.classList.add('hidden');
         confirmModal.style.display = 'none';
+        confirmModal.dataset.documentoSeleccionado = ''; // Limpiar el ID almacenado
       }
-      window.documentoSeleccionado = null;
     };
 
-    window.confirmarDocumentoSeleccionado = function() {
-      if (window.documentoSeleccionado) {
-        const container = document.getElementById(window.documentoSeleccionado)?.closest('.border-4');
-        const statusText = container?.querySelector('.text-yellow-600');
+    function confirmarDocumentoSeleccionado() {
+      const confirmModal = document.getElementById('confirm-modal');
+      const documentoSeleccionado = confirmModal?.dataset.documentoSeleccionado; // Obtener ID del modal
+
+      if (documentoSeleccionado) {
+        const statusSpan = document.getElementById(`${documentoSeleccionado}-status`);
+        const container = statusSpan?.closest('.border-4'); // Encontrar el contenedor padre
         
-        if (container && statusText) {
-          container.classList.remove('border-yellow-400');
-          container.classList.add('border-green-500');
-          statusText.textContent = 'Confirmado';
-          statusText.classList.remove('text-yellow-600');
-          statusText.classList.add('text-green-600');
+        if (container && statusSpan) {
+          // Remover clases de estado anteriores y añadir las de confirmado
+          container.classList.remove('border-gray-300', 'border-yellow-400', 'bg-white', 'bg-yellow-50', 'hover:bg-gray-100', 'hover:bg-yellow-50');
+          container.classList.add('border-green-600', 'bg-green-50', 'hover:bg-green-50');
+
+          statusSpan.textContent = 'Confirmado';
+          statusSpan.classList.remove('text-gray-500', 'text-yellow-600');
+          statusSpan.classList.add('text-green-600');
         }
       }
-      window.closeConfirmModal();
+      closeConfirmModal(); // Llamar a la función local
     };
 
-    window.openPdfViewer = function(id: string) {
+    function openPdfViewer(id: string) {
       const modal = document.getElementById('pdf-modal');
-      const viewer = document.getElementById('pdf-viewer') as HTMLIFrameElement;
+      const viewer = document.getElementById('pdf-viewer') as HTMLIFrameElement | null; // Tipado mejorado y permitir null
       const title = document.getElementById('modal-title');
-      const status = document.getElementById(`${id}-status`);
+      const status = document.getElementById(`${id}-status`); // Usar el ID del span de estado
 
       if (!modal || !viewer || !title) {
         console.error('No se encontraron los elementos necesarios para el modal');
@@ -264,9 +251,9 @@ import Layout from '../layouts/Layout.astro';
       modal.style.display = 'flex';
     };
 
-    window.closeModal = function() {
+    function closeModal() {
       const modal = document.getElementById('pdf-modal');
-      const viewer = document.getElementById('pdf-viewer') as HTMLIFrameElement;
+      const viewer = document.getElementById('pdf-viewer') as HTMLIFrameElement | null; // Tipado mejorado y permitir null
       
       if (!modal || !viewer) return;
       
@@ -275,14 +262,21 @@ import Layout from '../layouts/Layout.astro';
       viewer.src = '';
     };
 
-    // Función para mostrar el diálogo de validación
-    window.showValidationDialog = function() {
+    function showValidationDialog(event: Event) {
       const validationDialog = document.getElementById('validation-dialog');
       if (validationDialog) {
+        const button = event.currentTarget as HTMLElement; // Obtener el botón que disparó el evento y castear a HTMLElement
+        if (button && button.dataset) { // Verificar si button y button.dataset no son null/undefined
+          const section = button.dataset.section; // Obtener la sección del atributo data
+          if (section) {
+            validationDialog.dataset.section = section; // Almacenar la sección en el modal
+          }
+        }
+        
         // Cargar el PDF de simulación en los tres visores
         const pdfPreviews = ['preview-pdf1', 'preview-pdf2', 'preview-pdf3'];
         pdfPreviews.forEach(id => {
-          const iframe = document.getElementById(id);
+          const iframe = document.getElementById(id) as HTMLIFrameElement | null; // Tipado mejorado y permitir null
           if (iframe) {
             iframe.src = '/assets/simulacion.pdf';
           }
@@ -293,8 +287,7 @@ import Layout from '../layouts/Layout.astro';
       }
     };
 
-    // Función para cerrar el diálogo de validación
-    window.closeValidationDialog = function() {
+    function closeValidationDialog() {
       const validationDialog = document.getElementById('validation-dialog');
       if (validationDialog) {
         validationDialog.classList.add('hidden');
@@ -303,7 +296,7 @@ import Layout from '../layouts/Layout.astro';
         // Limpiar las URLs de los PDFs
         const pdfPreviews = ['preview-pdf1', 'preview-pdf2', 'preview-pdf3'];
         pdfPreviews.forEach(id => {
-          const iframe = document.getElementById(id);
+          const iframe = document.getElementById(id) as HTMLIFrameElement | null; // Tipado mejorado y permitir null
           if (iframe) {
             iframe.src = '';
           }
@@ -311,69 +304,126 @@ import Layout from '../layouts/Layout.astro';
       }
     };
 
-    // Event listeners para el diálogo de validación
     document.addEventListener('DOMContentLoaded', function() {
-      const validateFilesBtn = document.getElementById('validate-files-btn');
+      // Event listeners para los divs de turno individuales para abrir el modal de visualización de PDF (MODIFICADO)
+      const turnItemsToView = document.querySelectorAll('.turn-items-container > div.border-4');
+      turnItemsToView.forEach(item => {
+        // Obtener el ID del documento del atributo data
+        const id = (item as HTMLElement).dataset.docId; // Cast a HTMLElement para acceder a dataset
+        if (id) {
+          // Añadir event listener para abrir el modal de visualización de PDF
+          item.addEventListener('click', () => openPdfViewer(id)); // Usar la función local openPdfViewer
+        }
+      });
+
+      // Event listeners para los botones Validar para mostrar el modal de validación
+      const allValidateButtonIds = [
+        'validate-contadores-btn',
+        'validate-openpos-btn',
+        'validate-comprobante-btn',
+        'validate-inventarios-btn'
+      ];
+
+      allValidateButtonIds.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+          button.addEventListener('click', showValidationDialog); // Llamar a la función local showValidationDialog
+        }
+      });
+
+      // Event listeners para los botones del modal de confirmación (mantener si es necesario para otro flujo)
+      const confirmDocumentoBtn = document.querySelector('#confirm-modal button.bg-green-600');
+      const cancelConfirmBtn = document.querySelector('#confirm-modal button.bg-gray-200');
+
+      if (confirmDocumentoBtn) {
+        confirmDocumentoBtn.addEventListener('click', confirmarDocumentoSeleccionado); // Llamar a la función local confirmarDocumentoSeleccionado
+      }
+      if (cancelConfirmBtn) {
+        cancelConfirmBtn.addEventListener('click', closeConfirmModal); // Llamar a la función local closeConfirmModal
+      }
+
+      // Event listeners para los botones del modal de validación
       const cancelValidationBtn = document.getElementById('cancel-validation');
       const confirmValidationBtn = document.getElementById('confirm-validation');
 
-      if (validateFilesBtn) {
-        validateFilesBtn.addEventListener('click', window.showValidationDialog);
-      }
-
       if (cancelValidationBtn) {
-        cancelValidationBtn.addEventListener('click', window.closeValidationDialog);
+        cancelValidationBtn.addEventListener('click', closeValidationDialog); // Llamar a la función local closeValidationDialog
       }
 
       if (confirmValidationBtn) {
         confirmValidationBtn.addEventListener('click', function() {
-          // Aquí iría la lógica para confirmar la validación
-          window.closeValidationDialog();
-          // Actualizar el estado de los contenedores a confirmados
-          const containers = document.querySelectorAll('.border-4');
-          containers.forEach(container => {
-            const statusText = container.querySelector('.text-yellow-600');
-            if (statusText) {
-              statusText.textContent = 'Confirmado';
-              statusText.classList.remove('text-yellow-600');
-              statusText.classList.add('text-green-600');
-              container.classList.remove('hover:bg-yellow-50');
-              container.classList.add('hover:bg-green-50');
-            }
-          });
+          const validationDialog = document.getElementById('validation-dialog');
+          const section = validationDialog?.dataset.section;
+
+          if (section) {
+            let prefix = section === "contadores" ? "contador-" : section + "-";
+            const itemsToUpdate = document.querySelectorAll(`.turn-items-container [data-doc-id^="${prefix}"]`);
+            itemsToUpdate.forEach(item => {
+              item.classList.remove('border-gray-300', 'hover:bg-gray-100', 'hover:bg-yellow-50');
+              item.classList.add('border-green-600', 'hover:bg-green-50');
+              const statusSpan = item.querySelector('span.font-semibold');
+              if (statusSpan) {
+                statusSpan.textContent = 'Confirmado';
+                statusSpan.classList.remove('text-gray-500', 'text-yellow-600');
+                statusSpan.classList.add('text-green-600');
+              }
+              const descriptiveSpan = item.querySelector('div.text-base.text-gray-500');
+              if (descriptiveSpan) {
+                descriptiveSpan.textContent = 'Archivo subido';
+              }
+            });
+            console.log(`Validación confirmada para la sección: ${section}`);
+          }
+          closeValidationDialog();
         });
       }
-    });
 
-    // Inicializar variables globales
-    window.documentoSeleccionado = null;
+      // Event listeners para cerrar modales con ESC y clics fuera del contenido
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+          closeConfirmModal();
+          closeValidationDialog(); // Añadido para cerrar también el modal de validación
+        }
+      });
 
-    // Cerrar modal con la tecla ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        window.closeModal();
-        window.closeConfirmModal();
+      const modal = document.getElementById('pdf-modal');
+      const confirmModal = document.getElementById('confirm-modal');
+      const validationDialog = document.getElementById('validation-dialog'); // Obtener referencia al modal de validación
+      
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+      }
+
+      if (confirmModal) {
+        confirmModal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeConfirmModal();
+          }
+        });
+      }
+
+      if (validationDialog) { // Añadir listener para el modal de validación
+        validationDialog.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeValidationDialog();
+          }
+        });
+      }
+
+      // Event listener para el botón de cierre del modal del visor de PDF
+      const closePdfModalBtn = document.getElementById('close-pdf-modal-btn');
+      if (closePdfModalBtn) {
+        closePdfModalBtn.addEventListener('click', closeModal); // Llamar a la función local closeModal
       }
     });
 
-    // Cerrar modal al hacer clic fuera del contenido
-    const modal = document.getElementById('pdf-modal');
-    const confirmModal = document.getElementById('confirm-modal');
-    
-    if (modal) {
-      modal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          window.closeModal();
-        }
-      });
-    }
+    // window.documentoSeleccionado ya no se usa
+    // window.documentoSeleccionado = null;
 
-    if (confirmModal) {
-      confirmModal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          window.closeConfirmModal();
-        }
-      });
-    }
   </script>
 </Layout> 

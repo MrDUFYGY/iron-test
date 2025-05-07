@@ -1,0 +1,40 @@
+---
+// Props del componente
+export interface Props {
+  estado: "espera" | "faltante" | "confirmado";
+  turno: string;
+  docId: string;
+}
+
+const { estado, turno, docId } = Astro.props;
+
+// Función para actualizar el estado dinámicamente
+function updateEstado(newEstado: string) {
+  // Esta función no se usa directamente aquí, pero se puede llamar desde el script principal
+  // Para actualizar, necesitaríamos un mecanismo como eventos o un store, pero por simplicidad, asumimos que se maneja desde fuera.
+}
+---
+
+<div
+  id={docId}
+  class={`border-4 rounded-xl p-4 w-96 flex flex-col bg-white shadow-sm cursor-pointer transition-shadow transition-colors hover:shadow-2xl ${estado === "confirmado"
+      ? "border-green-600 hover:bg-green-50"
+      : "border-gray-300 hover:bg-gray-100"}`}
+  data-doc-id={docId}
+>
+  <div class="flex justify-between items-start mb-2">
+    <span class="font-bold text-base text-gray-800">{turno}</span>
+    <span
+      class={`font-semibold text-base ${estado === "confirmado"
+          ? "text-green-600"
+          : estado === "espera"
+          ? "text-yellow-600"
+          : "text-gray-500"}`}
+    >
+      {estado === "espera" ? "En espera" : estado === "faltante" ? "Faltante" : "Confirmado"}
+    </span>
+  </div>
+  <div class="text-base text-gray-500">
+    {estado === "faltante" ? "Archivo no subido" : "Archivo subido"}
+  </div>
+</div> 
