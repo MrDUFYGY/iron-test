@@ -1,10 +1,8 @@
 ---
 import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import Huella from '../components/ConfirmHuella.astro';
 import ProcesoEstadoCorporativo from '../components/ProcesoEstadoCorporativo.astro';
-
+import TooltipCircle from '../components/TooltipCircle.astro';
 const fechaActual = new Date();
 const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
     weekday: 'long',
@@ -20,10 +18,12 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
 ---
 
 <Layout>
+    <TooltipCircle />
 <div class="mx-auto bg-white rounded-xl shadow-md">
     <div class="border-b-2 border-gray-200 pb-4 mb-6">
         <div class="flex justify-between items-start mb-4">
             <h1 class="text-2xl font-bold uppercase">Lista de corrección de pólizas de ingresos</h1>
+            
             <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded">HD-45</span>
         </div>
         <div class="flex justify-between items-center">

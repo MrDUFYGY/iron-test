@@ -1,9 +1,9 @@
 ---
 import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
 import Huella from '../components/ConfirmHuella.astro';
 import ProcesoEstado from '../components/ProcesoEstadoEstacion.astro';
+import TooltipCircle from '../components/TooltipCircle.astro';
 
 const fechaActual = new Date();
 const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
@@ -20,6 +20,7 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
 ---
 
 <Layout>
+
 <style>
     .estado {
         display: none;
@@ -34,7 +35,7 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
         display: inline-block;
     }
 </style>
-
+<TooltipCircle />
 <div class=" mx-auto bg-white rounded-xl shadow-md">
     <div class="border-b-2 border-gray-200 pb-4 mb-6">
         <div class="flex justify-between items-start mb-4">

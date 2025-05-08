@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+import NavSelector from '../components/NavSelector.astro';
 interface Props {
     texto: string;
     color?: string;
@@ -13,6 +15,7 @@ const {
 ---
 
 <div class="separador-container" style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}>
+    <NavSelector />
     <div class="separador">
         <div class="linea"></div>
         <h2 class="texto">{texto}</h2>
@@ -23,11 +26,12 @@ const {
 <style>
     .separador-container {
         width: 100%;
-        padding: 4rem 1rem;
+        padding: 1rem 1rem;
         background-color: var(--bg-color);
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 1rem;
     }
 
     .separador {

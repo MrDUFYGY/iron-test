@@ -1,0 +1,203 @@
+---
+import "../styles/global.css";
+interface Props {
+  activeVisor?: string;
+  activeTipo?: string;
+}
+
+const { activeVisor = "estacion", activeTipo = "muestrario" } = Astro.props;
+---
+
+<div class="nav-selector">
+  <div class="dropdown">
+    <button class="dropdown-btn" onclick="toggleDropdown()">
+      <span>Menú de navegación</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+      </svg>
+    </button>
+    <div class="dropdown-content" id="dropdown-content">
+      <div class="menu-section">
+        <h3>Tipo de Visor</h3>
+        <div class="option-buttons">
+          <button class={`option-btn ${activeVisor === "estacion" ? "active" : ""}`} data-visor="estacion" onclick="selectVisor('estacion')">
+            Estación
+          </button>
+          <button class={`option-btn ${activeVisor === "corporativo" ? "active" : ""}`} data-visor="corporativo" onclick="selectVisor('corporativo')">
+            Corporativo
+          </button>
+        </div>
+      </div>
+
+      <div class="menu-section">
+        <h3>Tipo de Vista</h3>
+        <div class="option-buttons">
+          <button class={`option-btn ${activeTipo === "muestrario" ? "active" : ""}`} data-tipo="muestrario" onclick="selectTipo('muestrario')">
+            Muestrario
+          </button>
+          <button class={`option-btn ${activeTipo === "visor" ? "active" : ""}`} data-tipo="visor" onclick="selectTipo('visor')">
+            Visor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let dropdownOpen = false;
+  const dropdownContent = document.getElementById('dropdown-content');
+  const dropdownElement = document.querySelector('.dropdown'); // Obtener el contenedor principal del dropdown
+
+  function toggleDropdown() {
+    if (!dropdownContent) return; // Verificación de seguridad
+    if (dropdownOpen) {
+      dropdownContent.style.display = 'none';
+      dropdownOpen = false;
+    } else {
+      dropdownContent.style.display = 'block';
+      dropdownOpen = true;
+    }
+  }
+
+  function selectVisor(visor: string) {
+    console.log(`Visor seleccionado: ${visor}`);
+    // Actualizar el parámetro 'visor' en la URL y navegar
+    const url = new URL(window.location.href);
+    url.searchParams.set('visor', visor);
+    // Opcional: cerrar el dropdown después de la selección
+    if (dropdownContent) {
+        dropdownContent.style.display = 'none';
+        dropdownOpen = false;
+    }
+    window.location.href = url.toString(); // Navegar a la nueva URL
+  }
+
+  function selectTipo(tipo: string) {
+    console.log(`Tipo de vista seleccionado: ${tipo}`);
+    // Actualizar el parámetro 'tipo' en la URL y navegar
+    const url = new URL(window.location.href);
+    url.searchParams.set('tipo', tipo);
+     // Opcional: cerrar el dropdown después de la selección
+    if (dropdownContent) {
+        dropdownContent.style.display = 'none';
+        dropdownOpen = false;
+    }
+    window.location.href = url.toString(); // Navegar a la nueva URL
+  }
+
+  // Exponer funciones al ámbito global para que los atributos onclick puedan encontrarlas
+  // Esto es necesario porque el script es de type="module"
+  (window as any).toggleDropdown = toggleDropdown;
+  (window as any).selectVisor = selectVisor;
+  (window as any).selectTipo = selectTipo;
+
+
+  // Cerrar el dropdown cuando se hace clic fuera de él
+  document.addEventListener('click', function(e: Event) {
+    const target = e.target as HTMLElement;
+    // Verificar si el clic fue fuera del contenedor principal del dropdown
+    if (dropdownElement && !dropdownElement.contains(target) && dropdownOpen) {
+      if (dropdownContent) {
+        dropdownContent.style.display = 'none';
+        dropdownOpen = false;
+      }
+    }
+  });
+
+  // Asegurarse de que el dropdown esté oculto inicialmente si JS está habilitado
+  // Usar DOMContentLoaded para asegurar que el elemento existe
+   document.addEventListener('DOMContentLoaded', () => {
+      if (dropdownContent) {
+         dropdownContent.style.display = 'none';
+      }
+  });
+
+</script>
+
+<style>
+  .nav-selector {
+    position: relative;
+    display: inline-block;
+    z-index: 100;
+  }
+
+  .dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #2563eb;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+
+  .dropdown-btn:hover {
+    background-color: #1d4ed8;
+  }
+
+  .dropdown-content {
+    /* display: none;  -- Controlado por JS */
+    position: absolute;
+    background-color: white;
+    min-width: 250px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    z-index: 1;
+    margin-top: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+
+  /* Eliminar la regla de hover que mostraba el contenido */
+  /* .dropdown:hover .dropdown-content {
+    display: block;
+  } */
+
+  .menu-section {
+    margin-bottom: 1rem;
+  }
+
+  .menu-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .menu-section h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .option-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .option-btn {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .option-btn:hover {
+    background-color: #e5e7eb;
+  }
+
+  .option-btn.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #2563eb;
+  }
+</style>
