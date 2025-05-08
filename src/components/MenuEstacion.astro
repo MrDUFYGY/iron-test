@@ -1,0 +1,232 @@
+---
+// MenuEstacion.astro
+interface Props {
+  items: Array<{
+    title: string;
+    description: string;
+    icon: string;
+    link: string;
+    modalSide?: 'left' | 'right';
+  }>;
+}
+
+const { items } = Astro.props;
+---
+
+<div class="menu-estacion-container">
+  <div class="menu-estacion-grid">
+    {items.map((item) => (
+      <div class="menu-estacion-card">
+        <div class="card-top">
+          <div class="card-icon">
+            <span class="material-icons">{item.icon}</span>
+          </div>
+          <div class="card-content">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href={item.link} class="action-button button-ir">
+            <span class="button-text">Ir a página</span>
+          </a>
+          <button onclick={`showModal('${item.link}', '${item.modalSide || 'right'}', '${item.title}')`} class="action-button button-modal">
+            <span class="button-text">Ver modal</span>
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+{/* Modal containers */}
+<div id="modal-left" class="modal-content hidden" style="left: 0;"></div>
+<div id="modal-right" class="modal-content hidden" style="right: 0;"></div>
+
+<style>
+  .menu-estacion-container {
+    padding: 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .menu-estacion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .menu-estacion-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 1.25rem;
+    color: #f8fafc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    position: relative;
+    height: 100%;
+  }
+
+  .menu-estacion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-top {
+    flex-grow: 1;
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #4ade80;
+  }
+
+  .card-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: inherit;
+  }
+
+  .card-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: inherit;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid;
+    cursor: pointer;
+  }
+
+  .button-ir {
+    border-color: #22c55e;
+    color: #22c55e;
+    background: transparent;
+  }
+
+  .button-modal {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: transparent;
+  }
+
+  .action-button:hover {
+    transform: scale(1.05);
+  }
+
+  /* Modal styles */
+  .modal-content {
+    background-color: white;
+    width: 50%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    padding-top: 2rem;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+
+  .modal-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .modal-close-button:hover {
+    background-color: #dc2626;
+    transform: scale(1.1);
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script is:inline>
+  const activeModals = {
+    left: null,
+    right: null
+  };
+
+  function showModal(url, side, title) {
+    const modalId = `modal-${side}`;
+    const modal = document.getElementById(modalId);
+
+    // Close existing modal on this side if there is one
+    if (activeModals[side]) {
+      closeModal(modalId);
+    }
+
+    // Create modal content dynamically
+    modal.innerHTML = `
+      <iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>
+      <button onclick="closeModal('${modalId}')" class="modal-close-button">Cerrar</button>
+      <div style="
+      background-color: #22c55e;
+      color: white;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      position: absolute; top: 1rem; left: 1rem; font-weight: bold;">${title}</div>
+    `;
+
+    // Show modal and update active modal tracking
+    modal.classList.remove('hidden');
+    activeModals[side] = url;
+
+    // Add event listener for escape key
+    document.addEventListener('keydown', handleEscapeKey);
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('hidden');
+    modal.innerHTML = '';
+    
+    const side = modalId.replace('modal-', '');
+    activeModals[side] = null;
+
+    // Remove escape key listener if no active modals
+    if (!activeModals.left && !activeModals.right) {
+      document.removeEventListener('keydown', handleEscapeKey);
+    }
+  }
+
+  function handleEscapeKey(event) {
+    if (event.key === 'Escape') {
+      if (activeModals.left) closeModal('modal-left');
+      if (activeModals.right) closeModal('modal-right');
+    }
+  }
+</script> 

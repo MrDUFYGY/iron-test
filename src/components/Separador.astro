@@ -16,8 +16,8 @@ const {
 
 <div class="separador-container" style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}>
     <NavSelector />
-    <div class="separador">
-        <div class="linea"></div>
+    <div class="separador ml-10">
+        <div class="linea "></div>
         <h2 class="texto">{texto}</h2>
         <div class="linea"></div>
     </div>
@@ -26,12 +26,13 @@ const {
 <style>
     .separador-container {
         width: 100%;
-        padding: 1rem 1rem;
+        padding: 1rem;
         background-color: var(--bg-color);
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        margin-bottom: 1rem;
+        margin-bottom: 0.1rem;
+        height: 14vh;
     }
 
     .separador {
@@ -39,7 +40,7 @@ const {
         display: flex;
         align-items: center;
         gap: 2rem;
-        padding: 0 1rem;
+        padding: 0;
     }
 
     .linea {

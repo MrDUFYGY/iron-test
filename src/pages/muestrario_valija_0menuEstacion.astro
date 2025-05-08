@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+import MenuEstacion from "../components/MenuEstacion.astro";
+import Separador from "../components/Separador.astro";
+---
+
+<Layout>
+    <Separador texto="MENÚ DE ESTACIÓN" />
+
+    <div style="display: flex; justify-content: flex; width: 100%; align-items: center;">
+        <div style="width: 50%; height: 85vh;  margin-left: 2vw;">
+            <iframe 
+                src="/muestrario_valija_1caratula" 
+                style="width: 100%; height: 100%; border: none;"
+                title="Muestrario de caratula digital">
+            </iframe>
+        </div>
+        <div style="width: 50%; height: 85vh;  overflow-y: auto;">
+            <MenuEstacion items={[
+                {
+                    title: "Caratula",
+                    description: "Formulario de caratula digital",
+                    icon: "description",
+                    link: "/muestrario_valija_1caratula",
+                    modalSide: "right"
+                },
+                {
+                    title: "Hoja de liquidación",
+                    description: "Gestión de hojas de liquidación",
+                    icon: "receipt",
+                    link: "/muestrario_valija_2hojaLiquidacion",
+                    modalSide: "right"
+                },
+                {
+                    title: "Resultados de búsqueda",
+                    description: "Visualización de resultados de búsqueda",
+                    icon: "search",
+                    link: "/muestrario_valija_3resultadosBusqueda",
+                    modalSide: "right"
+                },
+                {
+                    title: "Nóminas",
+                    description: "Gestión de nóminas",
+                    icon: "account_balance_wallet",
+                    link: "/muestrario_valija_4nominas",
+                    modalSide: "right"
+                },
+                {
+                    title: "Documentos por turno",
+                    description: "Gestión de documentos por turno",
+                    icon: "schedule",
+                    link: "/muestrario_valija_5-7docsTurno",
+                    modalSide: "right"
+                },
+                {
+                    title: "Histórico de carburante",
+                    description: "Visualización del histórico de carburante",
+                    icon: "local_gas_station",
+                    link: "/muestrario_valija_8historicoCarburante",
+                    modalSide: "right"
+                },
+                {
+                    title: "Ventas por período",
+                    description: "Consulta de ventas por período",
+                    icon: "bar_chart",
+                    link: "/muestrario_valija_9resultadoVentasxPeriordo",
+                    modalSide: "right"
+                },
+                {
+                    title: "Mermas y regularización",
+                    description: "Resultados de mermas y regularización",
+                    icon: "assessment",
+                    link: "/muestrario_valija_10resultadosMermasRegul",
+                    modalSide: "right"
+                }
+            ]} />
+        </div>
+    </div>
+
+</Layout>
+
+<style>
+    /* Estilos adicionales específicos para esta página */
+    :global(.material-icons) {
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+    }
+</style>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
