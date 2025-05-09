@@ -7,6 +7,7 @@ interface Props {
     icon: string;
     link: string;
     modalSide?: 'left' | 'right';
+    sugerencia?: boolean;
   }>;
 }
 
@@ -45,7 +46,7 @@ const { items } = Astro.props;
 
 <style>
   .menu-estacion-container {
-    padding: 1.5rem;
+    padding-top: 1rem;
     max-width: 100%;
     margin: 0 auto;
   }
@@ -199,6 +200,21 @@ const { items } = Astro.props;
       border-radius: 999px;
       padding: 0.5rem 1rem;
       position: absolute; top: 1rem; left: 1rem; font-weight: bold;">${title}</div>
+      <style>
+          .modal-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+      </style>
     `;
 
     // Show modal and update active modal tracking
