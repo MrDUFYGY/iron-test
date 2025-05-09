@@ -30,9 +30,12 @@ import Separador from "../components/Separador.astro";
 
                 <form id="formulario" class="space-y-8">
                     <!-- Puntos de Amarre -->
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <h2 class="font-bold uppercase mb-4 text-gray-800">Puntos de Amarre:</h2>
-                        <div class="space-y-4 text-sm">
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 muestrario-collapse-section">
+                        <div class="cursor-pointer collapse-header muestrario-collapse-header flex justify-between items-center" data-section="muestrario-puntos-amarre">
+                            <h2 class="font-bold uppercase text-gray-800">Puntos de Amarre:</h2>
+                            <span class="collapse-icon muestrario-collapse-icon">▼</span>
+                        </div>
+                        <div id="muestrario-puntos-amarre-content" class="collapse-content muestrario-collapse-content max-h-0 overflow-hidden invisible transition-all duration-300 ease-in-out space-y-4 text-sm">
                             <!-- Punto 1 con subpuntos -->
                             <div>
                                 <div class="flex items-center p-2 bg-gray-100 rounded-t-lg">
@@ -121,9 +124,12 @@ import Separador from "../components/Separador.astro";
                     </div>
 
                     <!-- Documentos que integran la póliza -->
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <h2 class="font-bold uppercase mb-4 text-gray-800">Documentos que integran la póliza:</h2>
-                        <div class="space-y-2 text-sm">
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 muestrario-collapse-section">
+                        <div class="cursor-pointer collapse-header muestrario-collapse-header flex justify-between items-center" data-section="muestrario-documentos-poliza">
+                            <h2 class="font-bold uppercase text-gray-800">Documentos que integran la póliza:</h2>
+                            <span class="collapse-icon muestrario-collapse-icon">▼</span>
+                        </div>
+                        <div id="muestrario-documentos-poliza-content" class="collapse-content muestrario-collapse-content max-h-full overflow-visible transition-all duration-300 ease-in-out space-y-2 text-sm opacity-100">
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                                 <span class="text-gray-700">1.- Resumen de liquidación (1/3)</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-resumen-liquidacion">Verificar</button>
@@ -183,6 +189,8 @@ import Separador from "../components/Separador.astro";
                                 <span class="text-gray-700">12.- Recepción de carburantes con soportes</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-recepcion-carburantes-soportes">Verificar</button>
                             </div>
+
+
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                                 <span class="text-gray-700">13.- Jarreo</span>
@@ -323,7 +331,7 @@ import Separador from "../components/Separador.astro";
         "modal-listado-contadores": "/muestrario_valija_1caratula",
         "modal-recepcion-carburantes": "/muestrario_valija_2hojaLiquidacion",
         "modal-remisiones-perifericos": "/muestrario_valija_3resultadosBusqueda",
-        "modal-resumen-liquidacion": "/muestrario_valija_4nominas",
+        "modal-resumen-liquidacion": "/muestrario_valija_2hojaLiquidacion",
         "modal-movimientos-perifericos": "/muestrario_valija_5-7docsTurno",
         "modal-regularizacion-existencias": "/muestrario_valija_8historicoCarburante",
         "modal-ficha-banco": "/muestrario_valija_9resultadoVentasxPeriordo",
@@ -398,6 +406,37 @@ import Separador from "../components/Separador.astro";
     });
 
     // Script para calcular la diferencia (del formulario original)
+    document.addEventListener('DOMContentLoaded', () => {
+        const collapseHeaders = document.querySelectorAll('.muestrario-collapse-header');
+        
+        collapseHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const sectionName = header.getAttribute('data-section');
+                const content = document.getElementById(`${sectionName}-content`);
+                const icon = header.querySelector('.muestrario-collapse-icon');
+                
+                if (content && icon) {
+                    const isCollapsed = content.classList.contains('max-h-0');
+                    
+                    // Toggle classes for smooth expansion
+                    content.classList.toggle('max-h-0');
+                    content.classList.toggle('max-h-screen');
+                    content.classList.toggle('py-4');
+                    content.classList.toggle('opacity-0');
+                    content.classList.toggle('opacity-100');
+                    
+                    // Rotate icon
+                    icon.textContent = isCollapsed ? '▲' : '▼';
+                    
+                    // Optional: Add a slight delay to ensure smooth transition
+                    setTimeout(() => {
+                        content.classList.toggle('invisible');
+                    }, isCollapsed ? 300 : 0);
+                }
+            });
+        });
+    });
+
     function calcularDiferencia() {
         const importeTrasladoInput = document.getElementById('importeTraslado') as HTMLInputElement;
         const importeResumenInput = document.getElementById('importeResumen') as HTMLInputElement;
@@ -448,8 +487,41 @@ import Separador from "../components/Separador.astro";
 </script>
 
 <style>
-
-
+    .muestrario-collapse-section {
+        position: relative;
+        width: 100%;
+    }
+    .muestrario-collapse-header {
+        transition: background-color 0.3s ease;
+        padding: 10px;
+        border-radius: 0.5rem;
+        user-select: none;
+    }
+    .muestrario-collapse-header:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    .muestrario-collapse-icon {
+        transition: transform 0.3s ease, color 0.3s ease;
+        display: inline-block;
+    }
+    .muestrario-collapse-content {
+        transition: 
+            max-height 0.5s ease-in-out, 
+            padding 0.5s ease-in-out,
+            opacity 0.5s ease-in-out,
+            visibility 0.5s ease-in-out;
+        overflow: hidden;
+        opacity: 1;
+    }
+    .muestrario-collapse-content.max-h-0 {
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        opacity: 0;
+    }
+    .muestrario-collapse-content.invisible {
+        visibility: hidden;
+    }
 </style>
 
 
