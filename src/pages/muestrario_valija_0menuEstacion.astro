@@ -132,48 +132,48 @@ import Separador from "../components/Separador.astro";
                         </div>
                         <div id="muestrario-documentos-poliza-content" class="collapse-content muestrario-collapse-content max-h-full overflow-visible transition-all duration-300 ease-in-out space-y-2 text-sm opacity-100">
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">1.- Resumen de liquidación (1/3)</span>
+                                <span class="text-gray-700">1.- "Resumen" de Hoja de Liquidación</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-resumen-liquidacion">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">2.- Movimientos de Periféricos (1/3)</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-movimientos-perifericos">Subir</button>
+                                <span class="text-gray-700">2.- Movimientos de caja (Ficha del Banco y Traslado de valores)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-movimientos-caja">Subir</button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">3.- Nominas</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-nominas">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">3.- Reporte "Regularización de existencias"</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-regularizacion-existencias">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">4.- Ficha del Banco y Traslado de valores</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-ficha-banco">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">5.- Apuntes contables</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-apuntes-contables">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">6.- Hojas de corte de Periféricos (Turno 1,2 y 3)</span>
+                                <span class="text-gray-700">4.- Hojas de corte de Periféricos (Turno 1,2 y 3).</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-hojas-corte-perifericos">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">7.- Comprobantes de gastos (Nómina,etc)</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-comprobantes-gastos">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">8.- Libro de Tanques (día15 y último mes y cuando se realicen jarros)</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-libro-tanques">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">9.- Tira de venta real, listado de contadores, y Listado de Mediciones</span>
+                                <span class="text-gray-700">5.- Listado de contadores, HL de OpenPos y Mediciones con tickets</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-tira-venta">Subir</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">6.- Recepción de carburantes con soportes (Historico y Documentacion)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-recepcion-carburantes-soportes">Subir</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">7.- Listado de remisión de periféricos con soportes (Pendiente)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-listado-remision-perifericos">Subir</button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">8.-Regularización de existencias (Mermas) </span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-regularizacion-mermas">Subir</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">9.- Jarreo</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-jarreo">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
@@ -182,34 +182,17 @@ import Separador from "../components/Separador.astro";
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">11.- Listado de remisión de periféricos con soportes</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-listado-remision-perifericos">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">12.- Recepción de carburantes con soportes</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-recepcion-carburantes-soportes">Subir</button>
-                            </div>
-
-
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">13.- Jarreo</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-jarreo">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">14.- Vales por Empresa</span>
+                                <span class="text-gray-700">11.- Vales por Empresa</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-vales-empresa">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">15.- Corte de terminales con vouchers</span>
+                                <span class="text-gray-700">12.- Corte de terminales con vouchers</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-corte-terminales">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">16.- Lista de placas con tag</span>
+                                <span class="text-gray-700">13.- Lista de placas con tag</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-lista-placas">Subir</button>
                             </div>
                         </div>
@@ -279,8 +262,8 @@ import Separador from "../components/Separador.astro";
 				  link: "/muestrario_valija_4nominas",
 				},
 				{
-				  title: "Subida de archivos por turno",
-				  description: "Sube los archivos de los turnos",
+				  title: "Carga de archivos en el dia.",
+				  description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
 				  icon: "upload_file",
 				  link: "/muestrario_valija_5-7docsTurno",
 				},
@@ -302,6 +285,12 @@ import Separador from "../components/Separador.astro";
 				  icon: "analytics",
 				  link: "/muestrario_valija_10resultadosMermasRegul",
 				},
+                {
+				  title: "Jarreo",
+				  description: "Confirma el jarreo de documentos",
+				  icon: "analytics",
+				  link: "/muestrario_valija_9jarreo",
+				},
 						{
 				  title: "Reporte de Inventario",
 				  description: "Reporte de Inventario",
@@ -318,9 +307,9 @@ import Separador from "../components/Separador.astro";
     // Mapa para relacionar los IDs de los modales con las URLs correspondientes
     const modalUrlMap: Record<string, string> = {
         "modal-litros": "/muestrario_valija_2hojaLiquidacion",
-        "modal-perifericos": "/muestrario_valija_9ventaHojaPerifericos",
+        "modal-perifericos": "/muestrario_valija_9ventaHojaP1erifericos",
         "modal-vales": "/muestrario_valija_3resultadosBusqueda",
-        "modal-fajillas": "/muestrario_valija_4nominas",
+        "modal-nominas": "/muestrario_valija_4nominas",
         "modal-gastos": "/muestrario_valija_5-7docsTurno",
         "modal-formas-cobro": "/muestrario_valija_8historicoCarburante",
         "modal-litros-jarros": "/muestrario_valija_9resultadoVentasxPeriordo",
@@ -329,18 +318,16 @@ import Separador from "../components/Separador.astro";
         "modal-recepcion-carburantes": "/muestrario_valija_2hojaLiquidacion",
         "modal-remisiones-perifericos": "/muestrario_valija_3resultadosBusqueda",
         "modal-resumen-liquidacion": "/muestrario_valija_2ingresoHojaLiquidacion",
-        "modal-movimientos-perifericos": "/muestrario_valija_5-7docsTurno",
-        "modal-regularizacion-existencias": "/muestrario_valija_8historicoCarburante",
+        "modal-movimientos-caja": "/muestrario_valija_3resultadosBusqueda",
+        "modal-regularizacion-mermas": "/muestrario_valija_10resultadosMermasRegul",
         "modal-ficha-banco": "/muestrario_valija_9resultadoVentasxPeriordo",
-        "modal-apuntes-contables": "/muestrario_valija_10resultadosMermasRegul",
-        "modal-hojas-corte-perifericos": "/muestrario_valija_1caratula",
+        "modal-hojas-corte-perifericos": "/muestrario_valija_9resultadoVentasxPeriordo",
         "modal-comprobantes-gastos": "/muestrario_valija_4nominas",
-        "modal-libro-tanques": "/muestrario_valija_3resultadosBusqueda",
         "modal-tira-venta": "/muestrario_valija_5-7docsTurno",
         "modal-hoja-corte-cambio-turno": "/muestrario_valija_5-7docsTurno",
-        "modal-listado-remision-perifericos": "/muestrario_valija_8historicoCarburante",
-        "modal-recepcion-carburantes-soportes": "/muestrario_valija_9resultadoVentasxPeriordo",
-        "modal-jarreo": "/muestrario_valija_10resultadosMermasRegul",
+        "modal-listado-remision-perifericos": "/muestrario_valija_9resultadoVentasxPeriordo",
+        "modal-recepcion-carburantes-soportes": "/muestrario_valija_8historicoCarburante",
+        "modal-jarreo": "/muestrario_valija_9jarreo",
         "modal-vales-empresa": "/muestrario_valija_1caratula",
         "modal-corte-terminales": "/muestrario_valija_2hojaLiquidacion",
         "modal-lista-placas": "/muestrario_valija_3resultadosBusqueda"
