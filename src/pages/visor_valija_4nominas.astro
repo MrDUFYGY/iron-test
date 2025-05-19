@@ -42,9 +42,26 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
                 <span class="text-green-600">✓</span>
                 <span class="font-medium">Archivo subido correctamente</span>
             </div>
-            <button onclick="abrirPDF()" class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50">
+            <button id="mostrarDetalles" class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50">
+                Mostrar Detalles
+            </button>
+            <button onclick="abrirPDF()" class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50 ml-2">
                 Visualizar
             </button>
+        </div>
+        <!-- Área de texto que aparece al hacer clic en el botón -->
+        <div id="detallesNomina" class="mt-4 p-3 bg-white border border-gray-300 rounded-lg hidden">
+            <h4 class="font-semibold mb-2 text-gray-700">Nóminas Corporativas</h4>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <p class="text-gray-600">Monto enviado:</p>
+                    <p class="font-medium">$130,300.00</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Validado por:</p>
+                    <p class="font-medium">Carlos Rodríguez Vázquez</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -148,5 +165,20 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
             viewer.src = '';
         }
     }
+    
+    // Función para mostrar/ocultar los detalles de la nómina
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnMostrarDetalles = document.getElementById('mostrarDetalles');
+        const detallesNomina = document.getElementById('detallesNomina');
+        
+        if (btnMostrarDetalles && detallesNomina) {
+            btnMostrarDetalles.addEventListener('click', function() {
+                detallesNomina.classList.toggle('hidden');
+                btnMostrarDetalles.textContent = detallesNomina.classList.contains('hidden') 
+                    ? 'Mostrar Detalles' 
+                    : 'Ocultar Detalles';
+            });
+        }
+    });
 </script>
-</Layout> 
+</Layout>

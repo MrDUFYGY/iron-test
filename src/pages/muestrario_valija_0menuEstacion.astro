@@ -145,24 +145,24 @@ import Separador from "../components/Separador.astro";
                                 <span class="text-gray-700">3.- Nominas</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-nominas">Subir</button>
                             </div>
-
+                            
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">4.- Hojas de corte de Periféricos (Turno 1,2 y 3).</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-hojas-corte-perifericos">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">5.- Listado de contadores, HL de OpenPos y Mediciones con tickets</span>
+                                <span class="text-gray-700">4.- Listado de contadores, HL de OpenPos y Mediciones con tickets</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-tira-venta">Subir</button>
                             </div>
 
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">5.- Hojas de corte de Periféricos (Turno 1,2 y 3).</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-hojas-corte-perifericos">Subir</button>
+                            </div>
+                            
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
                                 <span class="text-gray-700">6.- Recepción de carburantes con soportes (Historico y Documentacion)</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-recepcion-carburantes-soportes">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">7.- Listado de remisión de periféricos con soportes (Pendiente)</span>
+                                <span class="text-gray-700">7.- Listado de remisión de periféricos (Entrada de Perifericos.)</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-listado-remision-perifericos">Subir</button>
                             </div>
                             
@@ -176,28 +176,36 @@ import Separador from "../components/Separador.astro";
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-jarreo">Subir</button>
                             </div>
 
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">10.- Hoja de corte por cambio de turno solo si se trabaja fuera del sistema</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-hoja-corte-cambio-turno">Subir</button>
-                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <!-- Metodos de pago -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 muestrario-collapse-section">
+                        <div class="cursor-pointer collapse-header muestrario-collapse-header flex justify-between items-center" data-section="muestrario-documentos-poliza">
+                            <h2 class="font-bold uppercase text-gray-800">Métodos de pago:</h2>
+                            <span class="collapse-icon muestrario-collapse-icon">▼</span>
+                        </div>
+                        <div id="muestrario-documentos-poliza-content" class="collapse-content muestrario-collapse-content max-h-full overflow-visible transition-all duration-300 ease-in-out space-y-2 text-sm opacity-100">
+                         
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">11.- Vales por Empresa</span>
+                                <span class="text-gray-700">1.- Vales por Empresa</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-vales-empresa">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">12.- Corte de terminales con vouchers</span>
+                                <span class="text-gray-700">2.- Corte de terminales con vouchers</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-corte-terminales">Subir</button>
                             </div>
 
                             <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">13.- Lista de placas con tag</span>
+                                <span class="text-gray-700">3.- Lista de placas con tag</span>
                                 <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-lista-placas">Subir</button>
                             </div>
                         </div>
                     </div>
-
                     <!-- Observaciones -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
@@ -308,7 +316,7 @@ import Separador from "../components/Separador.astro";
     const modalUrlMap: Record<string, string> = {
         "modal-litros": "/muestrario_valija_2hojaLiquidacion",
         "modal-perifericos": "/muestrario_valija_9ventaHojaP1erifericos",
-        "modal-vales": "/muestrario_valija_3resultadosBusqueda",
+        "modal-vales": "/muestrario_valija_11valesEmpresa",
         "modal-nominas": "/muestrario_valija_4nominas",
         "modal-gastos": "/muestrario_valija_5-7docsTurno",
         "modal-formas-cobro": "/muestrario_valija_8historicoCarburante",
@@ -328,9 +336,9 @@ import Separador from "../components/Separador.astro";
         "modal-listado-remision-perifericos": "/muestrario_valija_9resultadoVentasxPeriordo ",
         "modal-recepcion-carburantes-soportes": "/muestrario_valija_8historicoCarburante",
         "modal-jarreo": "/muestrario_valija_9jarreo",
-        "modal-vales-empresa": "/muestrario_valija_1caratula",
+        "modal-vales-empresa": "/muestrario_valija_11valesEmpresa",
         "modal-corte-terminales": "/muestrario_valija_2hojaLiquidacion",
-        "modal-lista-placas": "/muestrario_valija_3resultadosBusqueda"
+        "modal-lista-placas": "/muestrario_valija_3resultadosBusqueda",
     };
 
     // Función para abrir el contenido en el panel del modal
