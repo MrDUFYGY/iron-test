@@ -217,6 +217,44 @@ import Input from '../components/ConfirmInput.astro';
       // Mostrar contenido de la hoja de liquidación
       contenidoHojaLiquidacion?.classList.remove('hidden');
     });
+
+     // Boton de enviar funcione
+  const envioTextarea = document.getElementById('input-envio');
+        const envioEstado = document.getElementById('envio-estado');
+        const seccionComprobante = document.getElementById('seccion-comprobante');
+
+        const charCount = document.getElementById('char-count');
+        const btnEnviar = document.getElementById('btn-enviar');
+        
+        // Función para manejar el conteo de caracteres y habilitar el botón
+        envioTextarea.addEventListener('input', (e) => {
+            const currentLength = e.target.value.trim().length;
+            charCount.textContent = `${currentLength} / 100 caracteres`;
+            
+            // Habilitar o deshabilitar el botón según el conteo de caracteres
+            if (currentLength >= 100) {
+                btnEnviar.disabled = false;
+            } else {
+                btnEnviar.disabled = true;
+            }
+        });
+
+        // Función para manejar el envío
+        btnEnviar.addEventListener('click', () => {
+            // Deshabilitar textarea y botón durante el envío
+            envioTextarea.disabled = true;
+            btnEnviar.disabled = true;
+            
+            // Mostrar animación de carga
+            envioEstado.classList.remove('hidden');
+            
+            // Simular envío con timeout
+            setTimeout(() => {
+                envioEstado.classList.add('hidden');
+                seccionComprobante.classList.remove('hidden');
+            }, 5000);
+        });
+
   </script>
 
   <Huella />
@@ -247,6 +285,7 @@ import Input from '../components/ConfirmInput.astro';
   #hl-input-wrapper, #punto1-hojaLiquidacion, #punto2-hojaLiquidacion {
     transition: all 0.3s ease-in-out;
   }
+  <style>
   /* Estilo global para el formulario */
   form {
     display: grid;
