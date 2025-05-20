@@ -33,13 +33,53 @@ import Input from '../components/ConfirmInput.astro';
                     <input type="checkbox" id="hidrosina" name="empresas" value="hidrosina" class="form-checkbox">
                     <span>Hidrosina</span>
                 </label>
-                <label for="empresa2" class="flex items-center space-x-2">
-                    <input type="checkbox" id="empresa2" name="empresas" value="empresa2" class="form-checkbox">
-                    <span>Empresa 2</span>
+                <label for="cogasa" class="flex items-center space-x-2">
+                    <input type="checkbox" id="cogasa" name="empresas" value="cogasa" class="form-checkbox">
+                    <span>Cogasa </span>
                 </label>
-                <label for="empresa3" class="flex items-center space-x-2">
-                    <input type="checkbox" id="empresa3" name="empresas" value="empresa3" class="form-checkbox" checked>
-                    <span>Empresa 3</span>
+                <label for="cr88" class="flex items-center space-x-2">
+                    <input type="checkbox" id="cr88" name="empresas" value="cr88" class="form-checkbox">
+                    <span>CR88</span>
+                </label>
+                <label for="millenium" class="flex items-center space-x-2">
+                    <input type="checkbox" id="millenium" name="empresas" value="millenium" class="form-checkbox">
+                    <span>Millenium</span>
+                </label>
+                <label for="rojas" class="flex items-center space-x-2">
+                    <input type="checkbox" id="rojas" name="empresas" value="rojas" class="form-checkbox">
+                    <span>Rojas & Gas</span>
+                </label>
+                <label for="gasomer" class="flex items-center space-x-2">
+                    <input type="checkbox" id="gasomer" name="empresas" value="gasomer" class="form-checkbox">
+                    <span>Gasomer</span>
+                </label>
+                <label for="via" class="flex items-center space-x-2">
+                    <input type="checkbox" id="vias" name="empresas" value="via" class="form-checkbox">
+                    <span>Via Lactea</span>
+                </label>
+                <label for="prefecta" class="flex items-center space-x-2">
+                    <input type="checkbox" id="prefecta" name="empresas" value="prefecta" class="form-checkbox">
+                    <span>Prefecta</span>
+                </label>
+                <label for="dat" class="flex items-center space-x-2">
+                    <input type="checkbox" id="dat" name="empresas" value="dat" class="form-checkbox">
+                    <span>Dat</span>
+                </label>
+                <label for="cruces" class="flex items-center space-x-2">
+                    <input type="checkbox" id="cruces" name="empresas" value="cruces" class="form-checkbox">
+                    <span>3 Cruces</span>
+                </label>
+                <label for="combuserv" class="flex items-center space-x-2">
+                    <input type="checkbox" id="combuserv" name="empresas" value="combuserv" class="form-checkbox">
+                    <span>Combuserv</span>
+                </label>
+                <label for="risco" class="flex items-center space-x-2">
+                    <input type="checkbox" id="risco" name="empresas" value="risco" class="form-checkbox">
+                    <span>Risco</span>
+                </label>
+                <label for="menorca" class="flex items-center space-x-2">
+                    <input type="checkbox" id="menorca" name="empresas" value="menorca" class="form-checkbox">
+                    <span>Menorca</span>
                 </label>
             </div>
         </div>
@@ -162,7 +202,46 @@ import Input from '../components/ConfirmInput.astro';
     </div>
   </dialog>
 
+
+
   <script>
+     // Boton de enviar funcione
+  const envioTextarea = document.getElementById('input-envio');
+        const envioEstado = document.getElementById('envio-estado');
+        const seccionComprobante = document.getElementById('seccion-comprobante');
+
+        const charCount = document.getElementById('char-count');
+        const btnEnviar = document.getElementById('btn-enviar');
+        
+        // Función para manejar el conteo de caracteres y habilitar el botón
+        envioTextarea.addEventListener('input', (e) => {
+            const currentLength = e.target.value.trim().length;
+            charCount.textContent = `${currentLength} / 100 caracteres`;
+            
+            // Habilitar o deshabilitar el botón según el conteo de caracteres
+            if (currentLength >= 100) {
+                btnEnviar.disabled = false;
+            } else {
+                btnEnviar.disabled = true;
+            }
+        });
+
+        // Función para manejar el envío
+        btnEnviar.addEventListener('click', () => {
+            // Deshabilitar textarea y botón durante el envío
+            envioTextarea.disabled = true;
+            btnEnviar.disabled = true;
+            
+            // Mostrar animación de carga
+            envioEstado.classList.remove('hidden');
+            
+            // Simular envío con timeout
+            setTimeout(() => {
+                envioEstado.classList.add('hidden');
+                seccionComprobante.classList.remove('hidden');
+            }, 5000);
+        });
+
     // Variables para el manejo del archivo
     let archivoSeleccionado = false;
     const inputHojaLiquidacion = document.getElementById('input-hojaLiquidacion');
@@ -253,6 +332,8 @@ import Input from '../components/ConfirmInput.astro';
       // Mostrar contenido de la hoja de liquidación
       contenidoHojaLiquidacion?.classList.remove('hidden');
     });
+
+
   </script>
 
   <Huella />
