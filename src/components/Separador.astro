@@ -1,38 +1,93 @@
 ---
 import "../styles/global.css";
-import NavSelector from '../components/NavSelector.astro';
+import NavBarStandar from './NavBarStandar.astro';
+
 interface Props {
     texto: string;
     color?: string;
     backgroundColor?: string;
+    operadora?: string;
+    estacion?: string | number;
+    usuario?: {
+        nombre: string;
+    };
 }
 
 const { 
     texto, 
     color = "white",
-    backgroundColor = "black" 
+    backgroundColor = "#1f2937",
+    operadora = "CR 88 SAPI DE CV",
+    estacion = "45",
+    usuario = { nombre: "Usuario Demo" }
 } = Astro.props;
+
+// Obtener la fecha actual formateada
+const fechaActual = new Date().toLocaleDateString('es-MX', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+});
 ---
 
-<div class="separador-container" style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}>
-    <NavSelector />
-    <div class="separador ml-10">
-        <div class="linea "></div>
-        <h2 class="texto">{texto}</h2>
-        <div class="linea"></div>
+<div class="separador-container bg-gray-800 text-white p-3" style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}>
+    <div class="container mx-auto h-full">
+        <div class="h-full flex items-center">
+            <!-- Botón de navegación -->
+            <NavBarStandar />
+            
+            <!-- Título -->
+            <h1 class="text-lg font-bold text-nowrap ml-4">{texto}</h1>
+            
+            <!-- Separador -->
+            <div class="h-6 w-px bg-gray-600 mx-2"></div>
+            
+            <!-- Información principal -->
+            <div class="text-sm space-x-6 flex-1 flex items-center">
+                <div class="flex items-center">
+                    <span class="text-gray-400 mr-1">Operadora:</span>
+                    <span class="font-medium">{operadora}</span>
+                </div>
+                
+                <div class="h-4 w-px bg-gray-600"></div>
+                
+                <div class="flex items-center">
+                    <span class="text-gray-400 mr-1">Estación:</span>
+                    <span class="font-medium">HD-{estacion}</span>
+                </div>
+                
+                <div class="h-4 w-px bg-gray-600"></div>
+                
+                <div class="flex items-center">
+                    <span class="text-gray-400 mr-1">Fecha:</span>
+                    <span class="font-medium">{fechaActual}</span>
+                </div>
+            </div>
+            
+            <!-- Información de sesión -->
+            <div class="flex items-center space-x-4 border-r border-l border-gray-600 px-4 h-full">
+                <div class="text-right">
+                    <div class="text-xs text-gray-400">Sesión activa</div>
+                    <div class="text-sm font-medium">{usuario.nombre}</div>
+                </div>
+                <div class="text-xs text-gray-400">
+                    {new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
     .separador-container {
         width: 100%;
-        padding: 1rem;
         background-color: var(--bg-color);
         display: flex;
         justify-content: flex-start;
         align-items: center;
         margin-bottom: 0.1rem;
-        height: 14vh;
+        height: 9dvh;
     }
 
     .separador {

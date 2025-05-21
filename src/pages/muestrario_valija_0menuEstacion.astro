@@ -5,28 +5,22 @@ import Separador from "../components/Separador.astro";
 ---
 
 <Layout>
-    <Separador texto="MENÚ DE ESTACIÓN" />
+    <Separador 
+        texto="MENÚ DE ESTACIÓN"
+        operadora="CR 88 SAPI DE CV"
+        estacion="45"
+        usuario={{
+            nombre: "LUIS ALVARO VILLEGAS"
+        }}
+    />
 
-    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; height: 85vh;">
-        <div style="width: 50%; height: 100%; margin-left: 2vw; border-right: 1px solid #ccc; overflow-y: auto; padding: 20px;    scrollbar-width: thin;
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; height: 90dvh;">
+        <div style="width: 50%; height: 100%; margin-left: 1vw; border-right: 1px solid #ccc; overflow-y: auto; padding: 0px;    scrollbar-width: thin;
     scrollbar-color: #333 #e0e0e0;">
             <!-- Contenido para la Hoja de Información (Caratula) -->
-            <div class=" mx-auto bg-white rounded-xl shadow-md p-6">
-                <div class="border-b-2 border-gray-200 pb-4 mb-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h1 class="text-2xl font-bold uppercase">Resumen de Polizas</h1>
-                        <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded">HD-45</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center">
-                            <span class="font-semibold mr-2">Operadora:</span>
-                            <span class="bg-gray-100 px-3 py-1 rounded font-medium">CR 88 SAPI DE CV</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-semibold">Fecha de la póliza:</span>
-                            <span class="ml-2">jueves, 6 de marzo de 2025</span>
-                        </div>
-                    </div>
+            <div class=" mx-auto bg-white rounded-xl shadow-md p-3">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold uppercase mb-4">Resumen de Pólizas</h1>
                 </div>
 
                 <form id="formulario" class="space-y-8">
@@ -306,60 +300,72 @@ import Separador from "../components/Separador.astro";
 				//   modalSide: "left"
 				// },
 				{
-				  title: "Hoja de liquidacion",
+				  title: "1.- Hoja de liquidacion",
 				  description: "Sube la hoja de liquidacion y comparala",
 				  icon: "description",
 				  link: "/muestrario_valija_2ingresoHojaLiquidacion",
 				  
 				},
 				{
-				  title: "Movimientos de caja",
+				  title: "2.- Movimientos de caja",
 				  description: "Confirma los movimientos hechos.",
 				  icon: "inventory",
 				  link: "/muestrario_valija_3resultadosBusqueda",
 				},
 				{
-				  title: "Nominas",
+				  title: "3.- Nominas",
 				  description: "Sube las nominas",
 				  icon: "people",
 				  link: "/muestrario_valija_4nominas",
 				},
 				{
-				  title: "Carga de archivos en el dia.",
+				  title: "4.- Carga de documentos",
 				  description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
 				  icon: "upload_file",
 				  link: "/muestrario_valija_5-7docsTurno",
 				},
+                {
+                    title: "5.- Corte de Perifericos",
+                    description: "Se sube 1 archivo por cada turno",
+                    icon: "",
+                    link: "/muestrario_valija_7resultadoVentasxPeriordo",
+                },
 				{
-				  title: "Historico de Carburante",
+				  title: "6.- Historico de Carburante",
 				  description: "Confirma el historico de carburante y sube su comprobante",
 				  icon: "history",
 				  link: "/muestrario_valija_8historicoCarburante",
 				},
 				{
-				  title: "Consulta de Ventas por Periodo",
+				  title: "7.- Consulta de Ventas por Periodo",
 				  description: "Confirma las ventas por periodo y sube su comprobante",
 				  icon: "bar_chart",
 				  link: "/muestrario_valija_9resultadoVentasxPeriordo",
 				},
 				{
-				  title: "Mermas y Regularizacion",
+				  title: "8.- Mermas y Regularizacion",
 				  description: "Confirma las Mermas y Regularizacion",
 				  icon: "analytics",
 				  link: "/muestrario_valija_10resultadosMermasRegul",
 				},
                 {
-				  title: "Jarreo",
+				  title: "9.- Jarreo",
 				  description: "Confirma el jarreo de documentos",
 				  icon: "analytics",
 				  link: "/muestrario_valija_9jarreo",
 				},
-						{
-				  title: "Reporte de Inventario",
-				  description: "Reporte de Inventario",
-				  icon: "inventory",
-				  link: "/zzz",
-				}
+                {
+                    title: "10.- Vales por Empresa",
+                    description: "Se cargan los vales de acuerdo a la proveedor",
+                    icon: "inventory",
+                    link: "/muestrario_valija_11valesEmpresa",
+                }
+				// 		{
+				//   title: "Reporte de Inventario",
+				//   description: "Reporte de Inventario",
+				//   icon: "inventory",
+				//   link: "/zzz",
+				// }
 			]} />
 
         </div>

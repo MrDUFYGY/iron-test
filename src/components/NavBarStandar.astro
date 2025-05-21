@@ -1,0 +1,150 @@
+---
+// Props opcionales para personalización
+interface Props {
+    color?: string;
+    hoverColor?: string;
+}
+
+const { 
+    color = "white",
+    hoverColor = "#9CA3AF" // gray-400
+} = Astro.props;
+---
+
+<!-- Botón del menú -->
+<button 
+    id="navbarStandarButton"
+    class="p-2 rounded-md transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+    aria-label="Menú de navegación"
+>
+    <svg 
+        class="w-6 h-6" 
+        fill="none" 
+        stroke={color} 
+        viewBox="0 0 24 24" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            stroke-width="2" 
+            d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+    </svg>
+</button>
+
+<!-- Modal del menú -->
+<div 
+    id="navbarStandarModal" 
+    class="fixed inset-0 z-50 hidden bg-black bg-opacity-75 transition-opacity"
+    aria-labelledby="modal-title" 
+    role="dialog" 
+    aria-modal="true"
+>
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                <!-- Botón de cierre -->
+                <div class="absolute top-0 right-0 pt-4 pr-4">
+                    <button 
+                        id="closeNavbarStandarModal"
+                        type="button" 
+                        class="rounded-md bg-gray-700 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                    >
+                        <span class="sr-only">Cerrar menú</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Contenido del menú -->
+                <div class="mt-5">
+                    <h3 class="text-lg font-medium leading-6 text-white mb-6" id="modal-title">Menú de Navegación</h3>
+                    
+                    <div class="space-y-4">
+                        <a 
+                            href="/" 
+                            class="block w-full px-4 py-3 text-left text-white hover:bg-gray-700 rounded-md transition-colors"
+                        >
+                            Inicio
+                        </a>
+                        
+                        <a 
+                            href="/muestrario_valija_0menuEstacion" 
+                            class="block w-full px-4 py-3 text-left text-white hover:bg-gray-700 rounded-md transition-colors"
+                        >
+                            Menú Estaciones
+                        </a>
+                        
+                        <a 
+                            href="/muestrario_valija_0menuCorporativo" 
+                            class="block w-full px-4 py-3 text-left text-white hover:bg-gray-700 rounded-md transition-colors"
+                        >
+                            Corporativo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para manejar la funcionalidad del modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('navbarStandarModal');
+        const openButton = document.getElementById('navbarStandarButton');
+        const closeButton = document.getElementById('closeNavbarStandarModal');
+
+        // Abrir modal
+        openButton.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Cerrar modal
+        closeButton.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Cerrar al hacer clic fuera del contenido
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Cerrar con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Transiciones suaves para el modal */
+    #navbarStandarModal {
+        opacity: 0;
+        transition: opacity 200ms ease-in-out;
+    }
+    
+    #navbarStandarModal:not(.hidden) {
+        opacity: 1;
+    }
+    
+    /* Asegurar que el modal esté por encima de otros elementos */
+    #navbarStandarModal {
+        z-index: 50;
+    }
+    
+    /* Estilos para los enlaces al pasar el mouse */
+    #navbarStandarModal a {
+        transition: background-color 150ms ease-in-out;
+    }
+</style>
