@@ -30,11 +30,11 @@ import Separador from "../components/Separador.astro";
                 </div>
 
                 <form id="formulario" class="space-y-8">
-                    <!-- Resumen de Procesos -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
-                        <div id="resumen-procesos-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
-                            <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
-                            <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
+                    <!-- Puntos de Amarre -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 muestrario-collapse-section">
+                        <div class="cursor-pointer collapse-header muestrario-collapse-header flex justify-between items-center" data-section="muestrario-puntos-amarre">
+                            <h2 class="font-bold uppercase text-gray-800">Puntos de Amarre:</h2>
+                            <span class="collapse-icon muestrario-collapse-icon">▼</span>
                         </div>
                         <div id="resumen-procesos-content" class="overflow-hidden transition-all duration-300 ease-in-out space-y-2 text-sm max-h-0">
                             <!-- Proceso 1: Resumen de liquidación -->
