@@ -106,7 +106,7 @@ import Input from '../components/ConfirmInput.astro';
                 </button>
             </div>
             <div id="envio-estado" class="hidden mt-4 flex items-center justify-center space-x-2">
-                <span class="material-icons animate-spin text-blue-600">autorenew</span>
+                <div class="spinner"></div>
                 <span class="text-blue-600 font-semibold">Enviando...</span>
             </div>
         </div>
@@ -373,6 +373,24 @@ import Input from '../components/ConfirmInput.astro';
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
+
+  .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
 </style>
 </Layout>
