@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import NavBarStandar from './NavBarStandar.astro';
+import NavBarStandar from "./NavBarStandar.astro";
 
 interface Props {
     texto: string;
@@ -13,67 +13,90 @@ interface Props {
     };
 }
 
-const { 
-    texto, 
+const {
+    texto,
     color = "white",
     backgroundColor = "#1f2937",
     operadora = "CR 88 SAPI DE CV",
     estacion = "45",
-    usuario = { nombre: "Usuario Demo" }
+    usuario = { nombre: "Usuario Demo" },
 } = Astro.props;
 
 // Obtener la fecha actual formateada
-const fechaActual = new Date().toLocaleDateString('es-MX', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+const fechaActual = new Date().toLocaleDateString("es-MX", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
 });
 ---
 
-<div class="separador-container bg-gray-800 text-white p-3" style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}>
+<div
+    class="separador-container bg-gray-800 text-white p-3"
+    style={`--text-color: ${color}; --bg-color: ${backgroundColor};`}
+>
     <div class="container mx-auto h-full">
         <div class="h-full flex items-center">
             <!-- Botón de navegación -->
             <NavBarStandar />
-            
+
             <!-- Título -->
             <h1 class="text-lg font-bold text-nowrap ml-4">{texto}</h1>
-            
+
             <!-- Separador -->
             <div class="h-6 w-px bg-gray-600 mx-2"></div>
-            
+
             <!-- Información principal -->
             <div class="text-sm space-x-6 flex-1 flex items-center">
                 <div class="flex items-center">
                     <span class="text-gray-400 mr-1">Operadora:</span>
                     <span class="font-medium">{operadora}</span>
                 </div>
-                
+
                 <div class="h-4 w-px bg-gray-600"></div>
-                
+
                 <div class="flex items-center">
                     <span class="text-gray-400 mr-1">Estación:</span>
                     <span class="font-medium">HD-{estacion}</span>
                 </div>
-                
+
                 <div class="h-4 w-px bg-gray-600"></div>
-                
+
                 <div class="flex items-center">
                     <span class="text-gray-400 mr-1">Fecha:</span>
                     <span class="font-medium">{fechaActual}</span>
                 </div>
             </div>
-            
+
             <!-- Información de sesión -->
-            <div class="flex items-center space-x-4 border-r border-l border-gray-600 px-4 h-full">
+            <div
+                class="flex items-center space-x-4 border-r border-l border-gray-600 px-4 h-full"
+            >
                 <div class="text-right">
                     <div class="text-xs text-gray-400">Sesión activa</div>
                     <div class="text-sm font-medium">{usuario.nombre}</div>
                 </div>
                 <div class="text-xs text-gray-400">
-                    {new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
+                    {
+                        new Date().toLocaleTimeString("es-MX", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        })
+                    }
                 </div>
+            </div>
+
+            <div
+                class="flex items-center space-x-4 border-r border-l border-gray-600 px-4 h-full"
+            >
+                <form action="http://localhost:4321/" method="POST">
+                    <button
+                        type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-200"
+                    >
+                        Cerrar sesión
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -119,7 +142,18 @@ const fechaActual = new Date().toLocaleDateString('es-MX', {
         text-align: center;
         white-space: nowrap;
         letter-spacing: 0.1em;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-family:
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            Oxygen,
+            Ubuntu,
+            Cantarell,
+            "Open Sans",
+            "Helvetica Neue",
+            sans-serif;
     }
 
     @media (max-width: 768px) {

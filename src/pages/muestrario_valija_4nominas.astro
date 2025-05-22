@@ -252,18 +252,6 @@ import "../styles/global.css";
             });
         }
 
-        function setupRemoveButton(button){
-          button.addEventListener('click' , function (){
-            const inputGroup = this.closest('.input-group');
-            const input = inputGroup.querySelector('input[type="file"]');
-            uploadedFiles.delete(input.dataset.inputId);
-            inputGroup.romove();
-            updateFilesSummary();
-          });
-        }
-
-
-
         // Event listeners para el diálogo de confirmación
         confirmUploadBtn.addEventListener('click', () => {
             if (currentFileInput && currentFile) {

@@ -1,97 +1,172 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
 ---
 
 <Layout>
-	<Nav items={[
-		{
-			title: "Inicio",
-			description: "Página principal de nuestro sitio",
-			icon: "home",
-			link: "/"
-		},
-		{
-			title: "Servicios",
-			description: "Conoce nuestros servicios",
-			icon: "work",
-			link: "/servicios"
-		},
-		{
-			title: "Contacto",
-			description: "Ponte en contacto con nosotros",
-			icon: "email",
-			link: "/contacto"
-		},
-		{
-			title: "Acerca de",
-			description: "Conoce más sobre nosotros",
-			icon: "info",
-			link: "/acerca"
-		}
-	]} />
+	<Nav
+		items={[
+			{
+				title: "Inicio",
+				description: "Página principal de nuestro sitio",
+				icon: "home",
+				link: "/",
+			},
+			{
+				title: "Servicios",
+				description: "Conoce nuestros servicios",
+				icon: "work",
+				link: "/servicios",
+			},
+			{
+				title: "Contacto",
+				description: "Ponte en contacto con nosotros",
+				icon: "email",
+				link: "/contacto",
+			},
+			{
+				title: "Acerca de",
+				description: "Conoce más sobre nosotros",
+				icon: "info",
+				link: "/acerca",
+			},
+		]}
+	/>
 
 	<div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
-		<h1 style="text-align: center; margin-bottom: 30px;">Gestión de Alumnos</h1>
-		
-		<form id="crudForm" style="margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-			<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+		<h1 style="text-align: center; margin-bottom: 30px;">
+			Gestión de Alumnos
+		</h1>
+
+		<form
+			id="crudForm"
+			style="margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px;"
+		>
+			<div
+				style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;"
+			>
 				<div>
-					<label for="matricula" style="display: block; margin-bottom: 5px;">Matrícula:</label>
-					<input type="text" id="matricula" name="matricula" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+					<label
+						for="matricula"
+						style="display: block; margin-bottom: 5px;"
+						>Matrícula:</label
+					>
+					<input
+						type="text"
+						id="matricula"
+						name="matricula"
+						style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+					/>
 				</div>
-				
+
 				<div>
-					<label for="nombre" style="display: block; margin-bottom: 5px;">Nombre Completo:</label>
-					<input type="text" id="nombre" name="nombre" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+					<label
+						for="nombre"
+						style="display: block; margin-bottom: 5px;"
+						>Nombre Completo:</label
+					>
+					<input
+						type="text"
+						id="nombre"
+						name="nombre"
+						style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+					/>
 				</div>
-				
+
 				<div>
-					<label for="carrera" style="display: block; margin-bottom: 5px;">Carrera:</label>
-					<select id="carrera" name="carrera" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+					<label
+						for="carrera"
+						style="display: block; margin-bottom: 5px;"
+						>Carrera:</label
+					>
+					<select
+						id="carrera"
+						name="carrera"
+						style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+					>
 						<option value="">Seleccione una carrera</option>
-						<option value="Ingeniería en Sistemas">Ingeniería en Sistemas</option>
-						<option value="Ingeniería Industrial">Ingeniería Industrial</option>
+						<option value="Ingeniería en Sistemas"
+							>Ingeniería en Sistemas</option
+						>
+						<option value="Ingeniería Industrial"
+							>Ingeniería Industrial</option
+						>
 						<option value="Administración">Administración</option>
 						<option value="Contabilidad">Contabilidad</option>
 					</select>
 				</div>
-				
+
 				<div>
-					<label for="semestre" style="display: block; margin-bottom: 5px;">Semestre:</label>
-					<input type="number" id="semestre" name="semestre" min="1" max="12" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+					<label
+						for="semestre"
+						style="display: block; margin-bottom: 5px;"
+						>Semestre:</label
+					>
+					<input
+						type="number"
+						id="semestre"
+						name="semestre"
+						min="1"
+						max="12"
+						style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+					/>
 				</div>
-				
+
 				<div>
-					<label for="email" style="display: block; margin-bottom: 5px;">Email:</label>
-					<input type="email" id="email" name="email" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+					<label
+						for="email"
+						style="display: block; margin-bottom: 5px;"
+						>Email:</label
+					>
+					<input
+						type="email"
+						id="email"
+						name="email"
+						style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+					/>
 				</div>
-				
+
 				<div>
-					<label for="telefono" style="display: block; margin-bottom: 5px;">Teléfono:</label>
-					<input type="tel" id="telefono" name="telefono" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+					<label
+						for="telefono"
+						style="display: block; margin-bottom: 5px;"
+						>Teléfono:</label
+					>
+					<input
+						type="tel"
+						id="telefono"
+						name="telefono"
+						style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+					/>
 				</div>
 			</div>
-			
+
 			<div style="display: flex; gap: 10px; margin-top: 20px;">
-				<button type="submit" style="
+				<button
+					type="submit"
+					style="
 					padding: 10px 20px;
 					background-color: #28a745;
 					color: white;
 					border: none;
 					border-radius: 4px;
 					cursor: pointer;
-				">
+				"
+				>
 					Crear Alumno
 				</button>
-				<button type="button" id="actualizarBtn" style="
+				<button
+					type="button"
+					id="actualizarBtn"
+					style="
 					padding: 10px 20px;
 					background-color: #ffc107;
 					color: black;
 					border: none;
 					border-radius: 4px;
 					cursor: pointer;
-				">
+				"
+				>
 					Actualizar Alumno
 				</button>
 			</div>
@@ -100,13 +175,34 @@ import Nav from '../components/Nav.astro';
 		<table style="width: 100%; border-collapse: collapse;">
 			<thead>
 				<tr style="background-color: #f8f9fa;">
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Matrícula</th>
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Nombre</th>
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Carrera</th>
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Semestre</th>
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Email</th>
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Teléfono</th>
-					<th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Acciones</th>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Matrícula</th
+					>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Nombre</th
+					>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Carrera</th
+					>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Semestre</th
+					>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Email</th
+					>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Teléfono</th
+					>
+					<th
+						style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;"
+						>Acciones</th
+					>
 				</tr>
 			</thead>
 			<tbody id="tablaDatos">
@@ -115,64 +211,67 @@ import Nav from '../components/Nav.astro';
 		</table>
 	</div>
 
-    <script type="module">
-const apiUrl = "https://localhost:44376/ApiHandler/AlumnoAPI_Csharp.ashx";
-const form = document.getElementById("crudForm");
-const actualizarBtn = document.getElementById("actualizarBtn");
+	<script type="module">
+		const apiUrl =
+			"https://localhost:44376/ApiHandler/AlumnoAPI_Csharp.ashx";
+		const form = document.getElementById("crudForm");
+		const actualizarBtn = document.getElementById("actualizarBtn");
 
-let editandoId = null;
+		let editandoId = null;
 
-form.addEventListener("submit", async (e) => {
-	e.preventDefault();
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
 
-	const alumno = {
-		matricula: form.matricula.value,
-		nombre: form.nombre.value,
-		carrera: form.carrera.value,
-		semestre: parseInt(form.semestre.value),
-		email: form.email.value,
-		telefono: form.telefono.value,
-	};
+			const alumno = {
+				matricula: form.matricula.value,
+				nombre: form.nombre.value,
+				carrera: form.carrera.value,
+				semestre: parseInt(form.semestre.value),
+				email: form.email.value,
+				telefono: form.telefono.value,
+			};
 
-	if (editandoId) {
-		alumno.id = editandoId;
-		await fetch(apiUrl, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(alumno)
+			if (editandoId) {
+				alumno.id = editandoId;
+				await fetch(apiUrl, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(alumno),
+				});
+				editandoId = null;
+			} else {
+				await fetch(apiUrl, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(alumno),
+				});
+			}
+
+			form.reset();
+			cargarAlumnos();
 		});
-		editandoId = null;
-	} else {
-		await fetch(apiUrl, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(alumno)
+
+		actualizarBtn.addEventListener("click", () => {
+			alert(
+				"Para actualizar un alumno, haz clic en el botón editar de la tabla.",
+			);
 		});
-	}
 
-	form.reset();
-	cargarAlumnos();
-});
+		async function cargarAlumnos() {
+			const res = await fetch(apiUrl);
+			const alumnos = await res.json();
 
-actualizarBtn.addEventListener("click", () => {
-	alert("Para actualizar un alumno, haz clic en el botón editar de la tabla.");
-});
+			const tbody = document.querySelector("table tbody");
+			tbody.innerHTML = "";
 
-async function cargarAlumnos() {
-	const res = await fetch(apiUrl);
-	const alumnos = await res.json();
+			alumnos.forEach((a) => {
+				const tr = document.createElement("tr");
 
-	const tbody = document.querySelector("table tbody");
-	tbody.innerHTML = "";
-
-	alumnos.forEach((a) => {
-		const tr = document.createElement("tr");
-
-		tr.innerHTML = `
+				tr.innerHTML = `
 			<td>${a.Matricula}</td>
 			<td>${a.Nombre}</td>
 			<td>${a.Carrera}</td>
@@ -185,42 +284,37 @@ async function cargarAlumnos() {
 			</td>
 		`;
 
-		tbody.appendChild(tr);
-	});
-}
+				tbody.appendChild(tr);
+			});
+		}
 
-window.editarAlumno = async function (id) {
-	const res = await fetch(apiUrl);
-	const alumnos = await res.json();
-	const alumno = alumnos.find(a => a.id === id);
+		window.editarAlumno = async function (id) {
+			const res = await fetch(apiUrl);
+			const alumnos = await res.json();
+			const alumno = alumnos.find((a) => a.id === id);
 
-	if (!alumno) return;
+			if (!alumno) return;
 
-	form.matricula.value = alumno.matricula;
-	form.nombre.value = alumno.nombre;
-	form.carrera.value = alumno.carrera;
-	form.semestre.value = alumno.semestre;
-	form.email.value = alumno.email;
-	form.telefono.value = alumno.telefono;
+			form.matricula.value = alumno.matricula;
+			form.nombre.value = alumno.nombre;
+			form.carrera.value = alumno.carrera;
+			form.semestre.value = alumno.semestre;
+			form.email.value = alumno.email;
+			form.telefono.value = alumno.telefono;
 
-	editandoId = alumno.id;
-};
+			editandoId = alumno.id;
+		};
 
-window.eliminarAlumno = async function (id) {
-	if (!confirm("¿Estás seguro de eliminar este alumno?")) return;
+		window.eliminarAlumno = async function (id) {
+			if (!confirm("¿Estás seguro de eliminar este alumno?")) return;
 
-	await fetch(`${apiUrl}?id=${id}`, {
-		method: "DELETE"
-	});
+			await fetch(`${apiUrl}?id=${id}`, {
+				method: "DELETE",
+			});
 
-	cargarAlumnos();
-};
+			cargarAlumnos();
+		};
 
-cargarAlumnos();
-
+		cargarAlumnos();
 	</script>
-
-
-
-
 </Layout>

@@ -3,63 +3,89 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="flex max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden">
-    
-    <!-- Banner Izquierdo -->
-    <div class="w-1/2 bg-cover bg-center" style="background-image: url('./public/assets/logo_hidrosina.png');">
-      <!-- Puedes cambiar la URL de la imagen arriba -->
-    </div>
-    
-    <!-- Formulario de Login -->
-    <div class="w-1/2 p-10 flex flex-col justify-center">
-      <h2 class="text-3xl font-bold text-gray-800 mb-6">¡Bienvenido!</h2>
-      <form class="space-y-4" id="loginForm">
-        <div>
-          <label class="block text-sm font-medium text-gray-600">Correo electronico</label>
-          <input type="text" id="username" placeholder="Nombre de usuario" value="dev-test"
-            class="w-full px-4 py-2 mt-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
-          <span class="text-xs text-gray-500">@hidrosina.com.mx</span>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-600">Contraseña</label>
-          <input type="password" id="password" placeholder="••••••••" value="password01"
-            class="w-full px-4 py-2 mt-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        </div>
-        <div class="flex justify-between items-center text-sm mt-2">
-          <label class="flex items-center space-x-2">
-            <input type="checkbox" class="form-checkbox text-blue-500" />
-            <span>Recordarme</span>
-          </label>
-          <a href="#" class="text-blue-500 hover:underline">¿Olvidaste tu contraseña?</a>
-        </div>
-        <button type="submit"
-          class="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600 transition duration-300">Iniciar sesion</button>
-      </form>
-      <p class="text-center text-sm text-gray-500 mt-6">
-        ¿No tienes cuenta? <a href="muestrario_valija_0menuEstacion" class="text-blue-500 hover:underline">Registrate</a>
-      </p>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+      class="flex max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden"
+    >
+      <!-- Banner Izquierdo -->
+      <div
+        class="w-1/2 bg-cover bg-center"
+        style="background-image: url('./public/assets/logo_hidrosina.png');"
+      >
+        <!-- Puedes cambiar la URL de la imagen arriba -->
+      </div>
+
+      <!-- Formulario de Login -->
+      <div class="w-1/2 p-10 flex flex-col justify-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">¡Bienvenido!</h2>
+        <form class="space-y-4" id="loginForm">
+          <div>
+            <label class="block text-sm font-medium text-gray-600"
+              >Correo electronico</label
+            >
+            <input
+              type="text"
+              id="username"
+              placeholder="Nombre de usuario"
+              value="dev-test"
+              class="w-full px-4 py-2 mt-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <span class="text-xs text-gray-500">@hidrosina.com.mx</span>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600"
+              >Contraseña</label
+            >
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              value="password01"
+              class="w-full px-4 py-2 mt-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div class="flex justify-between items-center text-sm mt-2">
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" class="form-checkbox text-blue-500" />
+              <span>Recordarme</span>
+            </label>
+            <a href="#" class="text-blue-500 hover:underline"
+              >¿Olvidaste tu contraseña?</a
+            >
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600 transition duration-300"
+            >Iniciar sesion</button
+          >
+        </form>
+        <p class="text-center text-sm text-gray-500 mt-6">
+          ¿No tienes cuenta? <a
+            href="muestrario_valija_0menuEstacion"
+            class="text-blue-500 hover:underline">Registrate</a
+          >
+        </p>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-    
-    if (loginForm) {
-      loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        // Get username input value
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        
-        // For now, we're just redirecting without actual validation
-        // In a real application, you would validate credentials here
-        window.location.href = 'muestrario_valija_0menuEstacion';
-      });
-    }
-  });
-</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginForm = document.getElementById("loginForm");
+
+      if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          // Get username input value
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          // For now, we're just redirecting without actual validation
+          // In a real application, you would validate credentials here
+          window.location.href = "muestrario_valija_0menuEstacion";
+        });
+      }
+    });
+  </script>
 </Layout>

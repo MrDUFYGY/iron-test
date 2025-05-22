@@ -1,54 +1,82 @@
 ---
 import "../styles/global.css";
-import Layout from '../layouts/Layout.astro';
-import Huella from '../components/ConfirmHuella.astro';
-import Input from '../components/ConfirmInput.astro';
-
+import Layout from "../layouts/Layout.astro";
+import Huella from "../components/ConfirmHuella.astro";
+import Input from "../components/ConfirmInput.astro";
 ---
 
 <Layout>
-
   <!-- Contenedor principal con mejor diseño -->
-  <div id="hl-contenedor-principal" class="max-w-2xl mx-auto mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-    <h2 class="text-xl font-bold mb-4 text-gray-800">Ingreso de Hoja de Liquidación</h2>
-    
+  <div
+    id="hl-contenedor-principal"
+    class="max-w-2xl mx-auto mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200"
+  >
+    <h2 class="text-xl font-bold mb-4 text-gray-800">
+      Ingreso de Hoja de Liquidación
+    </h2>
+
     <!-- Input de archivo PDF con mejor diseño -->
     <div id="hl-contenedor-input" class="mb-6">
-      <label class="block text-sm font-medium text-gray-700 mb-2" for="input-hojaLiquidacion">
+      <label
+        class="block text-sm font-medium text-gray-700 mb-2"
+        for="input-hojaLiquidacion"
+      >
         Seleccione el archivo PDF de la Hoja de Liquidación
       </label>
-      <div id="hl-input-wrapper" class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 transition-all duration-200 hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
-        <input 
-          id="input-hojaLiquidacion" 
-          type="file" 
-          accept=".pdf" 
+      <div
+        id="hl-input-wrapper"
+        class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 transition-all duration-200 hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200"
+      >
+        <input
+          id="input-hojaLiquidacion"
+          type="file"
+          accept=".pdf"
           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-        >
+        />
         <p class="mt-2 text-xs text-gray-500">Formatos aceptados: PDF</p>
       </div>
     </div>
-    
+
     <!-- Indicadores de estado -->
     <div id="hl-indicadores" class="flex items-center mb-6">
       <div class="flex items-center mr-6">
-        <div id="punto1-hojaLiquidacion" class="w-4 h-4 bg-gray-300 rounded-full mr-2 shadow-sm"></div>
+        <div
+          id="punto1-hojaLiquidacion"
+          class="w-4 h-4 bg-gray-300 rounded-full mr-2 shadow-sm"
+        >
+        </div>
         <span class="text-sm text-gray-600">Archivo seleccionado</span>
       </div>
       <div class="flex items-center">
-        <div id="punto2-hojaLiquidacion" class="w-4 h-4 bg-gray-300 rounded-full mr-2 shadow-sm"></div>
+        <div
+          id="punto2-hojaLiquidacion"
+          class="w-4 h-4 bg-gray-300 rounded-full mr-2 shadow-sm"
+        >
+        </div>
         <span class="text-sm text-gray-600">Archivo confirmado</span>
       </div>
     </div>
-    
+
     <!-- Botón para eliminar el archivo -->
     <div id="hl-acciones" class="flex justify-end">
-      <button 
-        id="removeFile-hojaLiquidacion" 
+      <button
+        id="removeFile-hojaLiquidacion"
         class="px-4 py-2 text-sm text-white bg-red-600 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 hidden transition-all duration-200"
       >
         <span class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            ></path>
           </svg>
           Eliminar archivo
         </span>
@@ -59,184 +87,220 @@ import Input from '../components/ConfirmInput.astro';
   <!-- Contenido de la hoja de liquidación -->
   <div id="contenido-hojaLiquidacion" class="hidden">
     <div class="container mx-auto p-6 bg-white shadow-md font-sans text-sm">
-      <header class="flex flex-col md:flex-row justify-between items-start mb-6 pb-4 border-b">
+      <header
+        class="flex flex-col md:flex-row justify-between items-start mb-6 pb-4 border-b"
+      >
         <div class="mb-4 md:mb-0">
-            <img src="../assets/logo_hidrosina.png" alt="Hidrosina Logo" class="h-30 mb-4"> 
-            <h1 class="text-2xl font-bold">Hoja de liquidación</h1>
-            <div class="mt-4 text-gray-600">
-                <p><strong>Tienda:</strong> HD-141</p>
-                <p><strong>Empleados:</strong> NUANES LAUREANO JIMENEZ</p>
-                <p><strong>Desde:</strong> 09/04/2025 <strong>Hasta:</strong> 19/04/2025</p>
-            </div>
+          <img
+            src="../assets/logo_hidrosina.png"
+            alt="Hidrosina Logo"
+            class="h-30 mb-4"
+          />
+          <h1 class="text-2xl font-bold">Hoja de liquidación</h1>
+          <div class="mt-4 text-gray-600">
+            <p><strong>Tienda:</strong> HD-141</p>
+            <p><strong>Empleados:</strong> NUANES LAUREANO JIMENEZ</p>
+            <p>
+              <strong>Desde:</strong> 09/04/2025 <strong>Hasta:</strong> 19/04/2025
+            </p>
+          </div>
         </div>
 
         <div class="text-left md:text-right text-gray-700 w-full md:w-auto">
-            <h2 class="font-bold text-base">HIDROSINA PLUS SAPI DE C.V.</h2>
-            <p>RFC HPL070402EVT</p>
-            <p>NIC 1500579</p>
-            <p class="mt-2 text-xs">Av. Su Santidad Juan Pablo II #811</p>
-            <p class="text-xs">Col. Residencial Juan Pablo II, C.P. 37148,</p>
-            <p class="text-xs">METEPEC, EDO DE MEX</p>
-            <div class="mt-4 p-2 border inline-block">
-                <p class="font-bold text-center text-base">19 ABR 2025</p> 
-            </div>
-            <p class="mt-2"><strong>Tipo:</strong> Hidrosina (?)</p>
-            <p><strong>Fecha de solicitud:</strong> [...]</p>
-            <p><strong>Folio interno:</strong> [...]</p>
+          <h2 class="font-bold text-base">HIDROSINA PLUS SAPI DE C.V.</h2>
+          <p>RFC HPL070402EVT</p>
+          <p>NIC 1500579</p>
+          <p class="mt-2 text-xs">Av. Su Santidad Juan Pablo II #811</p>
+          <p class="text-xs">Col. Residencial Juan Pablo II, C.P. 37148,</p>
+          <p class="text-xs">METEPEC, EDO DE MEX</p>
+          <div class="mt-4 p-2 border inline-block">
+            <p class="font-bold text-center text-base">19 ABR 2025</p>
+          </div>
+          <p class="mt-2"><strong>Tipo:</strong> Hidrosina (?)</p>
+          <p><strong>Fecha de solicitud:</strong> [...]</p>
+          <p><strong>Folio interno:</strong> [...]</p>
         </div>
       </header>
 
       <section class="mb-6">
-        <h3 class="text-lg font-semibold mb-2 text-gray-800">Ventas por Producto</h3>
+        <h3 class="text-lg font-semibold mb-2 text-gray-800">
+          Ventas por Producto
+        </h3>
         <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-300 min-w-[800px]">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border border-gray-300 p-2 text-left">Código</th>
-                        <th class="border border-gray-300 p-2 text-left">Productos</th>
-                        <th class="border border-gray-300 p-2 text-right">Núm. Op.</th>
-                        <th class="border border-gray-300 p-2 text-right">Volumen</th>
-                        <th class="border border-gray-300 p-2 text-right">Ventas brutas</th>
-                        <th class="border border-gray-300 p-2 text-right">Devoluciones</th>
-                        <th class="border border-gray-300 p-2 text-right">Desc.</th>
-                        <th class="border border-gray-300 p-2 text-right">Ventas netas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 p-2">[...]</td>
-                        <td class="border border-gray-300 p-2">CITI MAGNA</td>
-                        <td class="border border-gray-300 p-2 text-right">156</td>
-                        <td class="border border-gray-300 p-2 text-right">1,109.29</td>
-                        <td class="border border-gray-300 p-2 text-right">20,567.32</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00</td>
-                        <td class="border border-gray-300 p-2 text-right">20,567.32</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 p-2">[...]</td>
-                        <td class="border border-gray-300 p-2">CITI PREMIUM</td>
-                        <td class="border border-gray-300 p-2 text-right">98</td>
-                        <td class="border border-gray-300 p-2 text-right">876.24</td>
-                        <td class="border border-gray-300 p-2 text-right">18,401.04</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00</td>
-                        <td class="border border-gray-300 p-2 text-right">18,401.04</td>
-                    </tr>
-                    <tr class="font-semibold bg-gray-50">
-                        <td class="border border-gray-300 p-2" colspan="2">Total Carburantes</td>
-                        <td class="border border-gray-300 p-2 text-right">254</td>
-                        <td class="border border-gray-300 p-2 text-right">1,985.53</td>
-                        <td class="border border-gray-300 p-2 text-right">38,968.36</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00</td>
-                        <td class="border border-gray-300 p-2 text-right">38,968.36</td>
-                    </tr>
-                </tbody>
-            </table>
+          <table
+            class="w-full border-collapse border border-gray-300 min-w-[800px]"
+          >
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border border-gray-300 p-2 text-left">Código</th>
+                <th class="border border-gray-300 p-2 text-left">Productos</th>
+                <th class="border border-gray-300 p-2 text-right">Núm. Op.</th>
+                <th class="border border-gray-300 p-2 text-right">Volumen</th>
+                <th class="border border-gray-300 p-2 text-right"
+                  >Ventas brutas</th
+                >
+                <th class="border border-gray-300 p-2 text-right"
+                  >Devoluciones</th
+                >
+                <th class="border border-gray-300 p-2 text-right">Desc.</th>
+                <th class="border border-gray-300 p-2 text-right"
+                  >Ventas netas</th
+                >
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-gray-300 p-2">[...]</td>
+                <td class="border border-gray-300 p-2">CITI MAGNA</td>
+                <td class="border border-gray-300 p-2 text-right">156</td>
+                <td class="border border-gray-300 p-2 text-right">1,109.29</td>
+                <td class="border border-gray-300 p-2 text-right">20,567.32</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+                <td class="border border-gray-300 p-2 text-right">20,567.32</td>
+              </tr>
+              <tr>
+                <td class="border border-gray-300 p-2">[...]</td>
+                <td class="border border-gray-300 p-2">CITI PREMIUM</td>
+                <td class="border border-gray-300 p-2 text-right">98</td>
+                <td class="border border-gray-300 p-2 text-right">876.24</td>
+                <td class="border border-gray-300 p-2 text-right">18,401.04</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+                <td class="border border-gray-300 p-2 text-right">18,401.04</td>
+              </tr>
+              <tr class="font-semibold bg-gray-50">
+                <td class="border border-gray-300 p-2" colspan="2"
+                  >Total Carburantes</td
+                >
+                <td class="border border-gray-300 p-2 text-right">254</td>
+                <td class="border border-gray-300 p-2 text-right">1,985.53</td>
+                <td class="border border-gray-300 p-2 text-right">38,968.36</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+                <td class="border border-gray-300 p-2 text-right">38,968.36</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="mt-4 flex justify-end">
-             <table class="w-full md:w-1/2 lg:w-1/3 border-collapse border border-gray-300">
-                 <tbody>
-                     <tr>
-                         <td class="border border-gray-300 p-2">Total Ventas Brutas</td>
-                         <td class="border border-gray-300 p-2 text-right">38,968.36</td>
-                     </tr>
-                     <tr>
-                         <td class="border border-gray-300 p-2">Total Devoluciones</td>
-                         <td class="border border-gray-300 p-2 text-right">0.00</td>
-                     </tr>
-                     <tr>
-                         <td class="border border-gray-300 p-2">Total Descuentos</td>
-                         <td class="border border-gray-300 p-2 text-right">0.00</td>
-                     </tr>
-                     <tr class="font-semibold bg-gray-50">
-                         <td class="border border-gray-300 p-2">Total Ventas Netas</td>
-                         <td class="border border-gray-300 p-2 text-right">38,968.36</td>
-                     </tr>
-                 </tbody>
-             </table>
+          <table
+            class="w-full md:w-1/2 lg:w-1/3 border-collapse border border-gray-300"
+          >
+            <tbody>
+              <tr>
+                <td class="border border-gray-300 p-2">Total Ventas Brutas</td>
+                <td class="border border-gray-300 p-2 text-right">38,968.36</td>
+              </tr>
+              <tr>
+                <td class="border border-gray-300 p-2">Total Devoluciones</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+              </tr>
+              <tr>
+                <td class="border border-gray-300 p-2">Total Descuentos</td>
+                <td class="border border-gray-300 p-2 text-right">0.00</td>
+              </tr>
+              <tr class="font-semibold bg-gray-50">
+                <td class="border border-gray-300 p-2">Total Ventas Netas</td>
+                <td class="border border-gray-300 p-2 text-right">38,968.36</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
       <section class="mb-6">
-        <h3 class="text-lg font-semibold mb-2 text-gray-800">Ventas en Tienda</h3>
+        <h3 class="text-lg font-semibold mb-2 text-gray-800">
+          Ventas en Tienda
+        </h3>
         <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-300 min-w-[800px]">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border border-gray-300 p-2 text-left">Familia</th>
-                        <th class="border border-gray-300 p-2 text-right">Núm. Op.</th>
-                        <th class="border border-gray-300 p-2 text-right">Cantidad</th>
-                        <th class="border border-gray-300 p-2 text-right">Ventas brutas</th>
-                        <th class="border border-gray-300 p-2 text-right">Devoluciones</th>
-                        <th class="border border-gray-300 p-2 text-right">Dtos.</th>
-                        <th class="border border-gray-300 p-2 text-right">Ventas netas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 p-2">CIGARROS AROMATICOS</td>
-                        <td class="border border-gray-300 p-2 text-right">3</td>
-                        <td class="border border-gray-300 p-2 text-right">3</td>
-                        <td class="border border-gray-300 p-2 text-right">62.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">62.00$</td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 p-2">BEBIDAS</td>
-                        <td class="border border-gray-300 p-2 text-right">1</td>
-                        <td class="border border-gray-300 p-2 text-right">1</td>
-                        <td class="border border-gray-300 p-2 text-right">45.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">45.00$</td>
-                    </tr>
-                    <tr class="font-semibold bg-gray-50">
-                        <td class="border border-gray-300 p-2">Total tienda</td>
-                        <td class="border border-gray-300 p-2 text-right">4</td>
-                        <td class="border border-gray-300 p-2 text-right">4</td>
-                        <td class="border border-gray-300 p-2 text-right">107.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">0.00$</td>
-                        <td class="border border-gray-300 p-2 text-right">107.00$</td>
-                    </tr>
-                </tbody>
-            </table>
+          <table
+            class="w-full border-collapse border border-gray-300 min-w-[800px]"
+          >
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border border-gray-300 p-2 text-left">Familia</th>
+                <th class="border border-gray-300 p-2 text-right">Núm. Op.</th>
+                <th class="border border-gray-300 p-2 text-right">Cantidad</th>
+                <th class="border border-gray-300 p-2 text-right"
+                  >Ventas brutas</th
+                >
+                <th class="border border-gray-300 p-2 text-right"
+                  >Devoluciones</th
+                >
+                <th class="border border-gray-300 p-2 text-right">Dtos.</th>
+                <th class="border border-gray-300 p-2 text-right"
+                  >Ventas netas</th
+                >
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-gray-300 p-2">CIGARROS AROMATICOS</td>
+                <td class="border border-gray-300 p-2 text-right">3</td>
+                <td class="border border-gray-300 p-2 text-right">3</td>
+                <td class="border border-gray-300 p-2 text-right">62.00$</td>
+                <td class="border border-gray-300 p-2 text-right">0.00$</td>
+                <td class="border border-gray-300 p-2 text-right">0.00$</td>
+                <td class="border border-gray-300 p-2 text-right">62.00$</td>
+              </tr>
+              <tr>
+                <td class="border border-gray-300 p-2">BEBIDAS</td>
+                <td class="border border-gray-300 p-2 text-right">1</td>
+                <td class="border border-gray-300 p-2 text-right">1</td>
+                <td class="border border-gray-300 p-2 text-right">45.00$</td>
+                <td class="border border-gray-300 p-2 text-right">0.00$</td>
+                <td class="border border-gray-300 p-2 text-right">0.00$</td>
+                <td class="border border-gray-300 p-2 text-right">45.00$</td>
+              </tr>
+              <tr class="font-semibold bg-gray-50">
+                <td class="border border-gray-300 p-2">Total tienda</td>
+                <td class="border border-gray-300 p-2 text-right">4</td>
+                <td class="border border-gray-300 p-2 text-right">4</td>
+                <td class="border border-gray-300 p-2 text-right">107.00$</td>
+                <td class="border border-gray-300 p-2 text-right">0.00$</td>
+                <td class="border border-gray-300 p-2 text-right">0.00$</td>
+                <td class="border border-gray-300 p-2 text-right">107.00$</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
       <footer class="pt-6 border-t mt-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-end">
-             <div>
-                 <p class="font-semibold mb-2">Firma de cajero:</p>
-                 <div class="border-b border-gray-400 h-10"></div>
-                 <p class="text-xs mt-1">[Nombre Cajero - Ej: NUANES LAUREANO...]</p>
-             </div>
-             <div class="mt-4 md:mt-0">
-                  <p class="font-semibold">Resumen de Liquidación:</p>
-                  <div class="space-y-1 mt-2 text-gray-700">
-                       <div class="flex justify-between">
-                           <span>Importe teórico:</span>
-                           <span class="text-right font-medium">207,315.14</span>
-                       </div>
-                       <div class="flex justify-between">
-                           <span>Recaudación:</span>
-                           <span class="text-right font-medium">207,315.14</span>
-                       </div>
-                        <div class="flex justify-between font-semibold border-t mt-1 pt-1">
-                           <span>Diferencia:</span>
-                           <span class="text-right text-red-600">-250.00</span>
-                       </div>
-                  </div>
-             </div>
-             <div class="text-right mt-4 md:mt-0">
-                 <p class="font-semibold">Total:</p>
-                 <p class="text-2xl font-bold">207,315.14</p>
-             </div>
+          <div>
+            <p class="font-semibold mb-2">Firma de cajero:</p>
+            <div class="border-b border-gray-400 h-10"></div>
+            <p class="text-xs mt-1">[Nombre Cajero - Ej: NUANES LAUREANO...]</p>
+          </div>
+          <div class="mt-4 md:mt-0">
+            <p class="font-semibold">Resumen de Liquidación:</p>
+            <div class="space-y-1 mt-2 text-gray-700">
+              <div class="flex justify-between">
+                <span>Importe teórico:</span>
+                <span class="text-right font-medium">207,315.14</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Recaudación:</span>
+                <span class="text-right font-medium">207,315.14</span>
+              </div>
+              <div
+                class="flex justify-between font-semibold border-t mt-1 pt-1"
+              >
+                <span>Diferencia:</span>
+                <span class="text-right text-red-600">-250.00</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-right mt-4 md:mt-0">
+            <p class="font-semibold">Total:</p>
+            <p class="text-2xl font-bold">207,315.14</p>
+          </div>
         </div>
-         <p class="text-center text-xs text-gray-500">CLAVE AMERICAN EXPRESS [...] | ACREDITENTUS PROMOCIONES HD [...]</p>
+        <p class="text-center text-xs text-gray-500">
+          CLAVE AMERICAN EXPRESS [...] | ACREDITENTUS PROMOCIONES HD [...]
+        </p>
       </footer>
     </div>
   </div>
@@ -245,22 +309,35 @@ import Input from '../components/ConfirmInput.astro';
   <dialog id="modal-pdf" class="rounded-lg p-0 w-full max-w-[80%]">
     <div class="p-6 bg-white rounded-lg shadow-lg relative">
       <!-- Encabezado -->
-      <h2 class="text-lg font-semibold text-gray-800 mb-4">Vista previa de la Hoja de Liquidación</h2>
-      
+      <h2 class="text-lg font-semibold text-gray-800 mb-4">
+        Vista previa de la Hoja de Liquidación
+      </h2>
+
       <!-- Simulación PDF -->
       <div class="mb-4 border rounded overflow-hidden h-80">
-        <iframe src="/assets/simulacion.pdf" class="w-full h-full" title="Vista previa PDF"></iframe>
+        <iframe
+          src="/assets/simulacion.pdf"
+          class="w-full h-full"
+          title="Vista previa PDF"></iframe>
       </div>
-      
+
       <!-- Confirmación -->
-      <p class="text-sm text-gray-700 mb-4">¿Desea confirmar esta Hoja de Liquidación?</p>
-      
+      <p class="text-sm text-gray-700 mb-4">
+        ¿Desea confirmar esta Hoja de Liquidación?
+      </p>
+
       <!-- Botones -->
       <div class="flex justify-end space-x-2">
-        <button id="btn-cancelar" class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200">
+        <button
+          id="btn-cancelar"
+          class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
+        >
           Cancelar
         </button>
-        <button id="btn-confirmar" class="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700">
+        <button
+          id="btn-confirmar"
+          class="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700"
+        >
           Confirmar
         </button>
       </div>
@@ -270,123 +347,135 @@ import Input from '../components/ConfirmInput.astro';
   <script>
     // Variables para el manejo del archivo
     let archivoSeleccionado = false;
-    const inputHojaLiquidacion = document.getElementById('input-hojaLiquidacion');
-    const punto1 = document.getElementById('punto1-hojaLiquidacion');
-    const punto2 = document.getElementById('punto2-hojaLiquidacion');
-    const removeFileBtn = document.getElementById('removeFile-hojaLiquidacion');
-    const modalPdf = document.getElementById('modal-pdf');
-    const btnCancelar = document.getElementById('btn-cancelar');
-    const btnConfirmar = document.getElementById('btn-confirmar');
-    const contenidoHojaLiquidacion = document.getElementById('contenido-hojaLiquidacion');
-    
+    const inputHojaLiquidacion = document.getElementById(
+      "input-hojaLiquidacion",
+    );
+    const punto1 = document.getElementById("punto1-hojaLiquidacion");
+    const punto2 = document.getElementById("punto2-hojaLiquidacion");
+    const removeFileBtn = document.getElementById("removeFile-hojaLiquidacion");
+    const modalPdf = document.getElementById("modal-pdf");
+    const btnCancelar = document.getElementById("btn-cancelar");
+    const btnConfirmar = document.getElementById("btn-confirmar");
+    const contenidoHojaLiquidacion = document.getElementById(
+      "contenido-hojaLiquidacion",
+    );
+
     // Referencia al contenedor del input
-    const inputWrapper = document.getElementById('hl-input-wrapper');
-    
+    const inputWrapper = document.getElementById("hl-input-wrapper");
+
     // Evento para cuando se selecciona un archivo
-    inputHojaLiquidacion?.addEventListener('change', function(e) {
+    inputHojaLiquidacion?.addEventListener("change", function (e) {
       const target = e.target as HTMLInputElement;
       const file = target?.files?.[0];
-      if (file && file.type === 'application/pdf') {
+      if (file && file.type === "application/pdf") {
         archivoSeleccionado = true;
         // Actualizar indicador visual
-        punto1?.classList.remove('bg-gray-300');
-        punto1?.classList.add('activo');
+        punto1?.classList.remove("bg-gray-300");
+        punto1?.classList.add("activo");
         // Mostrar botón de eliminar
-        removeFileBtn?.classList.remove('hidden');
+        removeFileBtn?.classList.remove("hidden");
         // Aplicar estilo de archivo seleccionado
-        inputWrapper?.classList.add('archivo-seleccionado');
+        inputWrapper?.classList.add("archivo-seleccionado");
         // Abrir el modal automáticamente al seleccionar un archivo PDF
         if (modalPdf instanceof HTMLDialogElement) {
           modalPdf.showModal();
         }
       } else if (file) {
-        alert('Por favor, selecciona solo archivos PDF');
+        alert("Por favor, selecciona solo archivos PDF");
         if (inputHojaLiquidacion instanceof HTMLInputElement) {
-          inputHojaLiquidacion.value = '';
+          inputHojaLiquidacion.value = "";
         }
       }
     });
-    
+
     // Evento para eliminar el archivo
-    removeFileBtn?.addEventListener('click', function() {
+    removeFileBtn?.addEventListener("click", function () {
       archivoSeleccionado = false;
       if (inputHojaLiquidacion instanceof HTMLInputElement) {
-        inputHojaLiquidacion.value = '';
+        inputHojaLiquidacion.value = "";
       }
       // Restablecer indicadores visuales
-      punto1?.classList.remove('activo');
-      punto1?.classList.add('bg-gray-300');
-      punto2?.classList.remove('activo');
-      punto2?.classList.add('bg-gray-300');
+      punto1?.classList.remove("activo");
+      punto1?.classList.add("bg-gray-300");
+      punto2?.classList.remove("activo");
+      punto2?.classList.add("bg-gray-300");
       // Ocultar botón de eliminar
-      removeFileBtn?.classList.add('hidden');
+      removeFileBtn?.classList.add("hidden");
       // Ocultar contenido de la hoja de liquidación
-      contenidoHojaLiquidacion?.classList.add('hidden');
+      contenidoHojaLiquidacion?.classList.add("hidden");
       // Restablecer estilos del contenedor
-      inputWrapper?.classList.remove('archivo-seleccionado', 'archivo-confirmado');
+      inputWrapper?.classList.remove(
+        "archivo-seleccionado",
+        "archivo-confirmado",
+      );
     });
-    
+
     // Evento para cancelar en el modal
-    btnCancelar?.addEventListener('click', function() {
+    btnCancelar?.addEventListener("click", function () {
       if (modalPdf instanceof HTMLDialogElement) {
         modalPdf.close();
       }
       archivoSeleccionado = false;
       if (inputHojaLiquidacion instanceof HTMLInputElement) {
-        inputHojaLiquidacion.value = '';
+        inputHojaLiquidacion.value = "";
       }
       // Restablecer indicadores visuales
-      punto1?.classList.remove('activo');
-      punto1?.classList.add('bg-gray-300');
+      punto1?.classList.remove("activo");
+      punto1?.classList.add("bg-gray-300");
       // Ocultar botón de eliminar
-      removeFileBtn?.classList.add('hidden');
+      removeFileBtn?.classList.add("hidden");
       // Restablecer estilos del contenedor
-      inputWrapper?.classList.remove('archivo-seleccionado', 'archivo-confirmado');
+      inputWrapper?.classList.remove(
+        "archivo-seleccionado",
+        "archivo-confirmado",
+      );
     });
-    
+
     // Evento para confirmar en el modal
-    btnConfirmar?.addEventListener('click', function() {
+    btnConfirmar?.addEventListener("click", function () {
       if (modalPdf instanceof HTMLDialogElement) {
         modalPdf.close();
       }
       // Actualizar indicadores visuales
-      punto2?.classList.remove('bg-gray-300');
-      punto2?.classList.add('activo');
+      punto2?.classList.remove("bg-gray-300");
+      punto2?.classList.add("activo");
       // Aplicar estilo de archivo confirmado
-      inputWrapper?.classList.remove('archivo-seleccionado');
-      inputWrapper?.classList.add('archivo-confirmado');
+      inputWrapper?.classList.remove("archivo-seleccionado");
+      inputWrapper?.classList.add("archivo-confirmado");
       // Mostrar contenido de la hoja de liquidación
-      contenidoHojaLiquidacion?.classList.remove('hidden');
+      contenidoHojaLiquidacion?.classList.remove("hidden");
     });
   </script>
 
   <Huella />
-<style>
-  /* Estilos específicos para esta página */
-  #hl-input-wrapper.archivo-seleccionado {
-    border-color: #10B981; /* verde */
-    background-color: rgba(16, 185, 129, 0.05);
-  }
-  
-  #hl-input-wrapper.archivo-confirmado {
-    border-color: #059669; /* verde más oscuro */
-    background-color: rgba(5, 150, 105, 0.1);
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
-  }
-  
-  #punto1-hojaLiquidacion.activo {
-    background-color: #10B981;
-    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-  }
-  
-  #punto2-hojaLiquidacion.activo {
-    background-color: #059669;
-    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
-  }
-  
-  /* Animación sutil para los cambios de estado */
-  #hl-input-wrapper, #punto1-hojaLiquidacion, #punto2-hojaLiquidacion {
-    transition: all 0.3s ease-in-out;
-  }
-</style>
+  <style>
+    /* Estilos específicos para esta página */
+    #hl-input-wrapper.archivo-seleccionado {
+      border-color: #10b981; /* verde */
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+
+    #hl-input-wrapper.archivo-confirmado {
+      border-color: #059669; /* verde más oscuro */
+      background-color: rgba(5, 150, 105, 0.1);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+    }
+
+    #punto1-hojaLiquidacion.activo {
+      background-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    }
+
+    #punto2-hojaLiquidacion.activo {
+      background-color: #059669;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
+    }
+
+    /* Animación sutil para los cambios de estado */
+    #hl-input-wrapper,
+    #punto1-hojaLiquidacion,
+    #punto2-hojaLiquidacion {
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
 </Layout>

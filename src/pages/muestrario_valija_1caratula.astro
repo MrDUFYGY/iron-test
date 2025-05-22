@@ -1,265 +1,514 @@
 ---
 import "../styles/global.css";
-import Layout from '../layouts/Layout.astro';
-import Huella from '../components/ConfirmHuella.astro';
-import ProcesoEstado from '../components/ProcesoEstadoEstacion.astro';
-import TooltipCircle from '../components/TooltipCircle.astro';
+import Layout from "../layouts/Layout.astro";
+import Huella from "../components/ConfirmHuella.astro";
+import ProcesoEstado from "../components/ProcesoEstadoEstacion.astro";
+import TooltipCircle from "../components/TooltipCircle.astro";
 
 const fechaActual = new Date();
-const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+const fechaFormateada = fechaActual.toLocaleDateString("es-MX", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
 });
-const horaActual = fechaActual.toLocaleTimeString('es-MX', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
+const horaActual = fechaActual.toLocaleTimeString("es-MX", {
+    hour: "2-digit",
+    minute: "2-digit",s
+    second: "2-digit",
 });
 ---
 
 <Layout>
-
-<style>
-    .estado {
-        display: none;
-    }
-    .estado.activo {
-        display: inline;
-    }
-    .boton {
-        display: none;
-    }
-    .boton.activo {
-        display: inline-block;
-    }
-</style>
-<TooltipCircle />
-<div class=" mx-auto bg-white rounded-xl shadow-md">
-    <div class="border-b-2 border-gray-200 pb-4 mb-6">
-        <div class="flex justify-between items-start mb-4">
-            <h1 class="text-2xl font-bold uppercase">Lista de corrección de pólizas de ingresos</h1>
-            <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded">HD-45</span>
-        </div>
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="font-semibold mr-2">Operadora:</span>
-                <span class="bg-gray-100 px-3 py-1 rounded font-medium">CR 88 SAPI DE CV</span>
+    <style>
+        .estado {
+            display: none;
+        }
+        .estado.activo {
+            display: inline;
+        }
+        .boton {
+            display: none;
+        }
+        .boton.activo {
+            display: inline-block;
+        }
+    </style>
+    <TooltipCircle />
+    <div class="mx-auto bg-white rounded-xl shadow-md">
+        <div class="border-b-2 border-gray-200 pb-4 mb-6">
+            <div class="flex justify-between items-start mb-4">
+                <h1 class="text-2xl font-bold uppercase">
+                    Lista de corrección de pólizas de ingresos
+                </h1>
+                <span
+                    class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded"
+                    >HD-45</span
+                >
             </div>
-            <div class="text-right">
-                <span class="font-semibold">Fecha de la póliza:</span>
-                <span class="ml-2">jueves, 6 de marzo de 2025</span>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="font-semibold mr-2">Operadora:</span>
+                    <span class="bg-gray-100 px-3 py-1 rounded font-medium"
+                        >CR 88 SAPI DE CV</span
+                    >
+                </div>
+                <div class="text-right">
+                    <span class="font-semibold">Fecha de la póliza:</span>
+                    <span class="ml-2">jueves, 6 de marzo de 2025</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <form id="formulario" class="space-y-8">
-        <!-- Puntos de Amarre -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h2 class="font-bold uppercase mb-4 text-gray-800">Puntos de Amarre:</h2>
-            <div class="space-y-4 text-sm">
-                <!-- Punto 1 con subpuntos -->
-                <div>
-                    <div class="flex items-center p-2 bg-gray-100 rounded-t-lg">
-                        <p class="font-medium">1.- Verificar hoja de corte vs "Resumen de liquidación" por turno lo siguiente:</p>
-                    </div>
-                    <div class="space-y-2 bg-white p-3 rounded-b-lg">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700">a) Litros vendidos</span>
-                            <ProcesoEstado estatus="Pendiente" url="/muestrario_valija_2hojaLiquidacion" />
+        <form id="formulario" class="space-y-8">
+            <!-- Puntos de Amarre -->
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <h2 class="font-bold uppercase mb-4 text-gray-800">
+                    Puntos de Amarre:
+                </h2>
+                <div class="space-y-4 text-sm">
+                    <!-- Punto 1 con subpuntos -->
+                    <div>
+                        <div
+                            class="flex items-center p-2 bg-gray-100 rounded-t-lg"
+                        >
+                            <p class="font-medium">
+                                1.- Verificar hoja de corte vs "Resumen de
+                                liquidación" por turno lo siguiente:
+                            </p>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700">b) Ventas de Periféricos</span>
+                        <div class="space-y-2 bg-white p-3 rounded-b-lg">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700"
+                                    >a) Litros vendidos</span
+                                >
+                                <ProcesoEstado
+                                    estatus="Pendiente"
+                                    url="/muestrario_valija_2hojaLiquidacion"
+                                />
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700"
+                                    >b) Ventas de Periféricos</span
+                                >
+                                <ProcesoEstado
+                                    estatus="Iniciado"
+                                    url="/sellar"
+                                />
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700"
+                                    >c) Vales, clientes y Tarjeta Inteligente</span
+                                >
+                                <ProcesoEstado
+                                    estatus="Sellado"
+                                    url="/verificar"
+                                />
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700">d) Fajillas</span>
+                                <ProcesoEstado
+                                    estatus="Alerta"
+                                    url="/assets/simulacion.pdf"
+                                />
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-700">e) Gastos</span>
+                                <ProcesoEstado
+                                    estatus="Verificado"
+                                    url="/muestrario_valija_2hojaLiquidacion"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Puntos 2 al 7 -->
+                    <div class="space-y-2">
+                        <div
+                            class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                        >
+                            <span class="text-gray-700"
+                                >2.- Verificar "Formas de cobro" Vs "Resumen de
+                                liquidación" del día (1/3)</span
+                            >
+                            <ProcesoEstado
+                                estatus="Pendiente"
+                                url="/assets/simulacion.pdf"
+                            />
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                        >
+                            <span class="text-gray-700"
+                                >3.- Verificar litros jarros = litros retorno
+                                (Listado de Contadores)</span
+                            >
                             <ProcesoEstado estatus="Iniciado" url="/sellar" />
                         </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700">c) Vales, clientes y Tarjeta Inteligente</span>
-                            <ProcesoEstado estatus="Sellado" url="/verificar" />
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700">d) Fajillas</span>
-                            <ProcesoEstado estatus="Alerta" url="/assets/simulacion.pdf" />
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-700">e) Gastos</span>
-                            <ProcesoEstado estatus="Verificado" url="/muestrario_valija_2hojaLiquidacion" />
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Puntos 2 al 7 -->
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                        <span class="text-gray-700">2.- Verificar "Formas de cobro" Vs "Resumen de liquidación" del día (1/3)</span>
-                        <ProcesoEstado estatus="Pendiente" url="/assets/simulacion.pdf" />
-                    </div>
-                    <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                        <span class="text-gray-700">3.- Verificar litros jarros = litros retorno (Listado de Contadores)</span>
-                        <ProcesoEstado estatus="Iniciado" url="/sellar" />
-                    </div>
-                    <!-- Punto 4 con subpuntos -->
-                    <div>
-                        <div class="flex items-center justify-between p-2 bg-gray-100 rounded-t-lg">
-                            <p class="font-medium">4.- Verificar depósitos vs "Resumen de liquidación" (1/3)</p>
-                            <ProcesoEstado estatus="Verificado" url="/assets/simulacion.pdf" />
-                        </div>
-                        <div class="bg-white p-4 rounded-b-lg space-y-3">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Importe F.traslado de valores:</label>
-                                    <div class="relative">
-                                        <span class="absolute left-3 top-2 text-gray-500">$</span>
-                                        <input type="number" id="importeTraslado" class="pl-7 w-full border border-gray-300 rounded p-2 text-sm" placeholder="0.00" step="0.01">
+                        <!-- Punto 4 con subpuntos -->
+                        <div>
+                            <div
+                                class="flex items-center justify-between p-2 bg-gray-100 rounded-t-lg"
+                            >
+                                <p class="font-medium">
+                                    4.- Verificar depósitos vs "Resumen de
+                                    liquidación" (1/3)
+                                </p>
+                                <ProcesoEstado
+                                    estatus="Verificado"
+                                    url="/assets/simulacion.pdf"
+                                />
+                            </div>
+                            <div class="bg-white p-4 rounded-b-lg space-y-3">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700 mb-1"
+                                            >Importe F.traslado de valores:</label
+                                        >
+                                        <div class="relative">
+                                            <span
+                                                class="absolute left-3 top-2 text-gray-500"
+                                                >$</span
+                                            >
+                                            <input
+                                                type="number"
+                                                id="importeTraslado"
+                                                class="pl-7 w-full border border-gray-300 rounded p-2 text-sm"
+                                                placeholder="0.00"
+                                                step="0.01"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700 mb-1"
+                                            >Importe Resumen de liquidación:</label
+                                        >
+                                        <div class="relative">
+                                            <span
+                                                class="absolute left-3 top-2 text-gray-500"
+                                                >$</span
+                                            >
+                                            <input
+                                                type="number"
+                                                id="importeResumen"
+                                                class="pl-7 w-full border border-gray-300 rounded p-2 text-sm"
+                                                placeholder="0.00"
+                                                step="0.01"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Importe Resumen de liquidación:</label>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-1"
+                                        >Diferencia:</label
+                                    >
                                     <div class="relative">
-                                        <span class="absolute left-3 top-2 text-gray-500">$</span>
-                                        <input type="number" id="importeResumen" class="pl-7 w-full border border-gray-300 rounded p-2 text-sm" placeholder="0.00" step="0.01">
+                                        <span
+                                            class="absolute left-3 top-2 text-gray-500"
+                                            >$</span
+                                        >
+                                        <input
+                                            type="text"
+                                            id="diferencia"
+                                            class="pl-7 w-full border border-gray-300 rounded p-2 text-sm bg-gray-50"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Diferencia:</label>
-                                <div class="relative">
-                                    <span class="absolute left-3 top-2 text-gray-500">$</span>
-                                    <input type="text" id="diferencia" class="pl-7 w-full border border-gray-300 rounded p-2 text-sm bg-gray-50" readonly>
-                                </div>
-                            </div>
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                        >
+                            <span class="text-gray-700"
+                                >5.- Verificar listado de contadores por turno
+                                vs resumen de liquidación</span
+                            >
+                            <ProcesoEstado
+                                estatus="Sellado"
+                                url="/muestrario_valija_2hojaLiquidacion"
+                            />
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                        >
+                            <span class="text-gray-700"
+                                >6.- Verificar en "Recepción de carburantes"
+                                litros capturados, IVA Flete, vs facturas Pemex</span
+                            >
+                            <ProcesoEstado
+                                estatus="Verificado"
+                                url="/muestrario_valija_2hojaLiquidacion"
+                            />
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                        >
+                            <span class="text-gray-700"
+                                >7.- Verificar en "Listado Remisiones de
+                                periféricos" proveedor, claves y unidades</span
+                            >
+                            <ProcesoEstado estatus="Alerta" url="/sellar" />
                         </div>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                        <span class="text-gray-700">5.- Verificar listado de contadores por turno vs resumen de liquidación</span>
-                        <ProcesoEstado estatus="Sellado" url="/muestrario_valija_2hojaLiquidacion" />
+                </div>
+            </div>
+
+            <!-- Documentos que integran la póliza -->
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <h2 class="font-bold uppercase mb-4 text-gray-800">
+                    Documentos que integran la póliza:
+                </h2>
+                <div class="space-y-2 text-sm">
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >1.- Resumen de liquidación (1/3)</span
+                        >
+                        <ProcesoEstado
+                            estatus="Sellado"
+                            url="/assets/simulacion.pdf"
+                        />
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                        <span class="text-gray-700">6.- Verificar en "Recepción de carburantes" litros capturados, IVA Flete, vs facturas Pemex</span>
-                        <ProcesoEstado estatus="Verificado" url="/muestrario_valija_2hojaLiquidacion" />
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >2.- Movimientos de Periféricos (1/3)</span
+                        >
+                        <ProcesoEstado
+                            estatus="Alerta"
+                            url="/muestrario_valija_2hojaLiquidacion"
+                        />
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                        <span class="text-gray-700">7.- Verificar en "Listado Remisiones de periféricos" proveedor, claves y unidades</span>
-                        <ProcesoEstado estatus="Alerta" url="/sellar" />
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >3.- Reporte "Regularización de existencias"</span
+                        >
+                        <ProcesoEstado
+                            estatus="Verificado"
+                            url="/muestrario_valija_2hojaLiquidacion"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >4.- Ficha del Banco y Traslado de valores</span
+                        >
+                        <ProcesoEstado estatus="Pendiente" url="/sellar" />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700">5.- Apuntes contables</span>
+                        <ProcesoEstado
+                            estatus="Iniciado"
+                            url="/assets/simulacion.pdf"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >6.- Hojas de corte de Periféricos (Turno 1,2 y 3)</span
+                        >
+                        <ProcesoEstado
+                            estatus="Sellado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >7.- Comprobantes de gastos (Nómina,etc)</span
+                        >
+                        <ProcesoEstado
+                            estatus="Alerta"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >8.- Libro de Tanques (día15 y último mes y cuando
+                            se realicen jarros)</span
+                        >
+                        <ProcesoEstado
+                            estatus="Verificado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >9.- Tira de venta real, listado de contadores, y
+                            Listado de Mediciones</span
+                        >
+                        <ProcesoEstado
+                            estatus="Verificado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >10.- Hoja de corte por cambio de turno solo si se
+                            trabaja fuera del sistema</span
+                        >
+                        <ProcesoEstado
+                            estatus="Alerta"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >11.- Listado de remisión de periféricos con
+                            soportes</span
+                        >
+                        <ProcesoEstado
+                            estatus="Sellado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >12.- Recepción de carburantes con soportes</span
+                        >
+                        <ProcesoEstado
+                            estatus="Verificado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700">13.- Jarreo</span>
+                        <ProcesoEstado
+                            estatus="Alerta"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700">14.- Vales por Empresa</span
+                        >
+                        <ProcesoEstado
+                            estatus="Sellado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >15.- Corte de terminales con vouchers</span
+                        >
+                        <ProcesoEstado
+                            estatus="Verificado"
+                            url="/muestrario_valija_3resumenes"
+                        />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-100 rounded-lg"
+                    >
+                        <span class="text-gray-700"
+                            >16.- Lista de placas con tag</span
+                        >
+                        <ProcesoEstado
+                            estatus="Alerta"
+                            url="/muestrario_valija_3resumenes"
+                        />
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Documentos que integran la póliza -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h2 class="font-bold uppercase mb-4 text-gray-800">Documentos que integran la póliza:</h2>
-            <div class="space-y-2 text-sm">
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">1.- Resumen de liquidación (1/3)</span>
-                    <ProcesoEstado estatus="Sellado" url="/assets/simulacion.pdf" />
+            <!-- Observaciones -->
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                    for="observaciones"
+                    class="block font-medium text-sm mb-2 text-gray-800"
+                    >Observaciones:</label
+                >
+                <textarea
+                    id="observaciones"
+                    class="w-full border border-gray-300 rounded p-2 text-sm"
+                    rows="4"
+                    placeholder="Escriba aquí..."></textarea>
+            </div>
+
+            <!-- Firma y turno -->
+            <div
+                class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+                <div>
+                    <label
+                        for="turno"
+                        class="block font-medium mb-2 text-gray-800"
+                        >Turno:</label
+                    >
+                    <input
+                        id="turno"
+                        type="text"
+                        class="w-full border border-gray-300 rounded p-2"
+                    />
                 </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">2.- Movimientos de Periféricos (1/3)</span>
-                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_2hojaLiquidacion" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">3.- Reporte "Regularización de existencias"</span>
-                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_2hojaLiquidacion" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">4.- Ficha del Banco y Traslado de valores</span>
-                    <ProcesoEstado estatus="Pendiente" url="/sellar" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">5.- Apuntes contables</span>
-                    <ProcesoEstado estatus="Iniciado" url="/assets/simulacion.pdf" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">6.- Hojas de corte de Periféricos (Turno 1,2 y 3)</span>
-                    <ProcesoEstado estatus="Sellado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">7.- Comprobantes de gastos (Nómina,etc)</span>
-                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">8.- Libro de Tanques (día15 y último mes y cuando se realicen jarros)</span>
-                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">9.- Tira de venta real, listado de contadores, y Listado de Mediciones</span>
-                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">10.- Hoja de corte por cambio de turno solo si se trabaja fuera del sistema</span>
-                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">11.- Listado de remisión de periféricos con soportes</span>
-                    <ProcesoEstado estatus="Sellado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">12.- Recepción de carburantes con soportes</span>
-                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">13.- Jarreo</span>
-                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">14.- Vales por Empresa</span>
-                    <ProcesoEstado estatus="Sellado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">15.- Corte de terminales con vouchers</span>
-                    <ProcesoEstado estatus="Verificado" url="/muestrario_valija_3resumenes" />
-                </div>
-
-                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                    <span class="text-gray-700">16.- Lista de placas con tag</span>
-                    <ProcesoEstado estatus="Alerta" url="/muestrario_valija_3resumenes" />
+                <div>
+                    <label class="block font-medium mb-2 text-gray-800"
+                        >Nombre y firma del verificador:</label
+                    >
+                    <input
+                        type="text"
+                        value="LUIS ALVARO VILLEGAS"
+                        disabled
+                        class="w-full bg-gray-200 border border-gray-300 rounded p-2"
+                    />
                 </div>
             </div>
-        </div>
 
-        <!-- Observaciones -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
-            <textarea id="observaciones" class="w-full border border-gray-300 rounded p-2 text-sm" rows="4" placeholder="Escriba aquí..."></textarea>
-        </div>
-
-        <!-- Firma y turno -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label for="turno" class="block font-medium mb-2 text-gray-800">Turno:</label>
-                <input id="turno" type="text" class="w-full border border-gray-300 rounded p-2">
+            <!-- Botones -->
+            <div class="text-center mt-6 space-x-4">
+                <button
+                    id="guardar"
+                    class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block"
+                >
+                    Guardar
+                </button>
             </div>
-            <div>
-                <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
-                <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
-            </div>
-        </div>
+        </form>
+    </div>
 
-        <!-- Botones -->
-        <div class="text-center mt-6 space-x-4">
-            <button id="guardar" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block">
-                Guardar
-            </button>
-        </div>
-    </form>
-</div>
-
-<Huella />
+    <Huella />
     <script>
         //se crea una funcion para evitar que las otras funciones se mezclen
         function main() {
@@ -271,28 +520,50 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
 
             //funcion para calcular la diferencia
             function calcularDiferencia() {
-                const importeTrasladoInput = document.getElementById('importeTraslado') as HTMLInputElement;
-                const importeResumenInput = document.getElementById('importeResumen') as HTMLInputElement;
-                const diferenciaInput = document.getElementById('diferencia') as HTMLInputElement;
+                const importeTrasladoInput = document.getElementById(
+                    "importeTraslado",
+                ) as HTMLInputElement;
+                const importeResumenInput = document.getElementById(
+                    "importeResumen",
+                ) as HTMLInputElement;
+                const diferenciaInput = document.getElementById(
+                    "diferencia",
+                ) as HTMLInputElement;
 
-                if (!importeTrasladoInput || !importeResumenInput || !diferenciaInput) return;
+                if (
+                    !importeTrasladoInput ||
+                    !importeResumenInput ||
+                    !diferenciaInput
+                )
+                    return;
 
-                const importeTraslado = parseFloat(importeTrasladoInput.value) || 0;
-                const importeResumen = parseFloat(importeResumenInput.value) || 0;
+                const importeTraslado =
+                    parseFloat(importeTrasladoInput.value) || 0;
+                const importeResumen =
+                    parseFloat(importeResumenInput.value) || 0;
                 const diferencia = importeTraslado - importeResumen;
-                
+
                 diferenciaInput.value = diferencia.toFixed(2);
-                
+
                 // Cambiar color según la diferencia
                 if (diferencia === 0) {
-                    diferenciaInput.classList.remove('text-red-600', 'text-green-600');
-                    diferenciaInput.classList.add('text-gray-600');
+                    diferenciaInput.classList.remove(
+                        "text-red-600",
+                        "text-green-600",
+                    );
+                    diferenciaInput.classList.add("text-gray-600");
                 } else if (diferencia > 0) {
-                    diferenciaInput.classList.remove('text-red-600', 'text-gray-600');
-                    diferenciaInput.classList.add('text-green-600');
+                    diferenciaInput.classList.remove(
+                        "text-red-600",
+                        "text-gray-600",
+                    );
+                    diferenciaInput.classList.add("text-green-600");
                 } else {
-                    diferenciaInput.classList.remove('text-green-600', 'text-gray-600');
-                    diferenciaInput.classList.add('text-red-600');
+                    diferenciaInput.classList.remove(
+                        "text-green-600",
+                        "text-gray-600",
+                    );
+                    diferenciaInput.classList.add("text-red-600");
                 }
             }
 
@@ -300,61 +571,69 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
             function marcarConfirmado(id: string) {
                 const elemento = document.getElementById(id);
                 if (elemento) {
-                    elemento.classList.remove('hidden');
+                    elemento.classList.remove("hidden");
                 }
             }
 
             // Agregar event listeners a los inputs
-            const importeTrasladoInput = document.getElementById('importeTraslado');
-            const importeResumenInput = document.getElementById('importeResumen');
-        
+            const importeTrasladoInput =
+                document.getElementById("importeTraslado");
+            const importeResumenInput =
+                document.getElementById("importeResumen");
+
             if (importeTrasladoInput) {
-                importeTrasladoInput.addEventListener('input', calcularDiferencia);
+                importeTrasladoInput.addEventListener(
+                    "input",
+                    calcularDiferencia,
+                );
             }
             if (importeResumenInput) {
-                importeResumenInput.addEventListener('input', calcularDiferencia);
+                importeResumenInput.addEventListener(
+                    "input",
+                    calcularDiferencia,
+                );
             }
 
-            const form = document.getElementById('formulario');
+            const form = document.getElementById("formulario");
             if (form) {
-              form.addEventListener('submit', (event) => {
-                event.preventDefault(); 
-              });
+                form.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                });
             }
 
-            const botonGuardar = document.getElementById('guardar');
+            const botonGuardar = document.getElementById("guardar");
             if (botonGuardar) {
-                botonGuardar.addEventListener('click', validarFormulario);
+                botonGuardar.addEventListener("click", validarFormulario);
             }
 
             // Simular confirmación de elementos (esto debería venir de tu backend)
             setTimeout(() => {
-                marcarConfirmado('confirmado_litros');
-                marcarConfirmado('confirmado_perifericos');
-                marcarConfirmado('confirmado_resumen');
+                marcarConfirmado("confirmado_litros");
+                marcarConfirmado("confirmado_perifericos");
+                marcarConfirmado("confirmado_resumen");
             }, 1000);
 
             // Funciones para los diálogos
             function mostrarDialogoSellar(tipo: string) {
-                const dialog = document.getElementById('dialogoSellar');
+                const dialog = document.getElementById("dialogoSellar");
                 if (dialog) {
-                    dialog.classList.remove('hidden');
+                    dialog.classList.remove("hidden");
                     dialog.dataset.tipo = tipo;
                 }
             }
 
             function mostrarDialogoValidar(tipo: string) {
-                const dialog = document.getElementById('dialogoValidar');
+                const dialog = document.getElementById("dialogoValidar");
                 if (dialog) {
-                    dialog.classList.remove('hidden');
+                    dialog.classList.remove("hidden");
                     dialog.dataset.tipo = tipo;
                 }
             }
 
             function mostrarDialogoVisualizar(tipo: string) {
-                const dialog = document.getElementById('dialogoVisualizar');
+                const dialog = document.getElementById("dialogoVisualizar");
                 if (dialog) {
-                    dialog.classList.remove('hidden');
+                    dialog.classList.remove("hidden");
                     dialog.dataset.tipo = tipo;
                 }
             }
@@ -362,45 +641,57 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
             function cerrarDialogo(id: string) {
                 const dialog = document.getElementById(id);
                 if (dialog) {
-                    dialog.classList.add('hidden');
+                    dialog.classList.add("hidden");
                 }
             }
 
             function sellarDocumento() {
-                const dialog = document.getElementById('dialogoSellar');
+                const dialog = document.getElementById("dialogoSellar");
                 const tipo = dialog?.dataset.tipo;
                 if (tipo) {
-                    const estadoSellado = document.getElementById(`estado_sellado_${tipo}`);
-                    const btnAcceder = document.getElementById(`btnAcceder_${tipo}`);
-                    const btnSellar = document.getElementById(`btnSellar_${tipo}`);
+                    const estadoSellado = document.getElementById(
+                        `estado_sellado_${tipo}`,
+                    );
+                    const btnAcceder = document.getElementById(
+                        `btnAcceder_${tipo}`,
+                    );
+                    const btnSellar = document.getElementById(
+                        `btnSellar_${tipo}`,
+                    );
                     if (estadoSellado && btnAcceder && btnSellar) {
-                        estadoSellado.classList.remove('hidden');
-                        btnAcceder.classList.remove('hidden');
-                        btnSellar.classList.add('hidden');
+                        estadoSellado.classList.remove("hidden");
+                        btnAcceder.classList.remove("hidden");
+                        btnSellar.classList.add("hidden");
                     }
                 }
-                cerrarDialogo('dialogoSellar');
+                cerrarDialogo("dialogoSellar");
             }
 
             function validarDocumento() {
-                const dialog = document.getElementById('dialogoValidar');
+                const dialog = document.getElementById("dialogoValidar");
                 const tipo = dialog?.dataset.tipo;
                 if (tipo) {
-                    const estadoValidado = document.getElementById(`estado_validado_${tipo}`);
-                    const btnAcceder = document.getElementById(`btnAcceder_${tipo}`);
-                    const btnValidar = document.getElementById(`btnValidar_${tipo}`);
+                    const estadoValidado = document.getElementById(
+                        `estado_validado_${tipo}`,
+                    );
+                    const btnAcceder = document.getElementById(
+                        `btnAcceder_${tipo}`,
+                    );
+                    const btnValidar = document.getElementById(
+                        `btnValidar_${tipo}`,
+                    );
                     if (estadoValidado && btnAcceder && btnValidar) {
-                        estadoValidado.classList.remove('hidden');
-                        btnAcceder.classList.remove('hidden');
-                        btnValidar.classList.add('hidden');
+                        estadoValidado.classList.remove("hidden");
+                        btnAcceder.classList.remove("hidden");
+                        btnValidar.classList.add("hidden");
                     }
                 }
-                cerrarDialogo('dialogoValidar');
+                cerrarDialogo("dialogoValidar");
             }
         }
-        
+
         // Ejecuta la función principal cuando la página se haya cargado
-        window.addEventListener('load', main);
+        window.addEventListener("load", main);
     </script>
 
     <!-- Diálogos -->
@@ -409,18 +700,38 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
             <div class="bg-white rounded-lg p-6 w-96">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium">Sellar documento</h3>
-                    <button onclick="cerrarDialogo('dialogoSellar')" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <button
+                        onclick="cerrarDialogo('dialogoSellar')"
+                        class="text-gray-500 hover:text-gray-700"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-                <p class="text-gray-600 mb-6">¿Está seguro que desea sellar este documento?</p>
+                <p class="text-gray-600 mb-6">
+                    ¿Está seguro que desea sellar este documento?
+                </p>
                 <div class="flex justify-end space-x-4">
-                    <button onclick="cerrarDialogo('dialogoSellar')" class="text-gray-600 hover:text-gray-800">
+                    <button
+                        onclick="cerrarDialogo('dialogoSellar')"
+                        class="text-gray-600 hover:text-gray-800"
+                    >
                         Cancelar
                     </button>
-                    <button onclick="sellarDocumento()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    <button
+                        onclick="sellarDocumento()"
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    >
                         Sellar
                     </button>
                 </div>
@@ -428,23 +739,46 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
         </div>
     </div>
 
-    <div id="dialogoValidar" class="fixed inset-0 bg-black bg-opacity-50 hidden">
+    <div
+        id="dialogoValidar"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden"
+    >
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-96">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium">Validar documento</h3>
-                    <button onclick="cerrarDialogo('dialogoValidar')" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <button
+                        onclick="cerrarDialogo('dialogoValidar')"
+                        class="text-gray-500 hover:text-gray-700"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-                <p class="text-gray-600 mb-6">¿Está seguro que desea validar este documento?</p>
+                <p class="text-gray-600 mb-6">
+                    ¿Está seguro que desea validar este documento?
+                </p>
                 <div class="flex justify-end space-x-4">
-                    <button onclick="cerrarDialogo('dialogoValidar')" class="text-gray-600 hover:text-gray-800">
+                    <button
+                        onclick="cerrarDialogo('dialogoValidar')"
+                        class="text-gray-600 hover:text-gray-800"
+                    >
                         Cancelar
                     </button>
-                    <button onclick="validarDocumento()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                    <button
+                        onclick="validarDocumento()"
+                        class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+                    >
                         Validar
                     </button>
                 </div>
@@ -452,27 +786,49 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
         </div>
     </div>
 
-    <div id="dialogoVisualizar" class="fixed inset-0 bg-black bg-opacity-50 hidden">
+    <div
+        id="dialogoVisualizar"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden"
+    >
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-96">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium">Visualizar documento sellado</h3>
-                    <button onclick="cerrarDialogo('dialogoVisualizar')" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <h3 class="text-lg font-medium">
+                        Visualizar documento sellado
+                    </h3>
+                    <button
+                        onclick="cerrarDialogo('dialogoVisualizar')"
+                        class="text-gray-500 hover:text-gray-700"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
                 <div class="mb-4">
-                    <iframe src="/assets/simulacion.pdf" class="w-full h-96 border border-gray-300 rounded"></iframe>
+                    <iframe
+                        src="/assets/simulacion.pdf"
+                        class="w-full h-96 border border-gray-300 rounded"
+                    ></iframe>
                 </div>
                 <div class="flex justify-end">
-                    <button onclick="cerrarDialogo('dialogoVisualizar')" class="text-gray-600 hover:text-gray-800">
+                    <button
+                        onclick="cerrarDialogo('dialogoVisualizar')"
+                        class="text-gray-600 hover:text-gray-800"
+                    >
                         Cerrar
                     </button>
                 </div>
             </div>
         </div>
     </div>
-
 </Layout>

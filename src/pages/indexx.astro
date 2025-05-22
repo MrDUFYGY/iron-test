@@ -1,16 +1,15 @@
 ---
 import "../styles/global.css";
-import Layout from '../layouts/Layout.astro';
-import Menu from '../components/Menu.astro';
-import Separador from '../components/Separador.astro';
+import Layout from "../layouts/Layout.astro";
+import Menu from "../components/Menu.astro";
+import Separador from "../components/Separador.astro";
 // import UsuariosListado from '../components/UsuariosLista.svelte';
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-
 <Layout>
-	<Separador texto="MENU DE PROCESOS" /> 
+	<Separador texto="MENU DE PROCESOS" />
 
 	<!-- <div class="max-w-sm bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
 		<img class="w-full h-48 object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-T96ZDntOXfRsoyF5i3J68JJq_w6nv9MtYA&s" alt="Imagen de prueba">
@@ -20,120 +19,125 @@ import Separador from '../components/Separador.astro';
 			<button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">Acción</button>
 		</div>
 	</div> -->
-	<div style="display: flex; justify-content: flex; width: 100%; align-items: center;">
-		<div style="width: 50%; height: 90vh;  border-right: 1px solid #ccc; margin-left: 2vw;">
-			<iframe 
-				src="/visor_valija_1caratula" 
+	<div
+		style="display: flex; justify-content: flex; width: 100%; align-items: center;"
+	>
+		<div
+			style="width: 50%; height: 90vh;  border-right: 1px solid #ccc; margin-left: 2vw;"
+		>
+			<iframe
+				src="/visor_valija_1caratula"
 				style="width: 100%; height: 100%; border: none;"
-				title="Muestrario de caratula digital">
+				title="Muestrario de caratula digital"
+			>
 			</iframe>
 		</div>
-		<div style="max-width: 50%; height: 90vh; border-right: 1px solid #ccc; overflow-y: auto;">
-			<Menu items={[
-				{
-				  title: "Resumen",
-				  description: "Muestrario de caratula digital",
-				  icon: "1.- Hoja Caratula",
-				  link: "/muestrario_valija_1caratula",
-				  validadoGerente: true,
-				  validadoCorporativo: true,
-				  modalSide: "left"
-				},
-				{
-				  title: "Hoja de liquidacion",
-				  description: "Muestrario de hoja de liquidacion",
-				  icon: "2.- hojaLiquidacion",
-				  link: "/muestrario_valija_2hojaLiquidacion",
-				  validadoGerente: true,
-				},
-				{
-				  title: "Resultados Busqueda",
-				  description: "Muestrario de resultados de busqueda",
-				  icon: "3.- resultadosBusqueda",
-				  link: "/muestrario_valija_3resultadosBusqueda",
-				  validadoGerente: false
-				},
-				{
-				  title: "Nominas",
-				  description: "Muestrario de nominas",
-				  icon: "4.- nominas",
-				  link: "/muestrario_valija_4nominas",
-				  validadoGerente: false
-				},
-				{
-				  title: "Subida de archivos por turno",
-				  description: "Muestrario de subida de archivos por turno",
-				  icon: "5-7.- subidaArchivosTurno",
-				  link: "/muestrario_valija_5-7docsTurno",
-				  validadoGerente: true
-				},
-				// {
-				//   title: "Listados Contadores",
-				//   description: "Muestrario de listados contadores",
-				//   icon: "5.- listadosContadores",
-				//   link: "/muestrario_valija_5listadosContadores",
-				//   validadoGerente: false
-				// },
-				// {
-				//   title: "Liquidacion Open",
-				//   description: "Muestrario de liquidacion open",
-				//   icon: "6.- liquidacionOpen",
-				//   link: "/muestrario_valija_6hojasLiquidacionOpen",
-				//   validadoGerente: true,
-				//   validadoCorporativo: true
-				// },
-				// {
-				//   title: "Medicion",
-				//   description: "Muestrario de medicion",
-				//   icon: "7.- medicion",
-				//   link: "/muestrario_valija_7medicion",
-				//   validadoGerente: true
-				// },
-				{
-				  title: "Historico de Carburante",
-				  description: "Historico",
-				  icon: "8.- Historico de Movimiento de Carburante",
-				  link: "/muestrario_valija_8historicoCarburante",
-				  validadoGerente: false
-				},
-				{
-				  title: "Consulta de Ventas por Periodo",
-				  description: "ventas por periodo",
-				  icon: "9.- Consulta de Ventas por Periodo",
-				  link: "/muestrario_valija_9resultadoVentasxPeriordo",
-				  validadoGerente: true,
-				  sugerencia: true
-				},
-				{
-				  title: "Resultados de Mermas y Regularizacion",
-				  description: "Resultados de Mermas y Regularizacion",
-				  icon: "10.- Resultados de Mermas y Regularizacion",
-				  link: "/muestrario_valija_10resultadosMermasRegul",
-				  validadoGerente: true,
-				  validadoCorporativo: true
-				},
-				// {
-				//   title: "Reporte de Inventario",
-				//   description: "Reporte de Inventario",
-				//   icon: "Reporte de Inventario",
-				//   link: "/zzz",
-				//   validadoGerente: true,
-				//   validadoCorporativo: true
-				// },
-						{
-				  title: "Reporte de Inventario",
-				  description: "Reporte de Inventario",
-				  icon: "Reporte de Inventario",
-				  link: "/muestrario_valija_9ventaHojaPerifericos",
-				  validadoGerente: true,
-				  validadoCorporativo: true
-				}
-			]} />
+		<div
+			style="max-width: 50%; height: 90vh; border-right: 1px solid #ccc; overflow-y: auto;"
+		>
+			<Menu
+				items={[
+					{
+						title: "Resumen",
+						description: "Muestrario de caratula digital",
+						icon: "1.- Hoja Caratula",
+						link: "/muestrario_valija_1caratula",
+						validadoGerente: true,
+						validadoCorporativo: true,
+						modalSide: "left",
+					},
+					{
+						title: "Hoja de liquidacion",
+						description: "Muestrario de hoja de liquidacion",
+						icon: "2.- hojaLiquidacion",
+						link: "/muestrario_valija_2hojaLiquidacion",
+						validadoGerente: true,
+					},
+					{
+						title: "Resultados Busqueda",
+						description: "Muestrario de resultados de busqueda",
+						icon: "3.- resultadosBusqueda",
+						link: "/muestrario_valija_3resultadosBusqueda",
+						validadoGerente: false,
+					},
+					{
+						title: "Nominas",
+						description: "Muestrario de nominas",
+						icon: "4.- nominas",
+						link: "/muestrario_valija_4nominas",
+						validadoGerente: false,
+					},
+					{
+						title: "Subida de archivos por turno",
+						description:
+							"Muestrario de subida de archivos por turno",
+						icon: "5-7.- subidaArchivosTurno",
+						link: "/muestrario_valija_5-7docsTurno",
+						validadoGerente: true,
+					},
+					// {
+					//   title: "Listados Contadores",
+					//   description: "Muestrario de listados contadores",
+					//   icon: "5.- listadosContadores",
+					//   link: "/muestrario_valija_5listadosContadores",
+					//   validadoGerente: false
+					// },
+					// {
+					//   title: "Liquidacion Open",
+					//   description: "Muestrario de liquidacion open",
+					//   icon: "6.- liquidacionOpen",
+					//   link: "/muestrario_valija_6hojasLiquidacionOpen",
+					//   validadoGerente: true,
+					//   validadoCorporativo: true
+					// },
+					// {
+					//   title: "Medicion",
+					//   description: "Muestrario de medicion",
+					//   icon: "7.- medicion",
+					//   link: "/muestrario_valija_7medicion",
+					//   validadoGerente: true
+					// },
+					{
+						title: "Historico de Carburante",
+						description: "Historico",
+						icon: "8.- Historico de Movimiento de Carburante",
+						link: "/muestrario_valija_8historicoCarburante",
+						validadoGerente: false,
+					},
+					{
+						title: "Consulta de Ventas por Periodo",
+						description: "ventas por periodo",
+						icon: "9.- Consulta de Ventas por Periodo",
+						link: "/muestrario_valija_9resultadoVentasxPeriordo",
+						validadoGerente: true,
+						sugerencia: true,
+					},
+					{
+						title: "Resultados de Mermas y Regularizacion",
+						description: "Resultados de Mermas y Regularizacion",
+						icon: "10.- Resultados de Mermas y Regularizacion",
+						link: "/muestrario_valija_10resultadosMermasRegul",
+						validadoGerente: true,
+						validadoCorporativo: true,
+					},
+					// {
+					//   title: "Reporte de Inventario",
+					//   description: "Reporte de Inventario",
+					//   icon: "Reporte de Inventario",
+					//   link: "/zzz",
+					//   validadoGerente: true,
+					//   validadoCorporativo: true
+					// },
+					{
+						title: "Reporte de Inventario",
+						description: "Reporte de Inventario",
+						icon: "Reporte de Inventario",
+						link: "/muestrario_valija_9ventaHojaPerifericos",
+						validadoGerente: true,
+						validadoCorporativo: true,
+					},
+				]}
+			/>
 		</div>
 	</div>
-	  
-	  
-	  
-	  
-
 </Layout>
