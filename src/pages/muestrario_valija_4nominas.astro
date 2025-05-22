@@ -73,9 +73,7 @@ import "../styles/global.css";
       <h3 class="text-yellow-800 font-semibold mb-2">Nota:</h3>
       <ol class="list-decimal pl-5 space-y-1 text-sm text-gray-700">
         <li>Solo se envían las que fueron pagadas en efectivo y que comprueban el monto en póliza</li>
-        <li>Deben venir firmadas por el empleado</li>
-       
-        
+        <li>Deben venir firmadas por el empleado</li> 
       </ol>
     </div>
   </div>
@@ -253,6 +251,18 @@ import "../styles/global.css";
                 updateFilesSummary();
             });
         }
+
+        function setupRemoveButton(button){
+          button.addEventListener('click' , function (){
+            const inputGroup = this.closest('.input-group');
+            const input = inputGroup.querySelector('input[type="file"]');
+            uploadedFiles.delete(input.dataset.inputId);
+            inputGroup.romove();
+            updateFilesSummary();
+          });
+        }
+
+
 
         // Event listeners para el diálogo de confirmación
         confirmUploadBtn.addEventListener('click', () => {
