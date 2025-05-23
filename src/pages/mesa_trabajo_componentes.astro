@@ -3,15 +3,26 @@ import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
 import SubidaComprobacionHL from '../components/ResumenProcesos/CORP-1-subidaComprobacionHL.astro';
 
+const subprocesos = {
+  "Validación de formato": "validado",
+  "Verificación de montos": "iniciado",
+  "Conciliación bancaria": "pendiente",
+  "Aprobación de supervisor": "pendiente"
+};
 ---
 
 <Layout>
-  <div class="component-container">
-    <h1>Mesa de Trabajo - Componentes</h1>
-    <section class="component-section">
-      <h5>Proceso: Subida y Comprobación de Hoja de Liquidación</h2>
-      <div class="component-preview">
-        <SubidaComprobacionHL />
+  <div class="component-container p-4">
+    <h1 class="text-2xl font-bold mb-6">Mesa de Trabajo - Componentes</h1>
+    <section class="component-section mb-8">
+      <h2 class="text-xl font-semibold mb-4">Proceso: Subida y Comprobación de Hoja de Liquidación</h2>
+      <div class="component-preview bg-gray-50 p-6 rounded-lg">
+        <SubidaComprobacionHL 
+          titulo="1. Subida y Comprobación de Hoja de Liquidación"
+          descripcion="Proceso de validación de documentos"
+          estado="iniciado"
+          subprocesos={subprocesos}
+        />
       </div>
     </section>
   </div>
