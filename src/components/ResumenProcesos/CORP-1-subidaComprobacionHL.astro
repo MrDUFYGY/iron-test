@@ -1,182 +1,85 @@
 ---
-// Lógica del componente aquí
+// Tipos
+type Estado = 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado';
+
+export interface Props {
+  titulo: string;
+  descripcion: string;
+  estado: Estado;
+  subprocesos?: Record<string, Estado>;
+}
+
+const { titulo, descripcion, estado, subprocesos = {} } = Astro.props;
+
+// Función para obtener las clases CSS según el estado
+function getClasesEstado(estado: string) {
+  const clases = {
+    base: 'text-xs font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap',
+    pendiente: 'bg-blue-100 text-blue-800',
+    iniciado: 'bg-blue-100 text-blue-800',
+    sellado: 'bg-yellow-100 text-yellow-800',
+    validado: 'bg-green-100 text-green-800',
+    alertado: 'bg-red-100 text-red-800'
+  };
+  
+  return `${clases.base} ${clases[estado as keyof typeof clases] || ''}`;
+}
+
+// Función para formatear el texto del estado
+function formatearEstado(estado: string) {
+  const estados: Record<string, string> = {
+    pendiente: 'Pendiente',
+    iniciado: 'Iniciado',
+    sellado: 'Sellado',
+    validado: 'Validado',
+    alertado: 'Alertado'
+  };
+  
+  return estados[estado] || estado;
+}
 ---
 
-<div class="proceso-container">
-  <div class="proceso-header">
-    <h3>1. Subida y Comprobación de Hoja de Liquidación</h3>
+<div class="proceso-card bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-sm hover:shadow-md transition-shadow">
+  <!-- Encabezado del proceso principal -->
+  <div class="flex justify-between items-start">
+    <h3 class="text-lg font-semibold text-gray-800">{titulo}</h3>
+    <span class={getClasesEstado(estado)}>
+      {formatearEstado(estado)}
+    </span>
   </div>
   
-  <div class="proceso-content">
-    <div class="proceso-pasos">
-      <div class="paso paso-activo">
-        <div class="paso-numero">1</div>
-        <div class="paso-info">
-          <h4>Subir Archivo</h4>
-          <p>Seleccione el archivo de hoja de liquidación para cargar</p>
-          <div class="file-upload">
-            <input type="file" id="archivoHL" accept=".xlsx, .xls" />
-            <label for="archivoHL" class="btn-subir">Seleccionar archivo</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="paso">
-        <div class="paso-numero">2</div>
-        <div class="paso-info">
-          <h4>Validar Datos</h4>
-          <p>Verificación de formato y datos del archivo</p>
-        </div>
-      </div>
-
-      <div class="paso">
-        <div class="paso-numero">3</div>
-        <div class="paso-info">
-          <h4>Confirmar Proceso</h4>
-          <p>Revisar y confirmar la información cargada</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="proceso-acciones">
-      <button class="btn btn-secundario">Cancelar</button>
-      <button class="btn btn-primario" disabled>Siguiente</button>
-    </div>
+  <!-- Descripción del proceso -->
+  <div class="mt-2 text-sm text-gray-700">
+    {descripcion.split('\n').map((linea) => (
+      <p class="mb-1">{linea}</p>
+    ))}
   </div>
+  
+  <!-- Lista de subprocesos si existen -->
+  {Object.keys(subprocesos).length > 0 && (
+    <div class="mt-3 border-t border-gray-100 pt-3">
+      <h4 class="text-sm font-medium text-gray-700 mb-2">Subprocesos:</h4>
+      <ul class="space-y-2">
+        {Object.entries(subprocesos).map(([nombre, estadoSubproceso]) => (
+          <li class="flex justify-between items-center text-sm">
+            <span class="text-gray-700">{nombre}</span>
+            <span class={getClasesEstado(estadoSubproceso)}>
+              {formatearEstado(estadoSubproceso)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
 </div>
 
 <style>
-  .proceso-container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
+  .proceso-card {
+    transition: all 0.2s ease;
   }
-
-  .proceso-header {
-    background-color: #f0f2f5;
-    padding: 1rem;
-    border-radius: 6px 6px 0 0;
-    border-bottom: 1px solid #e0e0e0;
+  
+  .proceso-card:hover {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
-
-
-  .proceso-header h3 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 1.1rem;
-  }
-
-  .proceso-content {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 0 0 6px 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .proceso-pasos {
-    margin-bottom: 2rem;
-  }
-
-  .paso {
-    display: flex;
-    margin-bottom: 1.5rem;
-    opacity: 0.6;
-  }
-
-  .paso-activo {
-    opacity: 1;
-  }
-
-  .paso-numero {
-    width: 30px;
-    height: 30px;
-    background-color: #e0e0e0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-    font-weight: bold;
-    color: #666;
-  }
-
-  .paso-activo .paso-numero {
-    background-color: #4a90e2;
-    color: white;
-  }
-
-  .paso-info h4 {
-    margin: 0 0 0.5rem 0;
-    color: #2c3e50;
-  }
-  .paso-info p {
-    margin: 0;
-    color: #666;
-    font-size: 0.9rem;
-  }
-
-  .file-upload {
-    margin-top: 1rem;
-  }
-
-  .file-upload input[type="file"] {
-    display: none;
-  }
-
-  .btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-
-  .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .btn-primario {
-    background-color: #4a90e2;
-    color: white;
-  }
-
-  .btn-primario:hover:not(:disabled) {
-    background-color: #3a7bc8;
-  }
-
-  .btn-secundario {
-    background-color: #f0f2f5;
-    color: #2c3e50;
-    margin-right: 0.5rem;
-  }
-
-  .btn-secundario:hover {
-    background-color: #e0e0e0;
-  }
-
-  .btn-subir {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: #f0f2f5;
-    border: 1px dashed #999;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-subir:hover {
-    border-color: #4a90e2;
-    color: #4a90e2;
-  }
-
-
-  .proceso-acciones {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-    margin-top: 1.5rem;
-  }
+</style>
 </style>
