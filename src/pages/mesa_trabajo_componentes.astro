@@ -2,13 +2,17 @@
 import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
 import SubidaComprobacionHL from '../components/ResumenProcesos/CORP-1-subidaComprobacionHL.astro';
+import ProgressTracker from '../components/ResumenProcesos/ProgressTracker.svelte';
 
 const subprocesos = {
-  "Validación de formato": "validado",
-  "Verificación de montos": "iniciado",
-  "Conciliación bancaria": "pendiente",
-  "Aprobación de supervisor": "pendiente"
+  "Validación de formato": true,    // true = activo (negro), false = inactivo (gris)
+  "Verificación de montos": true,
+  "Conciliación bancaria": false,
+  "Aprobación de supervisor": false
 };
+
+const pasoActual = 2;
+const totalPasos = 6;
 ---
 
 <Layout>
@@ -23,6 +27,19 @@ const subprocesos = {
           estado="iniciado"
           subprocesos={subprocesos}
         />
+        
+        <!-- Versión Svelte -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold mb-4">Versión Svelte del Componente</h3>
+          <ProgressTracker
+            titulo="1. Subida y Comprobación de Hoja de Liquidación"
+            descripcion="Proceso de validación de documentos con barra de progreso interactiva"
+            estado="iniciado"
+            {pasoActual}
+            {totalPasos}
+            {subprocesos}
+          />
+        </div>
       </div>
     </section>
   </div>
