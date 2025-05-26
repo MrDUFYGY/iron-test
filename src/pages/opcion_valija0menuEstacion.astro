@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md text-center">
+      <h1 class="text-2xl font-bold mb-4">Selecciona la operación a realizar</h1>
+      
+      <select id="menuOpciones" class="border border-gray-300 rounded-md px-4 py-2 mb-4 w-full">
+        <option disabled selected>-- Selecciona un proceso --</option>
+        <option value="vista1">Carga de documentos</option>
+        <option value="vista2">Verificación de documentos</option>
+      </select>
+
+      <button 
+        onclick="mostrarVista()" 
+        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+      >
+        Mostrar
+      </button>
+    </div>
+
+    <!-- Contenido de las vistas -->
+    <div id="vista1" class="hidden mt-6 w-full max-w-md bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-semibold mb-2">Vista 1</h2>
+      <p>Este es el contenido de la vista 1.</p>
+    </div>
+
+    <div id="vista2" class="hidden mt-6 w-full max-w-md bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-semibold mb-2">Vista 2</h2>
+      <p>Este es el contenido de la vista 2.</p>
+    </div>
+  </div>
+
+  <script>
+    function mostrarVista() {
+      const seleccion = document.getElementById("menuOpciones").value;
+      const vista1 = document.getElementById("vista1");
+      const vista2 = document.getElementById("vista2");
+
+      // Oculta ambas vistas primero
+      vista1.classList.add("hidden");
+      vista2.classList.add("hidden");
+
+      // Muestra la vista seleccionada
+      if (seleccion === "vista1") {
+        vista1.classList.remove("hidden");
+      } else if (seleccion === "vista2") {
+        vista2.classList.remove("hidden");
+      }
+    }
+  </script>
+</Layout>
