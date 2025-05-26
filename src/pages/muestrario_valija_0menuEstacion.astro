@@ -129,7 +129,6 @@ const resumenProcesos = {
   ]
 };
 
-// Estado para controlar la visibilidad del modal
 ---
 
 <Layout>
@@ -271,22 +270,22 @@ const resumenProcesos = {
                         <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
                         <textarea id="observaciones" class="w-full border border-gray-300 rounded p-2 text-sm" rows="4" placeholder="Escriba aquí..."></textarea>
                     </div>
-
+                    
                     <!-- Firma y turno -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="turno" class="block font-medium mb-2 text-gray-800">Turno:</label>
-                            <input id="turno" type="text" class="w-full border border-gray-300 rounded p-2">
-                        </div>
-                        <div>
-                            <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
-                            <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
-                        </div>
+                      <div>
+                        <label for="turno" class="block font-medium mb-2 text-gray-800">Turno:</label>
+                        <input id="turno" type="text" class="w-full border border-gray-300 rounded p-2">
+                      </div>
+                      <div>
+                        <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
+                        <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
+                      </div>
                     </div>
-
+                    
                     <!-- Botones -->
                     <div class="text-center mt-6 space-x-4">
-                        <Huella />
+                      <!-- <Huella /> -->
                     </div>
                 </form>
             </div>
