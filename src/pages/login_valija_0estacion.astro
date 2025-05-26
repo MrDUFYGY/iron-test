@@ -49,11 +49,15 @@ import HuellaLogin from "../components/huellaLogin.astro";
           >Iniciar sesión</button>
 
           <!-- Botón para iniciar sesión con huella -->
-          <button
-            type="button"
-            onclick="document.getElementById('huellaLogin-modal').showModal()"
-            class="w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition duration-300"
-          >Iniciar sesión con huella</button>
+          <!-- Botón para iniciar sesión con huella -->
+<button
+  type="button"
+  onclick="document.getElementById('huellaLogin-modal').classList.remove('hidden')"
+  class="w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition duration-300"
+>
+  Iniciar sesión con huella
+</button>
+
         </form>
 
         <p class="text-center text-sm text-gray-500 mt-6">
