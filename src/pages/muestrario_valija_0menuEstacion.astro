@@ -20,7 +20,6 @@ const resumenProcesos = {
   procesos: [
     {
       titulo: '1. Hoja de Liquidación',
-      descripcion: 'Subida de Hoja Open Pos. Comparación y confirmación de Documento.',
       estado: 'pendiente',
       subprocesos: {
         'Subida de Hoja Open Pos': true,
@@ -29,7 +28,6 @@ const resumenProcesos = {
     },
     {
       titulo: '2. Movimientos de caja',
-      descripcion: 'Subida de Talón bancario y Hoja de Valores. Comparación con resultados y confirmación.',
       estado: 'iniciado',
       subprocesos: {
         'Subida de Talón bancario': true,
@@ -40,7 +38,6 @@ const resumenProcesos = {
     },
     {
       titulo: '3. Nóminas',
-      descripcion: 'Subida de comprobantes firmados por trabajador. Confirmación de no haber nóminas ejecutivas. Confirmación de Nóminas.',
       estado: 'sellado',
       subprocesos: {
         'Subida de comprobantes': true,
@@ -50,7 +47,6 @@ const resumenProcesos = {
     },
     {
       titulo: '4. Listados de contadores, OpenPos y Mediciones',
-      descripcion: 'Listado de contadores, H.L. Open Pos, Mediciones con ticket',
       estado: 'alertado',
       subprocesos: {
         'Listado de contadores (Turno 1, 2, 3)': true,
@@ -60,7 +56,6 @@ const resumenProcesos = {
     },
     {
       titulo: '5. Hojas de corte de periféricos',
-      descripcion: 'Turno 1, Turno 2, Turno 3',
       estado: 'alertado',
       subprocesos: {
         'Turno 1': true,
@@ -70,7 +65,6 @@ const resumenProcesos = {
     },
     {
       titulo: '6. Recepción de carburantes con soportes',
-      descripcion: 'Subir documentación, Factura pemex / VDM, Veeder root',
       estado: 'validado',
       subprocesos: {
         'Subir documentación': true,
@@ -80,7 +74,6 @@ const resumenProcesos = {
     },
     {
       titulo: '7. Listado de remisión de periféricos',
-      descripcion: 'Formulario, Factura del cliente, Información adicional',
       estado: 'iniciado',
       subprocesos: {
         'Formulario': true,
@@ -90,7 +83,6 @@ const resumenProcesos = {
     },
     {
       titulo: '8. Regularización de existencias (Mermas)',
-      descripcion: 'Observaciones',
       estado: 'sellado',
       subprocesos: {
         'Registro de mermas': true,
@@ -100,7 +92,6 @@ const resumenProcesos = {
     },
     {
       titulo: '9. Jarreo',
-      descripcion: 'Correo, Documento de extracciones, Documento histórico, Ticket / Veeder root',
       estado: 'sellado',
       subprocesos: {
         'Correo': true,
@@ -111,7 +102,6 @@ const resumenProcesos = {
     },
     {
       titulo: '10. Vales por empresa',
-      descripcion: 'Seleccionar empresas, Adjuntar archivo PDF del vale, Mensaje de observaciones',
       estado: 'iniciado',
       subprocesos: {
         'Selección de empresas': true,
@@ -121,7 +111,6 @@ const resumenProcesos = {
     },
     {
       titulo: '11. Corte de terminales con vouchers',
-      descripcion: 'Adjuntar documento PDF del voucher, Adjuntar segundo documento en PDF',
       estado: 'iniciado',
       subprocesos: {
         'Adjuntar voucher PDF': true,
@@ -130,11 +119,10 @@ const resumenProcesos = {
     },
     {
       titulo: '12. Lista de placas con tag',
-      descripcion: 'Turno 1, Turno 2, Turno 3',
       estado: 'validado',
       subprocesos: {
         'Turno 1': true,
-        'Turno 2': true,
+        'Turno 2': false,
         'Turno 3': true
       }
     }
@@ -185,25 +173,24 @@ const resumenProcesos = {
                             <div class="bg-gray-50  rounded-lg border border-gray-100">
                               <ProgressTracker
                                 titulo={proceso.titulo}
-                                descripcion={proceso.descripcion}
                                 estado={proceso.estado}
                                 pasoActual={ultimoCompletado}
                                 totalPasos={totalPasos}
                                 subprocesos={subprocesos}
+                                client:load
                               />
                             </div>
                           );
                         })}
-                      </div>
-                      
                       <!-- Resumen Procesos Modal -->
                       <div class="mt-4">
-                        <ResumenProcesosModal data={JSON.stringify(resumenProcesos)} />
                         <ResumenProcesosModal 
                         data={JSON.stringify(resumenProcesos)}
-                        buttonText="Ver Resumen Completo"
+                        buttonText="Imprimir el resumen completo"
                         client:load
                       />
+                      </div>
+                      
                       </div>
 
 
@@ -211,7 +198,7 @@ const resumenProcesos = {
                     </div>
 
                     <!-- Documentos que integran la póliza -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
+                    <!-- <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
                         <div id="documentos-poliza-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg bg-gray-50">
                             <h2 class="font-bold text-gray-800">Documentos que integran la póliza</h2>
                             <span id="documentos-poliza-icon" class="text-gray-500">▲</span>
@@ -278,7 +265,7 @@ const resumenProcesos = {
                             </div>
                         </div>
                     </div>
- 
+  -->
                     <!-- Observaciones -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
@@ -305,102 +292,103 @@ const resumenProcesos = {
             </div>
         </div>
         <div id="modal-container" style="width: 50%; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; ">
-                <!-- Espacio para Modales -->
-                <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
-                    <h2 class="text-lg font-semibold">Menu de procesos.</h2>
-                    <p class=" text-gray-600">Puedes ingresar al proceso deseado o seguir la hoja .</p>
-                    <!-- Aquí se cargará el contenido del modal -->
-                </div>
-            <MenuEstacion items={[
-				// {
-				//   title: "Resumen",
-				//   description: "Muestrario de caratula digital",
-				//   icon: "1.- Hoja Caratula",
-				//   link: "/muestrario_valija_1caratula",
-				  
-				  
-				//   modalSide: "left"
-				// },
-				{
-				  title: "1.- Hoja de liquidacion",
-				  description: "Sube la hoja de liquidacion y comparala",
-				  icon: "description",
-				  link: "/muestrario_valija_2ingresoHojaLiquidacion",
-				  
-				},
-				{
-				  title: "2.- Movimientos de caja",
-				  description: "Confirma los movimientos hechos.",
-				  icon: "inventory",
-				  link: "/muestrario_valija_3resultadosBusqueda",
-				},
-				{
-				  title: "3.- Nominas",
-				  description: "Sube las nominas",
-				  icon: "people",
-				  link: "/muestrario_valija_4nominas",
-				},
-				{
-				  title: "4.- Carga de documentos",
-				  description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
-				  icon: "upload_file",
-				  link: "/muestrario_valija_5-7docsTurno",
-				},
+          <!-- Espacio para Modales -->
+          <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
+              <h2 class="text-lg font-semibold">Menu de procesos.</h2>
+              <p class=" text-gray-600">Puedes ingresar al proceso deseado o seguir la hoja .</p>
+              <!-- Aquí se cargará el contenido del modal -->
+          </div>
+          <MenuEstacion items={
+          [
+            // {
+            //   title: "Resumen",
+            //   description: "Muestrario de caratula digital",
+            //   icon: "1.- Hoja Caratula",
+            //   link: "/muestrario_valija_1caratula",
+              
+              
+            //   modalSide: "left"
+            // },
+            {
+              title: "1.- Hoja de liquidacion",
+              description: "Sube la hoja de liquidacion y comparala",
+              icon: "description",
+              link: "/muestrario_valija_2ingresoHojaLiquidacion",
+              
+            },
+            {
+              title: "2.- Movimientos de caja",
+              description: "Confirma los movimientos hechos.",
+              icon: "inventory",
+              link: "/muestrario_valija_3resultadosBusqueda",
+            },
+            {
+              title: "3.- Nominas",
+              description: "Sube las nominas",
+              icon: "people",
+              link: "/muestrario_valija_4nominas",
+            },
+            {
+              title: "4.- Carga de documentos",
+              description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
+              icon: "upload_file",
+              link: "/muestrario_valija_5-7docsTurno",
+            },
+            {
+                title: "5.- Corte de Perifericos",
+                description: "Se sube 1 archivo por cada turno",
+                icon: "",
+                link: "/muestrario_valija_7resultadoVentasxPeriordo",
+            },
+            {
+              title: "6.- Historico de Carburante",
+              description: "Confirma el historico de carburante y sube su comprobante",
+              icon: "history",
+              link: "/muestrario_valija_8historicoCarburante",
+            },
+            {
+              title: "7.- Consulta de Ventas por Periodo",
+              description: "Confirma las ventas por periodo y sube su comprobante",
+              icon: "bar_chart",
+              link: "/muestrario_valija_9resultadoVentasxPeriordo",
+            },
+            {
+              title: "8.- Mermas y Regularizacion",
+              description: "Confirma las Mermas y Regularizacion",
+              icon: "analytics",
+              link: "/muestrario_valija_10resultadosMermasRegul",
+            },
+                    {
+              title: "9.- Jarreo",
+              description: "Confirma el jarreo de documentos",
+              icon: "analytics",
+              link: "/muestrario_valija_9jarreo",
+            },
+            {
+                title: "10.- Vales por Empresa",
+                description: "Se cargan los vales de acuerdo a la proveedor",
+                icon: "inventory",
+                link: "/muestrario_valija_11valesEmpresa",
+            },
+            {
+                title: "11.- Corte de Terminales con Vouchers",
+                description: "Se cargan los vales de acuerdo a la proveedor",
+                icon: "inventory",
+                link: "/muestrario_valija_12terminalesVoucher",
+            },
+            {
+                title: "12.- Listado de placas con Tag",
+                description: "Se sube el registro de las placas con tag",
+                icon: "inventory",
+                link: "/muestrario_valija_13listaTag",
+            },
                 {
-                    title: "5.- Corte de Perifericos",
-                    description: "Se sube 1 archivo por cada turno",
-                    icon: "",
-                    link: "/muestrario_valija_7resultadoVentasxPeriordo",
-                },
-				{
-				  title: "6.- Historico de Carburante",
-				  description: "Confirma el historico de carburante y sube su comprobante",
-				  icon: "history",
-				  link: "/muestrario_valija_8historicoCarburante",
-				},
-				{
-				  title: "7.- Consulta de Ventas por Periodo",
-				  description: "Confirma las ventas por periodo y sube su comprobante",
-				  icon: "bar_chart",
-				  link: "/muestrario_valija_9resultadoVentasxPeriordo",
-				},
-				{
-				  title: "8.- Mermas y Regularizacion",
-				  description: "Confirma las Mermas y Regularizacion",
-				  icon: "analytics",
-				  link: "/muestrario_valija_10resultadosMermasRegul",
-				},
-                {
-				  title: "9.- Jarreo",
-				  description: "Confirma el jarreo de documentos",
-				  icon: "analytics",
-				  link: "/muestrario_valija_9jarreo",
-				},
-                {
-                    title: "10.- Vales por Empresa",
-                    description: "Se cargan los vales de acuerdo a la proveedor",
-                    icon: "inventory",
-                    link: "/muestrario_valija_11valesEmpresa",
-                },
-                {
-                    title: "11.- Corte de Terminales con Vouchers",
-                    description: "Se cargan los vales de acuerdo a la proveedor",
-                    icon: "inventory",
-                    link: "/muestrario_valija_12terminalesVoucher",
-                },
-                {
-                    title: "12.- Listado de placas con Tag",
-                    description: "Se sube el registro de las placas con tag",
-                    icon: "inventory",
-                    link: "/muestrario_valija_13listaTag",
-                },
-				// 		{
-				//   title: "Reporte de Inventario",
-				//   description: "Reporte de Inventario",
-				//   icon: "inventory",
-				//   link: "/zzz",
-				// }
-			]} />
+              title: "Otro",
+              description: "Otro",
+              icon: "inventory",
+              link: "/mesa_trabajo_componentes",
+            }
+          ]} />
 
         </div>
     </div>

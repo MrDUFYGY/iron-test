@@ -1,10 +1,45 @@
 <script lang="ts">
   export let titulo: string;
-  export let descripcion: string;
+  export let descripcion: string = "";
   export let estado: 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado';
   export let subprocesos: Record<string, boolean> = {}; // true = activo (negro), false = inactivo (gris)
   export let pasoActual: number = 1;
   export let totalPasos: number = 10;
+  export let modalTarget: string = ''; // ID del modal a abrir
+  
+  // Mapa de títulos a IDs de modal
+  const titleToModalMap: Record<string, string> = {
+    '1. Hoja de Liquidación': 'modal-resumen-liquidacion',
+    '2. Movimientos de caja': 'modal-movimientos-caja',
+    '3. Nóminas': 'modal-nominas',
+    '4. Listados de contadores, OpenPos y Mediciones': 'modal-listado-contadores',
+    '5. Hojas de corte de periféricos': 'modal-hojas-corte-perifericos',
+    '6. Recepción de carburantes con soportes': 'modal-recepcion-carburantes-soportes',
+    '7. Listado de remisión de periféricos': 'modal-listado-remision-perifericos',
+    '8. Regularización de existencias (Mermas)': 'modal-regularizacion-mermas',
+    '9. Jarreo': 'modal-jarreo',
+    '10. Vales por empresa': 'modal-vales-empresa',
+    '11. Corte de terminales con vouchers': 'modal-corte-terminales',
+    '12. Lista de placas con tag': 'modal-lista-placas'
+  };
+  
+  // Determinar el ID del modal basado en el título
+  $: modalId = modalTarget || (titulo in titleToModalMap ? titleToModalMap[titulo] : '');
+  
+  // Función para manejar el clic en el botón
+  function handleButtonClick() {
+    if (!modalId) return;
+    
+    // Disparar un evento personalizado que será manejado por el script principal
+    const event = new CustomEvent('openModal', { 
+      detail: { modalId },
+      bubbles: true,
+      cancelable: true
+    });
+    
+    // Disparar el evento
+    window.dispatchEvent(event);
+  }
 
   // Calcular el porcentaje completado basado en el paso actual
   $: porcentajeCompletado = totalPasos > 0 ? Math.round((pasoActual / totalPasos) * 100) : 0;
@@ -64,20 +99,33 @@
     return estados[estado] || estado;
   }
 
-  // Función para obtener clases de subproceso (activo/inactivo)
-  function getClasesSubproceso(activo: boolean) {
-    return `text-sm ${activo ? 'text-gray-900 font-medium' : 'text-gray-400'}`;
-  }
 </script>
 
-<div class="proceso-card bg-white border border-gray-200 rounded-lg p-4 mb-1 shadow-sm hover:shadow-md transition-shadow">
+<div class="proceso-card bg-white rounded-lg p-4 mb-1 ">
   <!-- Encabezado del proceso principal -->
   <div class="flex justify-between items-start mb-4">
-    <h3 class="text-lg font-semibold text-gray-800">{titulo}</h3>
-    <span class={getClasesEstado(estado)}>
-      {formatearEstado(estado)}
-    </span>
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold text-gray-800">{titulo}</h3>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class={getClasesEstado(estado)}>
+        {formatearEstado(estado)}
+      </span>
+      <button 
+        on:click={handleButtonClick}
+        data-modal-target={modalId}
+        class="text-gray-500 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+        aria-label="Ver detalles"
+        title="Ver detalles"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
   </div>
+  
+
   
   <!-- Descripción del proceso -->
   <div class="mb-4 text-sm text-gray-700">
