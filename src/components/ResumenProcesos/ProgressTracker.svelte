@@ -6,22 +6,36 @@
   export let pasoActual: number = 1;
   export let totalPasos: number = 10;
 
-  // Calcular el progreso basado en los subprocesos activos
-  $: pasosActivos = Object.values(subprocesos).filter(activo => activo).length;
-  $: porcentajeCompletado = Math.round((pasosActivos / totalPasos) * 100);
+  // Calcular el porcentaje completado basado en el paso actual
+  $: porcentajeCompletado = totalPasos > 0 ? Math.round((pasoActual / totalPasos) * 100) : 0;
   
   // Generar array de pasos con sus subprocesos correspondientes
-  $: pasos = Array.from({ length: totalPasos }, (_, i) => {
-    const pasoNumero = i + 1;
-    const subproceso = Object.entries(subprocesos)[i] || [];
-    return {
-      numero: pasoNumero,
-      nombre: subproceso[0] || `Paso ${pasoNumero}`,
-      activo: subproceso[1] || false,
-      esActual: pasoNumero === pasoActual,
-      esUltimo: i === totalPasos - 1
-    };
-  });
+  $: pasos = (() => {
+    const steps = [];
+    let lastCompletedIndex = -1;
+    
+    // Primero encontramos el último paso completado
+    Object.entries(subprocesos).forEach(([_, completado], index) => {
+      if (completado) lastCompletedIndex = index;
+    });
+    
+    // Creamos el array de pasos
+    return Object.entries(subprocesos).map(([nombre, completado], index) => {
+      const pasoNumero = index + 1;
+      const esUltimoCompletado = completado && index === lastCompletedIndex;
+      
+      return {
+        numero: pasoNumero,
+        nombre: nombre || `Paso ${pasoNumero}`,
+        activo: completado,
+        esActual: pasoNumero === pasoActual,
+        esUltimo: index === Object.keys(subprocesos).length - 1,
+        mostrarCheck: esUltimoCompletado,
+        mostrarNumero: true, // Mostrar siempre el número
+        estaCompletado: completado // Para el estilo del número
+      };
+    });
+  })();
 
   // Función para obtener las clases CSS según el estado
   function getClasesEstado(estado: string) {
@@ -56,7 +70,7 @@
   }
 </script>
 
-<div class="proceso-card bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="proceso-card bg-white border border-gray-200 rounded-lg p-4 mb-1 shadow-sm hover:shadow-md transition-shadow">
   <!-- Encabezado del proceso principal -->
   <div class="flex justify-between items-start mb-4">
     <h3 class="text-lg font-semibold text-gray-800">{titulo}</h3>
@@ -89,9 +103,9 @@
                    {paso.activo 
                      ? 'bg-blue-500 text-white' 
                      : 'bg-white border border-gray-300 text-gray-400'}
-                   {paso.esActual ? 'ring-1 ring-blue-400 scale-110' : ''}
-                   text-[9px] font-medium">
-            {paso.numero}
+                   {paso.esActual ? 'ring-2 ring-blue-400 scale-110' : ''}
+                   text-[9px] font-medium transition-all duration-200">
+            {paso.mostrarCheck ? '✓' : paso.numero}
           </div>
           
           <!-- Contenido del subproceso -->
