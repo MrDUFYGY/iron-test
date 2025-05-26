@@ -49,14 +49,13 @@ import HuellaLogin from "../components/huellaLogin.astro";
           >Iniciar sesión</button>
 
           <!-- Botón para iniciar sesión con huella -->
-          <!-- Botón para iniciar sesión con huella -->
-<button
-  type="button"
-  onclick="document.getElementById('huellaLogin-modal').showModal()"
-  class="w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition duration-300"
->
-  Iniciar sesión con huella
-</button>
+          <button
+            type="button"
+            onclick="document.getElementById('huellaLogin-modal').showModal()"
+            class="w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition duration-300"
+          >
+            Iniciar sesión con huella
+          </button>
 
         </form>
 
@@ -80,8 +79,8 @@ import HuellaLogin from "../components/huellaLogin.astro";
           const username = document.getElementById("username").value;
           const password = document.getElementById("password").value;
 
-          // Aquí podrías validar usuario y contraseña
-          window.location.href = "muestrario_valija_0menuEstacion";
+          // Redirige a la vista deseada
+          window.location.href = "/opcion_valija0menuEstacion";
         });
       }
     });
