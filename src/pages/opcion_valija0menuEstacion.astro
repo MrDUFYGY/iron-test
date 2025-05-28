@@ -1,5 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+// Función para generar las fechas desde hoy hacia 3 días atrás (más reciente primero)
+function obtenerUltimosDias() {
+  const hoy = new Date();
+  const dias = [];
+
+  for (let i = 0; i <= 3; i++) {
+    const fecha = new Date(hoy);
+    fecha.setDate(hoy.getDate() - i);
+    dias.push(fecha.toISOString().slice(0, 10));
+  }
+
+  return dias;
+}
+
+const fechas = obtenerUltimosDias();
 ---
 <Layout>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -7,23 +23,82 @@ import Layout from "../layouts/Layout.astro";
       <h1 class="text-2xl font-bold mb-4">Selecciona la operación a realizar</h1>
       
       <select id="menuOpciones" class="border border-gray-300 rounded-md px-4 py-2 mb-4 w-full">
-        <option disabled selected>-- Selecciona un proceso --</option>
+        <option disabled selected>⛽ Selecciona un proceso ⛽</option>
         <option value="carga">Carga de documentos</option>
         <option value="verificacion">Verificación de documentos</option>
       </select>
 
       <button 
         id="btnIrProceso"
-        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+        class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition mb-4"
       >
-        Ir a proceso
+        Ir a proceso 
       </button>
+
+      <!-- Calendario para verificación -->
+      <div id="calendarioContainer" class="hidden">
+        <button 
+          id="btnMostrarCalendario"
+          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition mb-2"
+        >
+          Seleccionar fecha 📅
+        </button>
+        <input 
+          type="date" 
+          id="calendarioFecha" 
+          class="mt-2 border border-gray-300 rounded-md px-3 py-2 hidden"
+        />
+      </div>
+
+      <!-- Fechas como botones para carga -->
+      <div id="fechasCargaContainer" class="hidden mt-4 text-left">
+        <h2 class="text-lg font-semibold mb-2">Fechas disponibles para carga:</h2>
+        <ul class="space-y-2">
+          {fechas.map(fecha => (
+            <li key={fecha}>
+              <button
+                class="w-full text-left bg-blue-100 hover:bg-blue-200 text-blue-900 px-4 py-2 rounded-md shadow transition"
+                onclick={`alert('Seleccionaste la fecha: ${fecha}')`}
+              >
+                📅 {fecha}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </div>
 
   <script type="module">
+    const menu = document.getElementById("menuOpciones");
+    const calendarioContainer = document.getElementById("calendarioContainer");
+    const calendarioInput = document.getElementById("calendarioFecha");
+    const fechasCargaContainer = document.getElementById("fechasCargaContainer");
+
+    menu.addEventListener('change', () => {
+      const seleccion = menu.value;
+
+      if (seleccion === "verificacion") {
+        calendarioContainer.classList.remove("hidden");
+        calendarioInput.classList.add("hidden");
+        fechasCargaContainer.classList.add("hidden");
+      } else if (seleccion === "carga") {
+        calendarioContainer.classList.add("hidden");
+        calendarioInput.classList.add("hidden");
+        fechasCargaContainer.classList.remove("hidden");
+      } else {
+        calendarioContainer.classList.add("hidden");
+        calendarioInput.classList.add("hidden");
+        fechasCargaContainer.classList.add("hidden");
+      }
+    });
+
+    document.getElementById('btnMostrarCalendario').addEventListener('click', () => {
+      calendarioInput.classList.toggle('hidden');
+    });
+
     document.getElementById('btnIrProceso').addEventListener('click', () => {
-      const seleccion = document.getElementById("menuOpciones").value;
+      const seleccion = menu.value;
       if (seleccion) {
         window.location.href = "/muestrario_valija_0menuEstacion";
       } else {
