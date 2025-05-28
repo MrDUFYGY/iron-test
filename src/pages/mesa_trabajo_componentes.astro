@@ -2,13 +2,46 @@
 import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
 import SubidaComprobacionHL from '../components/ResumenProcesos/CORP-1-subidaComprobacionHL.astro';
+import ProgressTracker from '../components/ResumenProcesos/ProgressTracker.svelte';
+import ResumenProcesosModal from '../components/ResumenProcesos/ResumenProcesosModal.svelte';
 
-const subprocesos = {
-  "Validación de formato": "validado",
-  "Verificación de montos": "iniciado",
-  "Conciliación bancaria": "pendiente",
-  "Aprobación de supervisor": "pendiente"
+// Datos para el modal de resumen
+const resumenProcesos = {
+  usuario: {
+    nombre: 'Usuario de Prueba',
+    rol: 'Analista'
+  },
+  fecha: new Date().toISOString(),
+  estacion: {
+    id: 'EST-TEST',
+    nombre: 'Estación de Prueba'
+  },
+  procesos: [
+    {
+      titulo: 'Subida y Comprobación de Hoja de Liquidación',
+      descripcion: 'Proceso de validación de documentos con barra de progreso interactiva',
+      estado: 'iniciado',
+      subprocesos: {
+        'Validación de formato': true,
+        'Verificación de montos': true,
+        'Conciliación bancaria': false,
+        'Aprobación de supervisor': true,
+      }
+    }
+  ]
 };
+
+// Estado para controlar el modal
+let mostrarModal = false;
+
+// Funciones para manejar el modal
+function abrirModal() {
+  mostrarModal = true;
+}
+
+function cerrarModal() {
+  mostrarModal = false;
+}
 ---
 
 <Layout>
@@ -17,12 +50,67 @@ const subprocesos = {
     <section class="component-section mb-8">
       <h2 class="text-xl font-semibold mb-4">Proceso: Subida y Comprobación de Hoja de Liquidación</h2>
       <div class="component-preview bg-gray-50 p-6 rounded-lg">
-        <SubidaComprobacionHL 
-          titulo="1. Subida y Comprobación de Hoja de Liquidación"
-          descripcion="Proceso de validación de documentos"
-          estado="iniciado"
-          subprocesos={subprocesos}
-        />
+        {resumenProcesos.procesos.map((proceso) => {
+          // Asegurar que el estado sea uno de los valores permitidos
+          const estado = ['pendiente', 'iniciado', 'sellado', 'validado', 'alertado'].includes(proceso.estado)
+            ? proceso.estado as 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado'
+            : 'pendiente';
+            
+          return (
+            <SubidaComprobacionHL 
+              titulo={proceso.titulo}
+              descripcion={proceso.descripcion}
+              estado={estado}
+              subprocesos={proceso.subprocesos || {}}
+            />
+          );
+        })}
+        
+        <!-- Versión Svelte -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold mb-4">Versión Svelte del Componente</h3>
+          {resumenProcesos.procesos.map((proceso) => {
+            const subprocesos = proceso.subprocesos || {};
+            const totalPasos = Object.keys(subprocesos).length;
+            
+            // Encontrar el último paso completado
+            let ultimoCompletado = 0;
+            Object.entries(subprocesos).forEach(([_, completado], index) => {
+              if (completado) ultimoCompletado = index + 1;
+            });
+            
+            // Asegurar que el estado sea uno de los valores permitidos
+            const estado = ['pendiente', 'iniciado', 'sellado', 'validado', 'alertado'].includes(proceso.estado)
+              ? proceso.estado as 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado'
+              : 'pendiente';
+              
+            return (
+              <ProgressTracker
+                titulo={proceso.titulo}
+                descripcion={proceso.descripcion}
+                estado={estado}
+                pasoActual={ultimoCompletado}
+                totalPasos={totalPasos}
+                subprocesos={subprocesos}
+              />
+            );
+          })}
+        </div>
+
+
+
+
+                <!-- Componente del Modal con botón integrado -->
+                <div class="mt-8 p-4 border rounded-lg bg-white">
+                  <h3 class="text-lg font-semibold mb-4">Ejemplo de Modal de Resumen</h3>
+                  <ResumenProcesosModal 
+                    data={JSON.stringify(resumenProcesos)}
+                    buttonText="Ver Resumen Completo"
+                    client:load
+                  />
+                </div>
+
+
       </div>
     </section>
   </div>

@@ -53,6 +53,38 @@ import "../styles/global.css";
         </div>
       </div>
 
+
+      <!-- Paso 1: Textarea de Envío -->
+       <div class="border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Envio</label>
+        <textarea
+        id="input-envio"
+        rows="4"
+        maxlength="500"
+        class="w-full p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Escriba su mensaje de envio..."></textarea>
+        <div class="flex justify-between items-center mt-2">
+          <span id="char-count" class="text-sm text-gray-500"
+          >0 / 100 caracteres</span
+          >
+          <button
+          id="btn-enviar"
+          class="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+           disabled
+           >
+           Enviar
+          </button>
+         
+        </div>
+        <div
+        id="envio-estado"
+        class="hidden mt-4 flex items-center justify-center space-x-2"
+        >
+        <div class="spinner"></div>
+        <span class="text-blue-600 font-semibold">Enviado...</span>
+        </div>
+       </div>
+
       <!-- Botón de envío -->
       <div class="mt-8 flex justify-end">
 
@@ -73,9 +105,7 @@ import "../styles/global.css";
       <h3 class="text-yellow-800 font-semibold mb-2">Nota:</h3>
       <ol class="list-decimal pl-5 space-y-1 text-sm text-gray-700">
         <li>Solo se envían las que fueron pagadas en efectivo y que comprueban el monto en póliza</li>
-        <li>Deben venir firmadas por el empleado</li>
-       
-        
+        <li>Deben venir firmadas por el empleado</li> 
       </ol>
     </div>
   </div>
@@ -298,6 +328,45 @@ import "../styles/global.css";
         // Configurar el primer input
         setupFileInput(document.querySelector('input[type="file"]'));
     });
+
+        // Boton de enviar funcione
+      const envioTextarea = document.getElementById("input-envio");
+      const envioEstado = document.getElementById("envio-estado");
+      const seccionComprobante = document.getElementById("seccion-comprobante");
+
+      const charCount = document.getElementById("char-count");
+      const btnEnviar = document.getElementById("btn-enviar");
+
+      // Función para manejar el conteo de caracteres y habilitar el botón
+      envioTextarea.addEventListener("input", (e) => {
+        const currentLength = e.target.value.trim().length;
+        charCount.textContent = `${currentLength} / 100 caracteres`;
+
+        // Habilitar o deshabilitar el botón según el conteo de caracteres
+        if (currentLength >= 100) {
+          btnEnviar.disabled = false;
+        } else {
+          btnEnviar.disabled = true;
+        }
+      });
+
+      // Función para manejar el envío
+      btnEnviar.addEventListener("click", () => {
+        // Deshabilitar textarea y botón durante el envío
+        envioTextarea.disabled = true;
+        btnEnviar.disabled = true;
+
+        // Mostrar animación de carga
+        envioEstado.classList.remove("hidden");
+
+        // Simular envío con timeout
+        setTimeout(() => {
+          envioEstado.classList.add("hidden");
+          seccionComprobante.classList.remove("hidden");
+        }, 5000);
+      });
+
+    
 </script>
 
 </Layout>

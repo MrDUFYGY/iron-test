@@ -3,6 +3,132 @@ import Layout from "../layouts/Layout.astro";
 import MenuEstacion from "../components/MenuEstacion.astro";
 import Separador from "../components/Separador.astro";
 import Huella from "../components/ConfirmHuella.astro";
+import ProgressTracker from '../components/ResumenProcesos/ProgressTracker.svelte';
+import ResumenProcesosModal from '../components/ResumenProcesos/ResumenProcesosModal.svelte';
+
+// Datos para el resumen de procesos
+const resumenProcesos = {
+  usuario: {
+    nombre: 'Juan Pérez',
+    rol: 'Supervisor'
+  },
+  fecha: new Date().toISOString(),
+  estacion: {
+    id: 'EST-001',
+    nombre: 'Estación Central'
+  },
+  procesos: [
+    {
+      titulo: '1. Hoja de Liquidación',
+      estado: 'pendiente',
+      subprocesos: {
+        'Subida de Hoja Open Pos': true,
+        'Comparación y confirmación': true
+      }
+    },
+    {
+      titulo: '2. Movimientos de caja',
+      estado: 'iniciado',
+      subprocesos: {
+        'Subida de Talón bancario': true,
+        'Hoja de Valores': true,
+        'Comparación con resultados': true,
+        'Confirmación': false
+      }
+    },
+    {
+      titulo: '3. Nóminas',
+      estado: 'sellado',
+      subprocesos: {
+        'Subida de comprobantes': true,
+        'Confirmación de nóminas ejecutivas': true,
+        'Confirmación de Nóminas': true
+      }
+    },
+    {
+      titulo: '4. Listados de contadores, OpenPos y Mediciones',
+      estado: 'alertado',
+      subprocesos: {
+        'Listado de contadores (Turno 1, 2, 3)': true,
+        'H.L. Open Pos (Turno 1, 2, 3)': true,
+        'Mediciones con ticket (Turno 1, 2, 3)': false
+      }
+    },
+    {
+      titulo: '5. Hojas de corte de periféricos',
+      estado: 'alertado',
+      subprocesos: {
+        'Turno 1': true,
+        'Turno 2': false,
+        'Turno 3': false
+      }
+    },
+    {
+      titulo: '6. Recepción de carburantes con soportes',
+      estado: 'validado',
+      subprocesos: {
+        'Subir documentación': true,
+        'Factura pemex / VDM': true,
+        'Veeder root': true
+      }
+    },
+    {
+      titulo: '7. Listado de remisión de periféricos',
+      estado: 'iniciado',
+      subprocesos: {
+        'Formulario': true,
+        'Factura del cliente': true,
+        'Información adicional': false
+      }
+    },
+    {
+      titulo: '8. Regularización de existencias (Mermas)',
+      estado: 'sellado',
+      subprocesos: {
+        'Registro de mermas': true,
+        'Documentación': true,
+        'Aprobación': true
+      }
+    },
+    {
+      titulo: '9. Jarreo',
+      estado: 'sellado',
+      subprocesos: {
+        'Correo': true,
+        'Documento de extracciones': true,
+        'Documento histórico': true,
+        'Ticket / Veeder root': true
+      }
+    },
+    {
+      titulo: '10. Vales por empresa',
+      estado: 'iniciado',
+      subprocesos: {
+        'Selección de empresas': true,
+        'Adjuntar PDF': true,
+        'Observaciones': false
+      }
+    },
+    {
+      titulo: '11. Corte de terminales con vouchers',
+      estado: 'iniciado',
+      subprocesos: {
+        'Adjuntar voucher PDF': true,
+        'Segundo documento PDF': false
+      }
+    },
+    {
+      titulo: '12. Lista de placas con tag',
+      estado: 'validado',
+      subprocesos: {
+        'Turno 1': true,
+        'Turno 2': false,
+        'Turno 3': true
+      }
+    }
+  ]
+};
+
 ---
 
 <Layout>
@@ -15,7 +141,7 @@ import Huella from "../components/ConfirmHuella.astro";
         }}
     />
 
-    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; height: 90vh;">
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; height: 90dvh;">
         <div style="width: 50%; height: 100%; margin-left: 1vw; border-right: 1px solid #ccc; overflow-y: auto; padding: 0px;    scrollbar-width: thin;
     scrollbar-color: #333 #e0e0e0;">
             <!-- Contenido para la Hoja de Información (Caratula) -->
@@ -27,132 +153,51 @@ import Huella from "../components/ConfirmHuella.astro";
                 <form id="formulario" class="space-y-8">
                     <!-- Resumen de Procesos -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
-                        <div id="resumen-procesos-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
-                            <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
-                            <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
-                        </div>
-                        <div id="resumen-procesos-content" class="overflow-hidden transition-all duration-300 ease-in-out space-y-2 text-sm max-h-0">
-
-                            <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">1.- Hoja de Liquidación</strong>
-                                <span class="absolute right-4 top-4 bg-blue-600 text-white text-xs px-3 py-1 rounded-full">Pendiente</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Subida de Hoja Open Pos.<br />
-                                  Comparación y confirmación de Documento.
-                                </div>
-                              </div>
+                      <div id="resumen-procesos-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
+                          <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
+                          <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
+                      </div>
+                      <div id="resumen-procesos-content" class="overflow-hidden transition-all duration-300 ease-in-out text-sm max-h-0">
+                        {resumenProcesos.procesos.map((proceso) => {
+                          const subprocesos = proceso.subprocesos || {};
+                          const totalPasos = Object.keys(subprocesos).length;
                           
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">2.- Movimientos de caja</strong>
-                                <span class="absolute right-4 top-4 bg-sky-400 text-black text-xs px-3 py-1 rounded-full">Iniciado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Subida de Talón bancario y Hoja de Valores.<br />
-                                  Comparación con resultados y confirmación.
-                                </div>
-                              </div>
+                          // Encontrar el último paso completado
+                          let ultimoCompletado = 0;
+                          Object.entries(subprocesos).forEach(([_, completado], index) => {
+                            if (completado) ultimoCompletado = index + 1;
+                          });
                           
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">3.- Nóminas</strong>
-                                <span class="absolute right-4 top-4 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full">Sellado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Subida de comprobantes firmados por trabajador.<br />
-                                  Confirmación de no haber nóminas ejecutivas.<br />
-                                  Confirmación de Nóminas.
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">4.- Listados de contadores, OpenPos y Mediciones</strong>
-                                <span class="absolute right-4 top-4 bg-red-500 text-white text-xs px-3 py-1 rounded-full">Alerta</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Listado de contadores (Turno 1, 2, 3)<br />
-                                  H.L. Open Pos (Turno 1, 2, 3)<br />
-                                  Mediciones con ticket (Turno 1, 2, 3)
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">5.- Hojas de corte de periféricos (Turno 1,2 y 3)</strong>
-                                <span class="absolute right-4 top-4 bg-red-500 text-white text-xs px-3 py-1 rounded-full">Alerta</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Turno 1, Turno 2, Turno 3
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">6.- Recepción de carburantes con soportes</strong>
-                                <span class="absolute right-4 top-4 bg-green-500 text-white text-xs px-3 py-1 rounded-full">Validado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Subir documentación<br />
-                                  Factura pemex / VDM<br />
-                                  Veeder root
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">7.- Listado de remisión de periféricos</strong>
-                                <span class="absolute right-4 top-4 bg-sky-400 text-black text-xs px-3 py-1 rounded-full">Iniciado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Formulario<br />
-                                  Factura del cliente<br />
-                                  Información adicional
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">8.- Regularización de existencias (Mermas)</strong>
-                                <span class="absolute right-4 top-4 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full">Sellado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Observaciones
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">9.- Jarreo</strong>
-                                <span class="absolute right-4 top-4 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full">Sellado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Correo<br />
-                                  Documento de extracciones<br />
-                                  Documento histórico<br />
-                                  Ticket / Veeder root
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">10.- Vales por empresa</strong>
-                                <span class="absolute right-4 top-4 bg-sky-400 text-black text-xs px-3 py-1 rounded-full">Iniciado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Seleccionar empresas<br />
-                                  Adjuntar archivo PDF del vale<br />
-                                  Mensaje de observaciones
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">11.- Corte de terminales con vouchers</strong>
-                                <span class="absolute right-4 top-4 bg-sky-400 text-black text-xs px-3 py-1 rounded-full">Iniciado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Adjuntar documento PDF del voucher<br />
-                                  Adjuntar segundo documento en PDF
-                                </div>
-                              </div>
-                          
-                              <div class="relative bg-gray-100 p-4 rounded-lg">
-                                <strong class="block text-gray-800">12.- Lista de placas con tag</strong>
-                                <span class="absolute right-4 top-4 bg-green-500 text-white text-xs px-3 py-1 rounded-full">Validado</span>
-                                <div class="mt-2 text-sm text-gray-700">
-                                  Turno 1, Turno 2, Turno 3
-                                </div>
-                              </div>
+                          return (
+                            <div class="bg-gray-50  rounded-lg border border-gray-100">
+                              <ProgressTracker
+                                titulo={proceso.titulo}
+                                estado={proceso.estado}
+                                pasoActual={ultimoCompletado}
+                                totalPasos={totalPasos}
+                                subprocesos={subprocesos}
+                                client:load
+                              />
+                            </div>
+                          );
+                        })}
+                      <!-- Resumen Procesos Modal -->
+                      <div class="mt-4">
+                        <ResumenProcesosModal 
+                        data={JSON.stringify(resumenProcesos)}
+                        buttonText="Imprimir el resumen completo"
+                        client:load
+                      />
+                      </div>
+                      
+                      </div>
 
 
 
-
-                        </div>
                     </div>
 
                     <!-- Documentos que integran la póliza -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
+                    <!-- <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
                         <div id="documentos-poliza-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg bg-gray-50">
                             <h2 class="font-bold text-gray-800">Documentos que integran la póliza</h2>
                             <span id="documentos-poliza-icon" class="text-gray-500">▲</span>
@@ -219,142 +264,130 @@ import Huella from "../components/ConfirmHuella.astro";
                             </div>
                         </div>
                     </div>
-                    <!-- Metodos de pago -->
-                    <!-- <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
-                        <div id="metodos-pago-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
-                            <h2 class="font-bold text-gray-800">Métodos de pago</h2>
-                            <span id="metodos-pago-icon" class="text-gray-500">▼</span>
-                        </div>
-                        <div id="metodos-pago-content" class="space-y-2 pt-2 max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-
-                         
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">1.- Vales por Empresa</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-vales-empresa">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">2.- Corte de terminales con vouchers</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-corte-terminales">Subir</button>
-                            </div>
-
-                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
-                                <span class="text-gray-700">3.- Lista de placas con tag</span>
-                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-lista-placas">Subir</button>
-                            </div>
-                        </div>
-                    </div> -->
+  -->
                     <!-- Observaciones -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
                         <textarea id="observaciones" class="w-full border border-gray-300 rounded p-2 text-sm" rows="4" placeholder="Escriba aquí..."></textarea>
                     </div>
-
+                    
                     <!-- Firma y turno -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="turno" class="block font-medium mb-2 text-gray-800">Turno:</label>
-                            <input id="turno" type="text" class="w-full border border-gray-300 rounded p-2">
-                        </div>
-                        <div>
-                            <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
-                            <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
-                        </div>
+                      <div>
+                        <label for="turno" class="block font-medium mb-2 text-gray-800">Turno:</label>
+                        <input id="turno" type="text" class="w-full border border-gray-300 rounded p-2">
+                      </div>
+                      <div>
+                        <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
+                        <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
+                      </div>
                     </div>
-
+                    
                     <!-- Botones -->
                     <div class="text-center mt-6 space-x-4">
-                        <Huella />
+                      <!-- <Huella /> -->
                     </div>
                 </form>
             </div>
         </div>
         <div id="modal-container" style="width: 50%; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; ">
-                <!-- Espacio para Modales -->
-                <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
-                    <h2 class="text-lg font-semibold">Menu de procesos.</h2>
-                    <p class=" text-gray-600">Puedes ingresar al proceso deseado o seguir la hoja .</p>
-                    <!-- Aquí se cargará el contenido del modal -->
-                </div>
-            <MenuEstacion items={[
-				// {
-				//   title: "Resumen",
-				//   description: "Muestrario de caratula digital",
-				//   icon: "1.- Hoja Caratula",
-				//   link: "/muestrario_valija_1caratula",
-				  
-				  
-				//   modalSide: "left"
-				// },
-				{
-				  title: "1.- Hoja de liquidacion",
-				  description: "Sube la hoja de liquidacion y comparala",
-				  icon: "description",
-				  link: "/muestrario_valija_2ingresoHojaLiquidacion",
-				  
-				},
-				{
-				  title: "2.- Movimientos de caja",
-				  description: "Confirma los movimientos hechos.",
-				  icon: "inventory",
-				  link: "/muestrario_valija_3resultadosBusqueda",
-				},
-				{
-				  title: "3.- Nominas",
-				  description: "Sube las nominas",
-				  icon: "people",
-				  link: "/muestrario_valija_4nominas",
-				},
-				{
-				  title: "4.- Carga de documentos",
-				  description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
-				  icon: "upload_file",
-				  link: "/muestrario_valija_5-7docsTurno",
-				},
+          <!-- Espacio para Modales -->
+          <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
+              <h2 class="text-lg font-semibold">Menu de procesos.</h2>
+              <p class=" text-gray-600">Puedes ingresar al proceso deseado o seguir la hoja .</p>
+              <!-- Aquí se cargará el contenido del modal -->
+          </div>
+          <MenuEstacion items={
+          [
+            // {
+            //   title: "Resumen",
+            //   description: "Muestrario de caratula digital",
+            //   icon: "1.- Hoja Caratula",
+            //   link: "/muestrario_valija_1caratula",
+              
+              
+            //   modalSide: "left"
+            // },
+            {
+              title: "1.- Hoja de liquidacion",
+              description: "Sube la hoja de liquidacion y comparala",
+              icon: "description",
+              link: "/muestrario_valija_2ingresoHojaLiquidacion",
+              
+            },
+            {
+              title: "2.- Movimientos de caja",
+              description: "Confirma los movimientos hechos.",
+              icon: "inventory",
+              link: "/muestrario_valija_3resultadosBusqueda",
+            },
+            {
+              title: "3.- Nominas",
+              description: "Sube las nominas",
+              icon: "people",
+              link: "/muestrario_valija_4nominas",
+            },
+            {
+              title: "4.- Carga de documentos",
+              description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
+              icon: "upload_file",
+              link: "/muestrario_valija_5-7docsTurno",
+            },
+            {
+                title: "5.- Corte de Perifericos",
+                description: "Se sube 1 archivo por cada turno",
+                icon: "",
+                link: "/muestrario_valija_7resultadoVentasxPeriordo",
+            },
+            {
+              title: "6.- Historico de Carburante",
+              description: "Confirma el historico de carburante y sube su comprobante",
+              icon: "history",
+              link: "/muestrario_valija_8historicoCarburante",
+            },
+            {
+              title: "7.- Consulta de Ventas por Periodo",
+              description: "Confirma las ventas por periodo y sube su comprobante",
+              icon: "bar_chart",
+              link: "/muestrario_valija_9resultadoVentasxPeriordo",
+            },
+            {
+              title: "8.- Mermas y Regularizacion",
+              description: "Confirma las Mermas y Regularizacion",
+              icon: "analytics",
+              link: "/muestrario_valija_10resultadosMermasRegul",
+            },
+                    {
+              title: "9.- Jarreo",
+              description: "Confirma el jarreo de documentos",
+              icon: "analytics",
+              link: "/muestrario_valija_9jarreo",
+            },
+            {
+                title: "10.- Vales por Empresa",
+                description: "Se cargan los vales de acuerdo a la proveedor",
+                icon: "inventory",
+                link: "/muestrario_valija_11valesEmpresa",
+            },
+            {
+                title: "11.- Corte de Terminales con Vouchers",
+                description: "Se cargan los vales de acuerdo a la proveedor",
+                icon: "inventory",
+                link: "/muestrario_valija_12terminalesVoucher",
+            },
+            {
+                title: "12.- Listado de placas con Tag",
+                description: "Se sube el registro de las placas con tag",
+                icon: "inventory",
+                link: "/muestrario_valija_13listaTag",
+            },
                 {
-                    title: "5.- Corte de Perifericos",
-                    description: "Se sube 1 archivo por cada turno",
-                    icon: "",
-                    link: "/muestrario_valija_7resultadoVentasxPeriordo",
-                },
-				{
-				  title: "6.- Historico de Carburante",
-				  description: "Confirma el historico de carburante y sube su comprobante",
-				  icon: "history",
-				  link: "/muestrario_valija_8historicoCarburante",
-				},
-				{
-				  title: "7.- Consulta de Ventas por Periodo",
-				  description: "Confirma las ventas por periodo y sube su comprobante",
-				  icon: "bar_chart",
-				  link: "/muestrario_valija_9resultadoVentasxPeriordo",
-				},
-				{
-				  title: "8.- Mermas y Regularizacion",
-				  description: "Confirma las Mermas y Regularizacion",
-				  icon: "analytics",
-				  link: "/muestrario_valija_10resultadosMermasRegul",
-				},
-                {
-				  title: "9.- Jarreo",
-				  description: "Confirma el jarreo de documentos",
-				  icon: "analytics",
-				  link: "/muestrario_valija_9jarreo",
-				},
-                {
-                    title: "10.- Vales por Empresa",
-                    description: "Se cargan los vales de acuerdo a la proveedor",
-                    icon: "inventory",
-                    link: "/muestrario_valija_11valesEmpresa",
-                }
-				// 		{
-				//   title: "Reporte de Inventario",
-				//   description: "Reporte de Inventario",
-				//   icon: "inventory",
-				//   link: "/zzz",
-				// }
-			]} />
+              title: "Otro",
+              description: "Otro",
+              icon: "inventory",
+              link: "/mesa_trabajo_componentes",
+            }
+          ]} />
 
         </div>
     </div>
@@ -624,9 +657,3 @@ import Huella from "../components/ConfirmHuella.astro";
 
 
 </Layout>
-
-
-
-
-
-
