@@ -1,11 +1,41 @@
 <script lang="ts">
   export let titulo: string;
   export let descripcion: string = "";
-  export let estado: 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado';
+  export let estadoProp: 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado' | null = null;
   export let subprocesos: Record<string, boolean> = {}; // true = activo (negro), false = inactivo (gris)
   export let pasoActual: number = 1;
   export let totalPasos: number = 10;
   export let modalTarget: string = ''; // ID del modal a abrir
+  export let validado: boolean | null = null; // Propiedad para forzar el estado validado
+  
+  // Determinar el estado basado en los subprocesos y la propiedad validado
+  $: estado = (() => {
+    // Si se proporciona un estado explícito, usarlo
+    if (estadoProp) return estadoProp;
+    
+    const subprocesosArray = Object.values(subprocesos);
+    
+    // Si no hay subprocesos o todos son false, es 'pendiente'
+    if (subprocesosArray.length === 0 || subprocesosArray.every(val => val === false)) {
+      return 'pendiente';
+    }
+    
+    // Verificar si el último subproceso es true
+    const ultimoSubprocesoTieneExito = subprocesosArray[subprocesosArray.length - 1] === true;
+    
+    // Si el último subproceso es true y validado es true, es 'validado'
+    if (ultimoSubprocesoTieneExito && validado === true) {
+      return 'validado';
+    }
+    
+    // Si solo el último subproceso es true, es 'sellado'
+    if (ultimoSubprocesoTieneExito) {
+      return 'sellado';
+    }
+    
+    // Si hay al menos un subproceso true pero no es el último, es 'iniciado'
+    return 'iniciado';
+  })();
   
   // Mapa de títulos a IDs de modal
   const titleToModalMap: Record<string, string> = {
@@ -25,6 +55,12 @@
   
   // Determinar el ID del modal basado en el título
   $: modalId = modalTarget || (titulo in titleToModalMap ? titleToModalMap[titulo] : '');
+  
+  // Reaccionar a cambios en los subprocesos para actualizar el estado si es necesario
+  $: if (!estadoProp) {
+    // El estado se actualizará automáticamente en la próxima actualización
+    estado = estado; // Forzar la actualización
+  }
   
   // Función para manejar el clic en el botón
   function handleButtonClick() {
@@ -75,12 +111,12 @@
   // Función para obtener las clases CSS según el estado
   function getClasesEstado(estado: string) {
     const clases = {
-      base: 'text-xs font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap',
-      pendiente: 'bg-blue-100 text-blue-800',
-      iniciado: 'bg-blue-100 text-blue-800',
-      sellado: 'bg-yellow-100 text-yellow-800',
-      validado: 'bg-green-100 text-green-800',
-      alertado: 'bg-red-100 text-red-800'
+      base: 'text-sm font-semibold px-3 py-1 rounded-full whitespace-nowrap',
+      pendiente: 'bg-blue-100 text-blue-800 border border-blue-200',
+      iniciado: 'bg-blue-100 text-blue-800 border border-blue-200',
+      sellado: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+      validado: 'bg-green-100 text-green-800 border border-green-200',
+      alertado: 'bg-red-100 text-red-800 border border-red-200'
     };
     
     return `${clases.base} ${clases[estado as keyof typeof clases] || ''}`;
@@ -111,17 +147,29 @@
       <span class={getClasesEstado(estado)}>
         {formatearEstado(estado)}
       </span>
-      <button 
-        on:click={handleButtonClick}
-        data-modal-target={modalId}
-        class="text-gray-500 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-gray-100"
-        aria-label="Ver detalles"
-        title="Ver detalles"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-        </svg>
-      </button>
+      {#if estado === 'pendiente'}
+        <button 
+          on:click={handleButtonClick}
+          data-modal-target={modalId}
+          class="text-white bg-blue-500 hover:bg-blue-600 transition-colors px-3 py-1 rounded-full text-sm font-medium"
+          aria-label="Subir archivos"
+          title="Subir archivos"
+        >
+          Subir
+        </button>
+      {:else}
+        <button 
+          on:click={handleButtonClick}
+          data-modal-target={modalId}
+          class="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-500 transition-colors p-2 rounded-full hover:shadow-md"
+          aria-label="Ver detalles"
+          title="Ver detalles"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      {/if}
     </div>
   </div>
   
