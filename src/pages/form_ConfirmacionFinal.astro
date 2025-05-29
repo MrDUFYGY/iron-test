@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <!-- Fondo con imagen -->
+  <div
+    class="fixed inset-0 bg-cover bg-center z-0"
+    style="background-image: url('../../public/assets/hidrosina-3.jpg');"
+  ></div>
+
+  <!-- Contenido del formulario (o cualquier contenido) -->
+  <div class="relative z-10 max-w-md mx-auto p-6 rounded shadow mt-10 bg-white">
+    <h1 class="text-2xl font-bold mb-6 text-center">Formulario de Autorización </h1>
+
+    <form>
+      <label for="nombreGerente" class="block mb-2 font-semibold">Nombre del gerente:</label>
+      <input 
+        type="text" 
+        id="nombreGerente" 
+        name="nombreGerente" 
+        placeholder="Ingresa el nombre completo" 
+        class="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+        required
+      />
+
+      <label for="idAutorizacion" class="block mb-2 font-semibold">ID de autorización:</label>
+      <input 
+        type="text" 
+        id="idAutorizacion" 
+        name="idAutorizacion" 
+        placeholder="Código o número de autorización" 
+        class="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+        required
+      />
+
+      <label for="fechaAutorizacion" class="block mb-2 font-semibold">Fecha de autorización:</label>
+      <input 
+        type="date" 
+        id="fechaAutorizacion" 
+        name="fechaAutorizacion" 
+        class="w-full border border-gray-300 rounded px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-green-500"
+        required
+      />
+
+      <button 
+        type="submit" 
+        class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+      >
+        Confirmar Autorización con Huella
+      </button>
+    </form>
+  </div>
+</Layout>
