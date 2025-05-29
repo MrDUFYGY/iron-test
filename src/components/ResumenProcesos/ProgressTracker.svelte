@@ -128,7 +128,7 @@
       pendiente: 'Pendiente',
       iniciado: 'Iniciado',
       sellado: 'Sellado',
-      validado: 'Validado',
+      validado: 'Verificado',
       alertado: 'Alertado'
     };
     
