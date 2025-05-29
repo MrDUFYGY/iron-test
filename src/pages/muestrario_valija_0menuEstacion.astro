@@ -2,133 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import MenuEstacion from "../components/MenuEstacion.astro";
 import Separador from "../components/Separador.astro";
-import Huella from "../components/ConfirmHuella.astro";
-import ProgressTracker from '../components/ResumenProcesos/ProgressTracker.svelte';
-import ResumenProcesosModal from '../components/ResumenProcesos/ResumenProcesosModal.svelte';
-
-// Datos para el resumen de procesos
-const resumenProcesos = {
-  usuario: {
-    nombre: 'Juan Pérez',
-    rol: 'Supervisor'
-  },
-  fecha: new Date().toISOString(),
-  estacion: {
-    id: 'EST-001',
-    nombre: 'Estación Central'
-  },
-  procesos: [
-    {
-      titulo: '1. Hoja de Liquidación',
-      estado: 'pendiente',
-      subprocesos: {
-        'Subida de Hoja Open Pos': true,
-        'Comparación y confirmación': true
-      }
-    },
-    {
-      titulo: '2. Movimientos de caja',
-      estado: 'iniciado',
-      subprocesos: {
-        'Subida de Talón bancario': true,
-        'Hoja de Valores': true,
-        'Comparación con resultados': true,
-        'Confirmación': false
-      }
-    },
-    {
-      titulo: '3. Nóminas',
-      estado: 'sellado',
-      subprocesos: {
-        'Subida de comprobantes': true,
-        'Confirmación de nóminas ejecutivas': true,
-        'Confirmación de Nóminas': true
-      }
-    },
-    {
-      titulo: '4. Listados de contadores, OpenPos y Mediciones',
-      estado: 'alertado',
-      subprocesos: {
-        'Listado de contadores (Turno 1, 2, 3)': true,
-        'H.L. Open Pos (Turno 1, 2, 3)': true,
-        'Mediciones con ticket (Turno 1, 2, 3)': false
-      }
-    },
-    {
-      titulo: '5. Hojas de corte de periféricos',
-      estado: 'alertado',
-      subprocesos: {
-        'Turno 1': true,
-        'Turno 2': false,
-        'Turno 3': false
-      }
-    },
-    {
-      titulo: '6. Recepción de carburantes con soportes',
-      estado: 'validado',
-      subprocesos: {
-        'Subir documentación': true,
-        'Factura pemex / VDM': true,
-        'Veeder root': true
-      }
-    },
-    {
-      titulo: '7. Listado de remisión de periféricos',
-      estado: 'iniciado',
-      subprocesos: {
-        'Formulario': true,
-        'Factura del cliente': true,
-        'Información adicional': false
-      }
-    },
-    {
-      titulo: '8. Regularización de existencias (Mermas)',
-      estado: 'sellado',
-      subprocesos: {
-        'Registro de mermas': true,
-        'Documentación': true,
-        'Aprobación': true
-      }
-    },
-    {
-      titulo: '9. Jarreo',
-      estado: 'sellado',
-      subprocesos: {
-        'Correo': true,
-        'Documento de extracciones': true,
-        'Documento histórico': true,
-        'Ticket / Veeder root': true
-      }
-    },
-    {
-      titulo: '10. Vales por empresa',
-      estado: 'iniciado',
-      subprocesos: {
-        'Selección de empresas': true,
-        'Adjuntar PDF': true,
-        'Observaciones': false
-      }
-    },
-    {
-      titulo: '11. Corte de terminales con vouchers',
-      estado: 'iniciado',
-      subprocesos: {
-        'Adjuntar voucher PDF': true,
-        'Segundo documento PDF': false
-      }
-    },
-    {
-      titulo: '12. Lista de placas con tag',
-      estado: 'validado',
-      subprocesos: {
-        'Turno 1': true,
-        'Turno 2': false,
-        'Turno 3': true
-      }
-    }
-  ]
-};
-
 ---
 
 <Layout>
@@ -152,51 +25,143 @@ const resumenProcesos = {
                 <form id="formulario" class="space-y-8">
                     <!-- Resumen de Procesos -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
-                      <div id="resumen-procesos-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
-                          <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
-                          <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
-                      </div>
-                      <div id="resumen-procesos-content" class="overflow-hidden transition-all duration-300 ease-in-out text-sm max-h-0">
-                        {resumenProcesos.procesos.map((proceso) => {
-                          const subprocesos = proceso.subprocesos || {};
-                          const totalPasos = Object.keys(subprocesos).length;
-                          
-                          // Encontrar el último paso completado
-                          let ultimoCompletado = 0;
-                          Object.entries(subprocesos).forEach(([_, completado], index) => {
-                            if (completado) ultimoCompletado = index + 1;
-                          });
-                          
-                          return (
-                            <div class="bg-gray-50  rounded-lg border border-gray-100">
-                              <ProgressTracker
-                                titulo={proceso.titulo}
-                                estado={proceso.estado}
-                                pasoActual={ultimoCompletado}
-                                totalPasos={totalPasos}
-                                subprocesos={subprocesos}
-                                client:load
-                              />
+                        <div id="resumen-procesos-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
+                            <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
+                            <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
+                        </div>
+                        <div id="resumen-procesos-content" class="overflow-hidden transition-all duration-300 ease-in-out space-y-2 text-sm max-h-0">
+                            <!-- Proceso 1: Resumen de liquidación -->
+                            <div>
+                                <div class="flex items-center p-2 bg-gray-100 rounded-t-lg">
+                                    <p class="font-medium">1.- Verificar Resumen de liquidación (1/3)</p>
+                                </div>
+                                <div class="space-y-2 bg-white p-3 rounded-b-lg">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">a) Litros vendidos por turno</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-litros">Verificar</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">b) Formas de cobro</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-formas-cobro">Verificar</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">c) Depósitos realizados</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-depositos">Verificar</button>
+                                    </div>
+                                </div>
                             </div>
-                          );
-                        })}
-                      <!-- Resumen Procesos Modal -->
-                      <div class="mt-4">
-                        <ResumenProcesosModal 
-                        data={JSON.stringify(resumenProcesos)}
-                        buttonText="Imprimir el resumen completo"
-                        client:load
-                      />
-                      </div>
-                      
-                      </div>
 
+                            <!-- Proceso 2: Movimientos de Periféricos -->
+                            <div>
+                                <div class="flex items-center p-2 bg-gray-100 rounded-t-lg">
+                                    <p class="font-medium">2.- Verificar Movimientos de Periféricos (1/3)</p>
+                                </div>
+                                <div class="space-y-2 bg-white p-3 rounded-b-lg">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">a) Ventas de Periféricos</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-perifericos">Verificar</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">b) Remisiones de periféricos</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-remisiones-perifericos">Verificar</button>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <!-- Proceso 3: Regularización de existencias -->
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">3.- Verificar Reporte "Regularización de existencias"</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-regularizacion">Verificar</button>
+                            </div>
 
+                            <!-- Proceso 4: Ficha del Banco y Traslado de valores -->
+                            <div>
+                                <div class="flex items-center justify-between p-2 bg-gray-100 rounded-t-lg">
+                                    <p class="font-medium">4.- Verificar Ficha del Banco y Traslado de valores</p>
+                                    <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-traslado-valores">Verificar</button>
+                                </div>
+                                <div class="bg-white p-4 rounded-b-lg space-y-3">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Importe F.traslado de valores:</label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-2 text-gray-500">$</span>
+                                                <input type="number" id="importeTraslado" class="pl-7 w-full border border-gray-300 rounded p-2 text-sm" placeholder="0.00" step="0.01">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Importe Resumen de liquidación:</label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-2 text-gray-500">$</span>
+                                                <input type="number" id="importeResumen" class="pl-7 w-full border border-gray-300 rounded p-2 text-sm" placeholder="0.00" step="0.01">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Diferencia:</label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-2 text-gray-500">$</span>
+                                            <input type="text" id="diferencia" class="pl-7 w-full border border-gray-300 rounded p-2 text-sm bg-gray-50" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Proceso 5: Apuntes contables -->
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">5.- Verificar Apuntes contables</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-apuntes-contables">Verificar</button>
+                            </div>
+
+                            <!-- Proceso 6: Hojas de corte de Periféricos -->
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">6.- Verificar Hojas de corte de Periféricos (Turno 1,2 y 3)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-hojas-corte-perifericos">Verificar</button>
+                            </div>
+
+                            <!-- Proceso 7: Comprobantes de gastos -->
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">7.- Verificar Comprobantes de gastos (Nómina, etc)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-gastos">Verificar</button>
+                            </div>
+
+                            <!-- Proceso 8: Libro de Tanques -->
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">8.- Verificar Libro de Tanques (día 15 y último mes y cuando se realicen jarros)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-libro-tanques">Verificar</button>
+                            </div>
+
+                            <!-- Proceso 9: Tira de venta real y listados -->
+                            <div>
+                                <div class="flex items-center p-2 bg-gray-100 rounded-t-lg">
+                                    <p class="font-medium">9.- Verificar Tira de venta real, listado de contadores, y Listado de Mediciones</p>
+                                </div>
+                                <div class="space-y-2 bg-white p-3 rounded-b-lg">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">a) Listado de contadores por turno</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-listado-contadores">Verificar</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">b) Verificar litros jarros = litros retorno</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-litros-jarros">Verificar</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">c) Tira de venta real</span>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-tira-venta">Verificar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Proceso 10: Hoja de corte por cambio de turno -->
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">10.- Verificar Hoja de corte por cambio de turno (solo si se trabaja fuera del sistema)</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-hoja-corte-cambio">Verificar</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Documentos que integran la póliza -->
-                    <!-- <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
+                    <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
                         <div id="documentos-poliza-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg bg-gray-50">
                             <h2 class="font-bold text-gray-800">Documentos que integran la póliza</h2>
                             <span id="documentos-poliza-icon" class="text-gray-500">▲</span>
@@ -263,127 +228,144 @@ const resumenProcesos = {
                             </div>
                         </div>
                     </div>
-  -->
+                    <!-- Metodos de pago -->
+                    <!-- <div class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm">
+                        <div id="metodos-pago-header" class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50">
+                            <h2 class="font-bold text-gray-800">Métodos de pago</h2>
+                            <span id="metodos-pago-icon" class="text-gray-500">▼</span>
+                        </div>
+                        <div id="metodos-pago-content" class="space-y-2 pt-2 max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+
+                         
+
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">1.- Vales por Empresa</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-vales-empresa">Subir</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">2.- Corte de terminales con vouchers</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-corte-terminales">Subir</button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-2 bg-gray-100 rounded-lg">
+                                <span class="text-gray-700">3.- Lista de placas con tag</span>
+                                <button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium" data-modal-target="modal-lista-placas">Subir</button>
+                            </div>
+                        </div>
+                    </div> -->
                     <!-- Observaciones -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
                         <textarea id="observaciones" class="w-full border border-gray-300 rounded p-2 text-sm" rows="4" placeholder="Escriba aquí..."></textarea>
                     </div>
-                    
+
                     <!-- Firma y turno -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
-
+                      <div>
+                        <label for="turno" class="block font-medium mb-2 text-gray-800">Turno:</label>
+                        <input id="turno" type="text" class="w-full border border-gray-300 rounded p-2">
+                      </div>
                       <div>
                         <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
                         <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
                       </div>
                     </div>
-                    
+
                     <!-- Botones -->
                     <div class="text-center mt-6 space-x-4">
-                      <!-- <Huella /> -->
+                        <button id="guardar" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium text-lg inline-block">
+                            Guardar
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
         <div id="modal-container" style="width: 50%; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; ">
-          <!-- Espacio para Modales -->
-          <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
-              <h2 class="text-lg font-semibold">Menu de procesos.</h2>
-              <p class=" text-gray-600">Puedes ingresar al proceso deseado o seguir la hoja .</p>
-              <!-- Aquí se cargará el contenido del modal -->
-          </div>
-          <MenuEstacion items={
-          [
-            // {
-            //   title: "Resumen",
-            //   description: "Muestrario de caratula digital",
-            //   icon: "1.- Hoja Caratula",
-            //   link: "/muestrario_valija_1caratula",
-              
-              
-            //   modalSide: "left"
-            // },
-            {
-              title: "1.- Hoja de liquidacion",
-              description: "Sube la hoja de liquidacion y comparala",
-              icon: "description",
-              link: "/muestrario_valija_2ingresoHojaLiquidacion",
-              
-            },
-            {
-              title: "2.- Movimientos de caja",
-              description: "Confirma los movimientos hechos.",
-              icon: "inventory",
-              link: "/muestrario_valija_3resultadosBusqueda",
-            },
-            {
-              title: "3.- Nominas",
-              description: "Sube las nominas",
-              icon: "people",
-              link: "/muestrario_valija_4nominas",
-            },
-            {
-              title: "4.- Carga de documentos",
-              description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
-              icon: "upload_file",
-              link: "/muestrario_valija_5-7docsTurno",
-            },
-            {
-                title: "5.- Corte de Perifericos",
-                description: "Se sube 1 archivo por cada turno",
-                icon: "",
-                link: "/muestrario_valija_7resultadoVentasxPeriordo",
-            },
-            {
-              title: "6.- Historico de Carburante",
-              description: "Confirma el historico de carburante y sube su comprobante",
-              icon: "history",
-              link: "/muestrario_valija_8historicoCarburante",
-            },
-            {
-              title: "7.- Consulta de Ventas por Periodo",
-              description: "Confirma las ventas por periodo y sube su comprobante",
-              icon: "bar_chart",
-              link: "/muestrario_valija_9resultadoVentasxPeriordo",
-            },
-            {
-              title: "8.- Mermas y Regularizacion",
-              description: "Confirma las Mermas y Regularizacion",
-              icon: "analytics",
-              link: "/muestrario_valija_10resultadosMermasRegul",
-            },
-                    {
-              title: "9.- Jarreo",
-              description: "Confirma el jarreo de documentos",
-              icon: "analytics",
-              link: "/muestrario_valija_9jarreo",
-            },
-            {
-                title: "10.- Vales por Empresa",
-                description: "Se cargan los vales de acuerdo a la proveedor",
-                icon: "inventory",
-                link: "/muestrario_valija_11valesEmpresa",
-            },
-            {
-                title: "11.- Corte de Terminales con Vouchers",
-                description: "Se cargan los vales de acuerdo a la proveedor",
-                icon: "inventory",
-                link: "/muestrario_valija_12terminalesVoucher",
-            },
-            {
-                title: "12.- Listado de placas con Tag",
-                description: "Se sube el registro de las placas con tag",
-                icon: "inventory",
-                link: "/muestrario_valija_13listaTag",
-            },
+                <!-- Espacio para Modales -->
+                <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
+                    <h2 class="text-lg font-semibold">Menu de procesos.</h2>
+                    <p class=" text-gray-600">Puedes ingresar al proceso deseado o seguir la hoja .</p>
+                    <!-- Aquí se cargará el contenido del modal -->
+                </div>
+            <MenuEstacion items={[
+				// {
+				//   title: "Resumen",
+				//   description: "Muestrario de caratula digital",
+				//   icon: "1.- Hoja Caratula",
+				//   link: "/muestrario_valija_1caratula",
+				  
+				  
+				//   modalSide: "left"
+				// },
+				{
+				  title: "1.- Hoja de liquidacion",
+				  description: "Sube la hoja de liquidacion y comparala",
+				  icon: "description",
+				  link: "/muestrario_valija_2ingresoHojaLiquidacion",
+				  
+				},
+				{
+				  title: "2.- Movimientos de caja",
+				  description: "Confirma los movimientos hechos.",
+				  icon: "inventory",
+				  link: "/muestrario_valija_3resultadosBusqueda",
+				},
+				{
+				  title: "3.- Nominas",
+				  description: "Sube las nominas",
+				  icon: "people",
+				  link: "/muestrario_valija_4nominas",
+				},
+				{
+				  title: "4.- Carga de documentos",
+				  description: 'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
+				  icon: "upload_file",
+				  link: "/muestrario_valija_5-7docsTurno",
+				},
                 {
-              title: "Otro",
-              description: "Otro",
-              icon: "inventory",
-              link: "/mesa_trabajo_componentes",
-            }
-          ]} />
+                    title: "5.- Corte de Perifericos",
+                    description: "Se sube 1 archivo por cada turno",
+                    icon: "",
+                    link: "/muestrario_valija_7resultadoVentasxPeriordo",
+                },
+				{
+				  title: "6.- Historico de Carburante",
+				  description: "Confirma el historico de carburante y sube su comprobante",
+				  icon: "history",
+				  link: "/muestrario_valija_8historicoCarburante",
+				},
+				{
+				  title: "7.- Consulta de Ventas por Periodo",
+				  description: "Confirma las ventas por periodo y sube su comprobante",
+				  icon: "bar_chart",
+				  link: "/muestrario_valija_9resultadoVentasxPeriordo",
+				},
+				{
+				  title: "8.- Mermas y Regularizacion",
+				  description: "Confirma las Mermas y Regularizacion",
+				  icon: "analytics",
+				  link: "/muestrario_valija_10resultadosMermasRegul",
+				},
+                {
+				  title: "9.- Jarreo",
+				  description: "Confirma el jarreo de documentos",
+				  icon: "analytics",
+				  link: "/muestrario_valija_9jarreo",
+				},
+                {
+                    title: "10.- Vales por Empresa",
+                    description: "Se cargan los vales de acuerdo a la proveedor",
+                    icon: "inventory",
+                    link: "/muestrario_valija_11valesEmpresa",
+                }
+				// 		{
+				//   title: "Reporte de Inventario",
+				//   description: "Reporte de Inventario",
+				//   icon: "inventory",
+				//   link: "/zzz",
+				// }
+			]} />
 
         </div>
     </div>
@@ -407,7 +389,7 @@ const resumenProcesos = {
         "modal-movimientos-caja": "/muestrario_valija_3resultadosBusqueda",
         "modal-regularizacion-mermas": "/muestrario_valija_10resultadosMermasRegul",
         "modal-ficha-banco": "/muestrario_valija_9resultadoVentasxPeriordo",
-        "modal-hojas-corte-perifericos": "/muestrario_valija_7resultadoVentasxPeriordo",
+        "modal-hojas-corte-perifericos": "/muestrario_valija_9resultadoVentasxPeriordo",
         "modal-comprobantes-gastos": "/muestrario_valija_4nominas",
         "modal-tira-venta": "/muestrario_valija_5-7docsTurno",
         "modal-hoja-corte-cambio-turno": "/muestrario_valija_5-7docsTurno",
@@ -603,7 +585,7 @@ const resumenProcesos = {
       form.addEventListener('submit', (event) => {
         event.preventDefault(); 
         // Aquí podrías agregar la lógica para guardar el formulario
-        console.log("Formulario simulado guardado.");
+        alert("Formulario simulado guardado.");
       });
     }
 
@@ -653,3 +635,9 @@ const resumenProcesos = {
 
 
 </Layout>
+
+
+
+
+
+
