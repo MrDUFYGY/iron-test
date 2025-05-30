@@ -1,220 +1,153 @@
 ---
-import "../styles/global.css";
 import Layout from '../layouts/Layout.astro';
+import { fetchWithSSL } from '../fetchWithSSL';
 
-const fechaActual = new Date();
-const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-});
-const horaActual = fechaActual.toLocaleTimeString('es-MX', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-});
+let datos = [];
+let error = null;
+let cargando = true;
+let rawResponse = null;
+
+try {
+  console.log('Iniciando petición a la API...');
+  
+  const url = 'https://localhost:44345/api/Valija/GetAll';
+  const options = {
+    method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    }
+  };
+
+  console.log('Realizando petición a:', url);
+  const respuesta = await fetchWithSSL(url, options);
+  
+  console.log('Respuesta recibida, estado:', respuesta.status);
+  rawResponse = await respuesta.text();
+  console.log('Respuesta en texto plano:', rawResponse);
+  
+  try {
+    const resultado = JSON.parse(rawResponse);
+    console.log('Respuesta parseada:', resultado);
+    
+    if (resultado.Success && Array.isArray(resultado.Data)) {
+      datos = resultado.Data;
+      console.log('Datos extraídos correctamente. Total de registros:', datos.length);
+    } else {
+      throw new Error('Formato de respuesta inesperado');
+    }
+  } catch (parseError) {
+    console.error('Error al parsear la respuesta:', parseError);
+    throw new Error('Error al procesar la respuesta del servidor');
+  }
+} catch (err: any) {
+  console.error('Error en la petición:', {
+    message: err.message,
+    stack: err.stack,
+    rawResponse
+  });
+  error = `Error: ${err.message}`;
+} finally {
+  cargando = false;
+  console.log('Estado final:', { cargando, error, datosLength: datos.length });
+}
 ---
 
 <Layout>
-<div class="mx-auto bg-white rounded-xl shadow-md p-6">
-    <div class="border-b-2 border-gray-200 pb-4 mb-6">
-        <div class="flex justify-between items-start mb-4">
-            <h1 class="text-xl font-bold uppercase">Vista previa de resúmenes</h1>
-            <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded">HD-141</span>
-        </div>
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="font-semibold mr-2">Operadora:</span>
-                <span class="bg-gray-100 px-3 py-1 rounded font-medium">HIDROSINA PLUS SAPI DE C.V.</span>
-            </div>
-            <div class="text-right">
-                <span class="font-semibold">Fecha:</span>
-                <span class="ml-2">19 de abril de 2025</span>
-            </div>
-        </div>
-        <div class="mt-2 text-sm text-gray-600">
-            <span class="font-semibold">Fecha y hora de vista previa:</span>
-            <span class="ml-2">{fechaFormateada} - {horaActual}</span>
-        </div>
-    </div>
+  <div class="p-6 max-w-7xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6">Listado de Valijas</h1>
+    
+    {cargando ? (
+      <div class="flex justify-center items-center p-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <p class="ml-4">Cargando datos...</p>
+      </div>
+    ) : error ? (
+      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+        <p class="font-bold">Error</p>
+        <pre class="whitespace-pre-wrap">{error}</pre>
+        {rawResponse && (
+          <details class="mt-2">
+            <summary class="text-sm cursor-pointer">Ver respuesta del servidor</summary>
+            <pre class="whitespace-pre-wrap text-xs mt-2 bg-gray-100 p-2 rounded overflow-auto max-h-60">{rawResponse}</pre>
+          </details>
+        )}
+      </div>
+    ) : datos.length === 0 ? (
+      <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4">
+        <p>No se encontraron datos de valijas.</p>
+      </div>
+    ) : (
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100">
+              {Object.keys(datos[0] || {}).map((encabezado) => (
+                <th 
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  {encabezado}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            {datos.map((fila, index) => (
+              <tr class={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                {Object.values(fila).map((valor, i) => (
+                  <td 
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                  >
+                    {valor !== null && valor !== undefined ? String(valor) : '-'}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </div>
 
-    <div class="space-y-6">
-        <!-- Resumen de Liquidación -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h2 class="font-bold uppercase mb-3 text-gray-800">Resumen de Liquidación</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium">Documento:</span>
-                        <button onclick="abrirPDF('resumen_liquidacion')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Ver PDF
-                        </button>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Importe teórico:</span>
-                        <span class="text-right font-medium">207,565.14</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Recaudación:</span>
-                        <span class="text-right font-medium">207,565.14</span>
-                    </div>
-                    <div class="flex justify-between font-semibold bg-yellow-50 p-2 rounded">
-                        <span>Diferencia:</span>
-                        <span class="text-right">0.00</span>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="font-semibold">Total:</p>
-                    <p class="text-2xl font-bold bg-yellow-50 p-2 rounded inline-block">207,565.14</p>
-                </div>
-            </div>
-        </div>
+  <script>
+    // Mostrar los datos en la consola del navegador
+    const datosCliente = JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify(datos))}"));
+    console.log('Datos cargados desde el servidor:', datosCliente);
+    console.log('Total de valijas:', datosCliente.length);
+  </script>
+</Layout>
 
-        <!-- Movimientos de Periféricos -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h2 class="font-bold uppercase mb-3 text-gray-800">Movimientos de Periféricos</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium">Documento:</span>
-                        <button onclick="abrirPDF('movimientos_perifericos')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Ver PDF
-                        </button>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Total ventas:</span>
-                        <span class="text-right font-medium">107.00$</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Devoluciones:</span>
-                        <span class="text-right font-medium">0.00$</span>
-                    </div>
-                    <div class="flex justify-between font-semibold bg-yellow-50 p-2 rounded">
-                        <span>Neto:</span>
-                        <span class="text-right">107.00$</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Reporte de Regularización -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h2 class="font-bold uppercase mb-3 text-gray-800">Reporte de Regularización</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium">Documento:</span>
-                        <button onclick="abrirPDF('reporte_regularizacion')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Ver PDF
-                        </button>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Estado:</span>
-                        <span class="text-right font-medium text-green-600">Regularizado</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Fecha de regularización:</span>
-                        <span class="text-right font-medium">19/04/2025</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ficha del Banco -->
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <h2 class="font-bold uppercase mb-3 text-gray-800">Ficha del Banco</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium">Documento:</span>
-                        <button onclick="abrirPDF('ficha_banco')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Ver PDF
-                        </button>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Importe depositado:</span>
-                        <span class="text-right font-medium">112,XXX.XX</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Fecha de depósito:</span>
-                        <span class="text-right font-medium">19/04/2025</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Botones de acción -->
-        <div class="flex justify-center space-x-4 mt-6">
-            <button class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition">
-                Volver
-            </button>
-            <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
-                Confirmar
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Diálogo para visualizar PDFs -->
-<div id="pdfDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-4 max-w-4xl w-full mx-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-bold" id="pdfTitle"></h3>
-            <button onclick="cerrarPDF()" class="text-gray-500 hover:text-gray-700">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-        <div class="aspect-[4/3] bg-gray-100 rounded">
-            <iframe id="pdfViewer" class="w-full h-full" frameborder="0"></iframe>
-        </div>
-    </div>
-</div>
-
-<script>
-    function abrirPDF(tipo) {
-        const dialog = document.getElementById('pdfDialog');
-        const viewer = document.getElementById('pdfViewer');
-        const title = document.getElementById('pdfTitle');
-        
-        // Configurar el título según el tipo de documento
-        const titulos = {
-            'resumen_liquidacion': 'Resumen de Liquidación',
-            'movimientos_perifericos': 'Movimientos de Periféricos',
-            'reporte_regularizacion': 'Reporte de Regularización',
-            'ficha_banco': 'Ficha del Banco'
-        };
-        
-        title.textContent = titulos[tipo];
-        
-        // Aquí deberías reemplazar con la ruta real de tus PDFs
-        viewer.src = `/assets/${tipo}.pdf`;
-        
-        dialog.classList.remove('hidden');
-        dialog.classList.add('flex');
-    }
-
-    function cerrarPDF() {
-        const dialog = document.getElementById('pdfDialog');
-        const viewer = document.getElementById('pdfViewer');
-        
-        viewer.src = '';
-        dialog.classList.remove('flex');
-        dialog.classList.add('hidden');
-    }
-</script>
-</Layout> 
+<style>
+  /* Estilos para la tabla */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  
+  tr:hover {
+    background-color: #f7fafc;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+</style>

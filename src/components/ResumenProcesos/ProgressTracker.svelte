@@ -129,7 +129,8 @@
       iniciado: 'Iniciado',
       sellado: 'Sellado',
       validado: 'Verificado',
-      alertado: 'Alertado'
+      alertado: 'Alertado',
+      
     };
     
     return estados[estado] || estado;
