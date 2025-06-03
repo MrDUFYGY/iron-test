@@ -6,6 +6,8 @@ interface Props {
     description: string;
     icon: string;
     link: string;
+    estado?: 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado';
+    subprocesos?: Record<string, boolean>;
     modalSide?: 'left' | 'right';
     sugerencia?: boolean;
   }>;

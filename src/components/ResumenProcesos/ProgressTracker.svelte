@@ -50,7 +50,19 @@
     '9. Jarreo': 'modal-jarreo',
     '10. Vales por empresa': 'modal-vales-empresa',
     '11. Corte de terminales con vouchers': 'modal-corte-terminales',
-    '12. Lista de placas con tag': 'modal-lista-placas'
+    '12. Lista de placas con tag': 'modal-placas-tag',
+    '1 - Hoja de Liquidacion':'modal-hoja-liquidacion-contador',
+    '2 - Movimientos de caja':'modal-movimientos-caja-contador',
+    '3 - Nominas':'modal-nominas-contador',
+    '4 - Listados de contadores, OpenPos, Mediciones y Corte de Perifericos por turno':'modal-listado-contadores-contador',
+    '5 - Recepción de carburantes':'modal-recepcion-carburantes-contador',
+    '6 - Listado de remisión de periféricos':'modal-listado-remision-perifericos-contador',
+    '7 - Regularización de existencias (Mermas)':'modal-regularizacion-mermas-contador',
+    '8 - Jarreo':'modal-jarreo-contador',
+    '1 - Vales por empresa':'modal-vales-empresa-contador',
+    '2 - Corte de terminales con vouchers':'modal-corte-terminales-contador',
+    '3 - Lista de placas con tag':'modal-placas-tag-contador',
+    
   };
   
   // Determinar el ID del modal basado en el título
