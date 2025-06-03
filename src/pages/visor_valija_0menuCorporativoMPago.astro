@@ -262,7 +262,7 @@ const modalUrlMap: Record<string, string> = {
       if (!header || !content || !icon) return;
 
       // Inicialmente cerrado
-      let isOpen = false;
+      let isOpen = true;
 
       header.addEventListener("click", () => {
         isOpen = !isOpen;

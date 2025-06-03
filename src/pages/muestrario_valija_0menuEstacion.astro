@@ -409,8 +409,8 @@ const resumenProcesos = {
       "modal-lista-placas": "/muestrario_valija_13listaTag",
     };
 
-    // Función para abrir el contenido en el panel del modal
-    document.addEventListener("click", function (event) {
+       // Función para abrir el contenido en el panel del modal
+       document.addEventListener("click", function (event) {
       const target = (event.target as HTMLElement).closest(
         "[data-modal-target]",
       );
@@ -509,8 +509,56 @@ const resumenProcesos = {
       let isOpen = true;
       content.style.maxHeight = content.scrollHeight + "px";
 
+      header.addEventListener("click", () => {
+        isOpen = !isOpen;
+
+        if (isOpen) {
+          content.style.maxHeight = content.scrollHeight + "px";
+          icon.textContent = "▲";
+        } else {
+          content.style.maxHeight = "0";
+          icon.textContent = "▼";
+        }
+      });
+    }
+
+    // Función para manejar la sección de Métodos de pago
+    function initMetodosPago() {
+      const header = document.getElementById("metodos-pago-header");
+      const content = document.getElementById("metodos-pago-content");
+      const icon = document.getElementById("metodos-pago-icon");
+
+      if (!header || !content || !icon) return;
+
+      // Inicialmente cerrado
+      let isOpen = true;
+      content.style.maxHeight = content.scrollHeight + "px";
+
+      header.addEventListener("click", () => {
+        isOpen = !isOpen;
+
+        if (isOpen) {
+          content.style.maxHeight = content.scrollHeight + "px";
+          content.classList.add("pb-2");
+          icon.textContent = "▲";
+        } else {
+          content.style.maxHeight = "0";
+          content.classList.remove("pb-2");
+          icon.textContent = "▼";
+        }
+      });
+    }
+
+    // Inicializar todas las secciones
+    document.addEventListener("DOMContentLoaded", () => {
       initResumenProcesos();
+      initDocumentosPoliza();
+      initMetodosPago();
     });
+
+    function calcularDiferencia() {
+      const importeTrasladoInput = document.getElementById(
+        "importeTraslado",
       ) as HTMLInputElement;
       const importeResumenInput = document.getElementById(
         "importeResumen",
