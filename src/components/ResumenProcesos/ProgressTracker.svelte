@@ -42,7 +42,7 @@
     '1. Hoja de Liquidación': 'modal-resumen-liquidacion',
     '2. Movimientos de caja': 'modal-movimientos-caja',
     '3. Nóminas': 'modal-nominas',
-    '4. Listados de contadores, OpenPos y Mediciones': 'modal-listado-contadores',
+    '4. Listados de contadores, OpenPos, Mediciones y Lista de placas con Tag': 'modal-listado-contadores-mediciones-tag',
     '5. Hojas de corte de periféricos': 'modal-hojas-corte-perifericos',
     '6. Recepción de carburantes con soportes': 'modal-recepcion-carburantes-soportes',
     '7. Listado de remisión de periféricos': 'modal-listado-remision-perifericos',
@@ -65,6 +65,35 @@
     
   };
   
+  const modalUrlMap: Record<string, string> = {
+      "modal-litros": "/muestrario_valija_2hojaLiquidacion",
+      "modal-perifericos": "/muestrario_valija_9ventaHojaP1erifericos",
+      "modal-vales": "/muestrario_valija_11valesEmpresa",
+      "modal-nominas": "/muestrario_valija_4nominas",
+      "modal-gastos": "/muestrario_valija_5-7docsTurno",
+      "modal-formas-cobro": "/muestrario_valija_8historicoCarburante",
+      "modal-litros-jarros": "/muestrario_valija_9resultadoVentasxPeriordo",
+      "modal-depositos": "/muestrario_valija_10resultadosMermasRegul",
+
+      "modal-listado-contadores-mediciones-tag": "/est_valija_4cargaDocumentosxTurno",
+      
+      "modal-recepcion-carburantes": "/muestrario_valija_2hojaLiquidacion",
+      "modal-remisiones-perifericos": "/muestrario_valija_3resultadosBusqueda",
+      "modal-resumen-liquidacion": "/muestrario_valija_2ingresoHojaLiquidacion",
+      "modal-movimientos-caja": "/muestrario_valija_3resultadosBusqueda",
+      "modal-regularizacion-mermas": "/muestrario_valija_10resultadosMermasRegul",
+      "modal-ficha-banco": "/muestrario_valija_9resultadoVentasxPeriordo",
+      "modal-hojas-corte-perifericos": "/muestrario_valija_7resultadoVentasxPeriordo",
+      "modal-comprobantes-gastos": "/muestrario_valija_4nominas",
+      "modal-tira-venta": "/muestrario_valija_5-7docsTurno",
+      "modal-hoja-corte-cambio-turno": "/muestrario_valija_5-7docsTurno",
+      "modal-listado-remision-perifericos": "/muestrario_valija_7Perifericos",
+      "modal-recepcion-carburantes-soportes": "/muestrario_valija_8historicoCarburante",
+      "modal-jarreo": "/muestrario_valija_9jarreo",
+      "modal-vales-empresa": "/muestrario_valija_11valesEmpresa",
+      "modal-corte-terminales": "/muestrario_valija_12terminalesVoucher",
+      "modal-placas-tag": "/muestrario_valija_13listaTag",
+    };
   // Determinar el ID del modal basado en el título
   $: modalId = modalTarget || (titulo in titleToModalMap ? titleToModalMap[titulo] : '');
   

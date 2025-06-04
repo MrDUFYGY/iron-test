@@ -23,8 +23,8 @@ const resumenProcesos = {
       titulo: "1. Hoja de Liquidación",
       estado: "pendiente",
       subprocesos: {
-        "Subida de Hoja Open Pos": true,
-        "Comparación y confirmación": true,
+        "Subida de Hoja Open Pos": false,
+        "Comparación y confirmación": false,
       },
       description: "Sube la hoja de liquidación y compárala",
       icon: "description",
@@ -34,9 +34,9 @@ const resumenProcesos = {
       titulo: "2. Movimientos de caja",
       estado: "iniciado",
       subprocesos: {
-        "Subida de Talón bancario": true,
-        "Hoja de Valores": true,
-        "Comparación con resultados": true,
+        "Subida de Talón bancario": false,
+        "Hoja de Valores": false,
+        "Comparación con resultados": false,
         "Confirmación": false
       },
       description: "Gestiona los movimientos de caja",
@@ -47,23 +47,24 @@ const resumenProcesos = {
       titulo: "3. Nóminas",
       estado: "sellado",
       subprocesos: {
-        "Subida de comprobantes": true,
-        "Confirmación de nóminas ejecutivas": true,
-        "Confirmación de Nóminas": true
+        "Subida de comprobantes": false,
+        "Confirmación de nóminas ejecutivas": false,
+        "Confirmación de Nóminas": false
       },
       description: "Administra las nóminas",
       icon: "payments",
       link: "/nominas"
     },
     {
-      titulo: "4. Listados de contadores, OpenPos y Mediciones",
+      titulo: "4. Listados de contadores, OpenPos, Mediciones y Lista de placas con Tag",
       estado: "alertado",
       subprocesos: {
-        "Listado de contadores (Turno 1, 2, 3)": true,
-        "H.L. Open Pos (Turno 1, 2, 3)": true,
-        "Mediciones con ticket (Turno 1, 2, 3)": false
+        "Listado de contadores (Turno 1, 2, 3)": false,
+        "H.L. Open Pos (Turno 1, 2, 3)**": false,
+        "Mediciones con ticket (Turno 1, 2, 3)": false,
+        "Lista de placas con tag (Turno 1, 2, 3)": false
       },
-      description: "Gestiona los listados de contadores y mediciones",
+      description: "Gestiona los listados de contadores, OpenPos, mediciones y lista de placas con tag",
       icon: "list_alt",
       link: "/listados-contadores"
     },
@@ -71,7 +72,7 @@ const resumenProcesos = {
       titulo: "5. Hojas de corte de periféricos",
       estado: "alertado",
       subprocesos: {
-        "Turno 1": true,
+        "Turno 1": false,
         "Turno 2": false,
         "Turno 3": false
       },
@@ -83,9 +84,9 @@ const resumenProcesos = {
       titulo: "6. Recepción de carburantes con soportes",
       estado: "validado",
       subprocesos: {
-        "Subir documentación": true,
-        "Factura pemex / VDM": true,
-        "Veeder root": true
+        "Subir documentación": false,
+        "Factura pemex / VDM": false,
+        "Veeder root": false
       },
       description: "Controla la recepción de carburantes",
       icon: "local_gas_station",
@@ -95,8 +96,8 @@ const resumenProcesos = {
       titulo: "7. Listado de remisión de periféricos",
       estado: "iniciado",
       subprocesos: {
-        "Formulario": true,
-        "Factura del cliente": true,
+        "Formulario": false,
+        "Factura del cliente": false,
         "Información adicional": false
       },
       description: "Gestiona las remisiones de periféricos",
@@ -107,9 +108,9 @@ const resumenProcesos = {
       titulo: "8. Regularización de existencias (Mermas)",
       estado: "sellado",
       subprocesos: {
-        "Registro de mermas": true,
-        "Documentación": true,
-        "Aprobación": true
+        "Registro de mermas": false,
+        "Documentación": false,
+        "Aprobación": false
       },
       description: "Controla la regularización de existencias",
       icon: "inventory_2",
@@ -119,10 +120,10 @@ const resumenProcesos = {
       titulo: "9. Jarreo",
       estado: "sellado",
       subprocesos: {
-        "Correo": true,
-        "Documento de extracciones": true,
-        "Documento histórico": true,
-        "Ticket / Veeder root": true
+        "Correo": false,
+        "Documento de extracciones": false,
+        "Documento histórico": false,
+        "Ticket / Veeder root": false
       },
       description: "Gestiona el proceso de jarreo",
       icon: "oil_barrel",
@@ -132,8 +133,8 @@ const resumenProcesos = {
       titulo: "10. Vales por empresa",
       estado: "iniciado",
       subprocesos: {
-        "Selección de empresas": true,
-        "Adjuntar PDF": true,
+        "Selección de empresas": false,
+        "Adjuntar PDF": false,
         "Observaciones": false
       },
       description: "Administra los vales por empresa",
@@ -144,25 +145,25 @@ const resumenProcesos = {
       titulo: "11. Corte de terminales con vouchers",
       estado: "iniciado",
       subprocesos: {
-        "Adjuntar voucher PDF": true,
+        "Adjuntar voucher PDF": false,
         "Segundo documento PDF": false
       },
       description: "Gestiona el corte de terminales",
       icon: "credit_card",
       link: "/corte-terminales"
     },
-    {
-      titulo: "12. Lista de placas con tag",
-      estado: "validado",
-      subprocesos: {
-        "Turno 1": true,
-        "Turno 2": false,
-        "Turno 3": true
-      },
-      description: "Controla el registro de placas con tag",
-      icon: "local_shipping",
-      link: "/placas-tag"
-    }
+    // {
+    //   titulo: "12. Lista de placas con tag",
+    //   estado: "validado",
+    //   subprocesos: {
+    //     "Turno 1": false,
+    //     "Turno 2": false,
+    //     "Turno 3": false
+    //   },
+    //   description: "Controla el registro de placas con tag",
+    //   icon: "local_shipping",
+    //   link: "/placas-tag"
+    // }
   ]
 };
 ---
@@ -188,12 +189,13 @@ const resumenProcesos = {
         <form id="formulario" class="space-y-8">
           <!-- Resumen de Procesos -->
           <div
-            class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm"
+            class="bg-white p-4 rounded-xl border border-gray-200 mb-6 shadow-sm"
           >
             <div
               id="resumen-procesos-header"
               class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50"
             >
+
               <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
               <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
             </div>
@@ -229,13 +231,7 @@ const resumenProcesos = {
                 })
               }
               <!-- Resumen Procesos Modal -->
-              <div class="mt-4">
-                <ResumenProcesosModal
-                  data={JSON.stringify(resumenProcesos)}
-                  buttonText="Imprimir el resumen completo"
-                  client:load
-                />
-              </div>
+
             </div>
           </div>
 
@@ -245,7 +241,13 @@ const resumenProcesos = {
                         <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
                         <textarea id="observaciones" class="w-full border border-gray-300 rounded p-2 text-sm" rows="4" placeholder="Escriba aquí..."></textarea>
                     </div>
-                    
+                    <div class="">
+                      <ResumenProcesosModal
+                        data={JSON.stringify(resumenProcesos)}
+                        buttonText=""
+                        client:load
+                      />
+                    </div>
                     <!-- Firma y turno -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -387,26 +389,25 @@ const resumenProcesos = {
       "modal-formas-cobro": "/muestrario_valija_8historicoCarburante",
       "modal-litros-jarros": "/muestrario_valija_9resultadoVentasxPeriordo",
       "modal-depositos": "/muestrario_valija_10resultadosMermasRegul",
-      "modal-listado-contadores": "/muestrario_valija_1caratula",
+
+      "modal-listado-contadores-mediciones-tag": "/est_valija_4cargaDocumentosxTurno",
+      
       "modal-recepcion-carburantes": "/muestrario_valija_2hojaLiquidacion",
       "modal-remisiones-perifericos": "/muestrario_valija_3resultadosBusqueda",
       "modal-resumen-liquidacion": "/muestrario_valija_2ingresoHojaLiquidacion",
       "modal-movimientos-caja": "/muestrario_valija_3resultadosBusqueda",
-      "modal-regularizacion-mermas":
-        "/muestrario_valija_10resultadosMermasRegul",
+      "modal-regularizacion-mermas": "/muestrario_valija_10resultadosMermasRegul",
       "modal-ficha-banco": "/muestrario_valija_9resultadoVentasxPeriordo",
-      "modal-hojas-corte-perifericos":
-        "/muestrario_valija_7resultadoVentasxPeriordo",
+      "modal-hojas-corte-perifericos": "/muestrario_valija_7resultadoVentasxPeriordo",
       "modal-comprobantes-gastos": "/muestrario_valija_4nominas",
       "modal-tira-venta": "/muestrario_valija_5-7docsTurno",
       "modal-hoja-corte-cambio-turno": "/muestrario_valija_5-7docsTurno",
       "modal-listado-remision-perifericos": "/muestrario_valija_7Perifericos",
-      "modal-recepcion-carburantes-soportes":
-        "/muestrario_valija_8historicoCarburante",
+      "modal-recepcion-carburantes-soportes": "/muestrario_valija_8historicoCarburante",
       "modal-jarreo": "/muestrario_valija_9jarreo",
       "modal-vales-empresa": "/muestrario_valija_11valesEmpresa",
       "modal-corte-terminales": "/muestrario_valija_12terminalesVoucher",
-      "modal-lista-placas": "/muestrario_valija_13listaTag",
+      "modal-placas-tag": "/muestrario_valija_13listaTag",
     };
 
        // Función para abrir el contenido en el panel del modal

@@ -3,6 +3,23 @@ import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
 import Huella from "../components/ConfirmHuella.astro";
 import Input from "../components/ConfirmInput.astro";
+
+// Datos de las empresas
+const empresas = [
+  { id: 'hidrosina', nombre: 'Hidrosina' },
+  { id: 'cogasa', nombre: 'Cogasa' },
+  { id: 'cr88', nombre: 'CR88' },
+  { id: 'millenium', nombre: 'Millenium' },
+  { id: 'rojas', nombre: 'Rojas & Gas' },
+  { id: 'gasomer', nombre: 'Gasomer' },
+  { id: 'via', nombre: 'Via Lactea' },
+  { id: 'prefecta', nombre: 'Prefecta' },
+  { id: 'dat', nombre: 'Dat' },
+  { id: 'cruces', nombre: '3 Cruces' },
+  { id: 'combuserv', nombre: 'Combuserv' },
+  { id: 'risco', nombre: 'Risco' },
+  { id: 'menorca', nombre: 'Menorca' }
+];
 ---
 
 <Layout>
@@ -36,156 +53,45 @@ import Input from "../components/ConfirmInput.astro";
           Mostrar opciones
         </button>
 
-        <!-- Contenedor desplegable con las opciones -->
+        <!-- Contenedor desplegable con las opciones en grid -->
         <div
           id="checkbox-container"
-          class="hidden flex flex-col space-y-2 transition-all duration-300 ease-in-out"
+          class="sm:grid sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4 transition-all duration-300 ease-in-out"
         >
-          <label for="hidrosina" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="hidrosina"
-              name="empresas"
-              value="hidrosina"
-              class="form-checkbox"
-            />
-            <span>Hidrosina</span>
-          </label>
-          <label for="cogasa" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="cogasa"
-              name="empresas"
-              value="cogasa"
-              class="form-checkbox"
-            />
-            <span>Cogasa </span>
-          </label>
-          <label for="cr88" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="cr88"
-              name="empresas"
-              value="cr88"
-              class="form-checkbox"
-            />
-            <span>CR88</span>
-          </label>
-          <label for="millenium" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="millenium"
-              name="empresas"
-              value="millenium"
-              class="form-checkbox"
-            />
-            <span>Millenium</span>
-          </label>
-          <label for="rojas" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="rojas"
-              name="empresas"
-              value="rojas"
-              class="form-checkbox"
-            />
-            <span>Rojas & Gas</span>
-          </label>
-          <label for="gasomer" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="gasomer"
-              name="empresas"
-              value="gasomer"
-              class="form-checkbox"
-            />
-            <span>Gasomer</span>
-          </label>
-          <label for="via" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="vias"
-              name="empresas"
-              value="via"
-              class="form-checkbox"
-            />
-            <span>Via Lactea</span>
-          </label>
-          <label for="prefecta" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="prefecta"
-              name="empresas"
-              value="prefecta"
-              class="form-checkbox"
-            />
-            <span>Prefecta</span>
-          </label>
-          <label for="dat" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="dat"
-              name="empresas"
-              value="dat"
-              class="form-checkbox"
-            />
-            <span>Dat</span>
-          </label>
-          <label for="cruces" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="cruces"
-              name="empresas"
-              value="cruces"
-              class="form-checkbox"
-            />
-            <span>3 Cruces</span>
-          </label>
-          <label for="combuserv" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="combuserv"
-              name="empresas"
-              value="combuserv"
-              class="form-checkbox"
-            />
-            <span>Combuserv</span>
-          </label>
-          <label for="risco" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="risco"
-              name="empresas"
-              value="risco"
-              class="form-checkbox"
-            />
-            <span>Risco</span>
-          </label>
-          <label for="menorca" class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="menorca"
-              name="empresas"
-              value="menorca"
-              class="form-checkbox"
-            />
-            <span>Menorca</span>
-          </label>
+          {empresas.map((empresa) => (
+            <label 
+              id={empresa.id}
+              class="flex items-center p-2 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors duration-200"
+            >   
+              <input
+                type="checkbox"
+                id={empresa.id}
+                name="empresas"
+                value={empresa.id}
+                class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+              />
+              <span class="ml-2 text-sm font-medium text-gray-700">{empresa.nombre}</span>
+            </label>
+          ))}
         </div>
       </div>
     </div>
 
     <!-- Script para manejar el toggle del desplegable -->
     <script>
-      const btnToggle = document.getElementById("btn-toggle");
-      const checkboxContainer = document.getElementById("checkbox-container");
+      document.addEventListener('DOMContentLoaded', () => {
+        const btnToggle = document.getElementById("btn-toggle");
+        const checkboxContainer = document.getElementById("checkbox-container");
 
-      btnToggle.addEventListener("click", function () {
-        checkboxContainer.classList.toggle("hidden");
-        if (checkboxContainer.classList.contains("hidden")) {
-          btnToggle.textContent = "Mostrar opciones";
-        } else {
-          btnToggle.textContent = "Ocultar opciones";
+        if (btnToggle && checkboxContainer) {
+          btnToggle.addEventListener("click", function () {
+            checkboxContainer.classList.toggle("show");
+            if (checkboxContainer.classList.contains("show")) {
+              btnToggle.textContent = "Ocultar opciones";
+            } else {
+              btnToggle.textContent = "Mostrar opciones";
+            }
+          });
         }
       });
     </script>
@@ -472,6 +378,31 @@ import Input from "../components/ConfirmInput.astro";
     <Huella />
     <style>
       /* Estilos específicos para esta página */
+      #checkbox-container {
+        max-height: 400px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #3b82f6 #f1f1f1;
+        display: none; /* Initially hidden, shown via JavaScript */
+      }
+      
+      #checkbox-container.show {
+        display: grid; /* Shown when toggled */
+      }
+      
+      #checkbox-container::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      #checkbox-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+      
+      #checkbox-container::-webkit-scrollbar-thumb {
+        background-color: #3b82f6;
+        border-radius: 10px;
+      }
       #hl-input-wrapper.archivo-seleccionado {
         border-color: #10b981; /* verde */
         background-color: rgba(16, 185, 129, 0.05);
@@ -516,6 +447,99 @@ import Input from "../components/ConfirmInput.astro";
         100% {
           transform: rotate(360deg);
         }
+      }
+    </style>
+  </div></Layout
+>
+
+        // Actualizar indicadores visuales
+        punto2?.classList.remove("bg-gray-300");
+        punto2?.classList.add("activo");
+        // Aplicar estilo de archivo confirmado
+        inputWrapper?.classList.remove("archivo-seleccionado");
+        inputWrapper?.classList.add("archivo-confirmado");
+        // Mostrar contenido de la hoja de liquidación
+        contenidoHojaLiquidacion?.classList.remove("hidden");
+      });
+    </script>
+
+    <Huella />
+    <style>
+      /* Estilos específicos para esta página */
+      #checkbox-container {
+        max-height: 400px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #3b82f6 #f1f1f1;
+        display: none; /* Initially hidden, shown via JavaScript */
+      }
+      
+      #checkbox-container.show {
+        display: grid; /* Shown when toggled */
+      }
+      
+      #checkbox-container::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      #checkbox-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+      
+      #checkbox-container::-webkit-scrollbar-thumb {
+        background-color: #3b82f6;
+        border-radius: 10px;
+      }
+      #hl-input-wrapper.archivo-seleccionado {
+        border-color: #10b981; /* verde */
+        background-color: rgba(16, 185, 129, 0.05);
+      }
+
+      #hl-input-wrapper.archivo-confirmado {
+        border-color: #059669; /* verde más oscuro */
+        background-color: rgba(5, 150, 105, 0.1);
+        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+      }
+
+      #punto1-hojaLiquidacion.activo {
+        background-color: #10b981;
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      }
+
+      #punto2-hojaLiquidacion.activo {
+        background-color: #059669;
+        box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
+      }
+
+      /* Animación sutil para los cambios de estado */
+      #hl-input-wrapper,
+      #punto1-hojaLiquidacion,
+      #punto2-hojaLiquidacion {
+        transition: all 0.3s ease-in-out;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </div></Layout
+>
+
       }
     </style>
   </div></Layout

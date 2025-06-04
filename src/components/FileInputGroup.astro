@@ -1,0 +1,208 @@
+---
+// src/components/FileInputGroup.astro
+import CustomPdfInput from './CustomPdfInput.astro';
+
+export interface Props {
+  groupIdBase: string;
+  tituloProceso: string;
+  pdfPreviewUrl: string; // Placeholder PDF URL
+  initiallyDisabled?: boolean;
+}
+
+const { 
+  groupIdBase, 
+  tituloProceso, 
+  pdfPreviewUrl,
+  initiallyDisabled = false 
+} = Astro.props;
+
+const turnos = [
+  { id: 1, title: 'Turno 1' },
+  { id: 2, title: 'Turno 2' },
+  { id: 3, title: 'Turno 3' },
+];
+
+const validateButtonId = `${groupIdBase}-validateBtn`;
+const groupContainerId = `${groupIdBase}-groupContainer`;
+---
+
+<div id={groupContainerId} class:list={["file-input-group p-4 rounded-md mb-6 shadow-md border border-gray-200", { 'opacity-50 pointer-events-none': initiallyDisabled }]}>
+  <h2 class="text-xl font-semibold mb-4 text-gray-700">{tituloProceso}</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    {turnos.map(turno => (
+      <CustomPdfInput
+        inputIdBase={`${groupIdBase}Turno${turno.id}`}
+        inputTitle={turno.title}
+        pdfPreviewUrl={pdfPreviewUrl}
+      />
+    ))}
+  </div>
+  <button 
+    id={validateButtonId} 
+    class="w-full px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-150 ease-in-out"
+    disabled
+  >
+    Validar Archivos
+  </button>
+</div>
+
+<script>
+  interface InputState {
+    confirmed: boolean;
+    file: File | null;
+    status2Validated: boolean;
+  }
+
+  interface CustomEventWithDetail extends Event {
+    detail?: {
+      file: File;
+    };
+  }
+
+  interface HTMLElementWithDisableGroup extends HTMLElement {
+    enableGroup: () => void;
+    disableGroup: () => void;
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const groupContainer = document.currentScript?.closest('.file-input-group') as HTMLElementWithDisableGroup | null;
+    if (!groupContainer) return;
+
+    const customInputs = groupContainer.querySelectorAll('.custom-pdf-input');
+    const validateButton = document.getElementById(`${Astro.props.groupIdBase}-validateBtn`) as HTMLButtonElement | null;
+    const inputStates: Record<string, InputState> = {};
+
+    // Inicializar estados para cada input
+    customInputs.forEach(inputElement => {
+      const fileInput = inputElement.querySelector('.file-input-element') as HTMLInputElement | null;
+      if (!fileInput) return;
+      
+      const inputId = fileInput.id;
+      const inputIdBase = inputId.replace('-input', '');
+      inputStates[inputIdBase] = { confirmed: false, file: null, status2Validated: false };
+
+      // Escuchar eventos de confirmación de PDF
+      inputElement.addEventListener('pdfConfirmed', (e: Event) => {
+        const customEvent = e as CustomEventWithDetail;
+        if (customEvent.detail?.file) {
+          inputStates[inputIdBase].confirmed = true;
+          inputStates[inputIdBase].file = customEvent.detail.file; 
+          checkAllConfirmed();
+        }
+      });
+
+      // Escuchar eventos de cancelación de PDF
+      inputElement.addEventListener('pdfCancelled', () => {
+        inputStates[inputIdBase].confirmed = false;
+        inputStates[inputIdBase].file = null;
+        checkAllConfirmed();
+      });
+    });
+
+    // Verificar si todos los inputs están confirmados
+    function checkAllConfirmed() {
+      if (!validateButton) return;
+      
+      const allConfirmed = Object.values(inputStates).every(state => state.confirmed);
+      validateButton.disabled = !allConfirmed;
+      
+      if (allConfirmed) {
+        setupValidationModal();
+      }
+    }
+    
+    // Configurar el modal de validación
+    function setupValidationModal() {
+      const validationDialog = document.getElementById('validation-dialog');
+      if (!validationDialog) return;
+
+      // Configurar botones del modal de validación
+      const confirmBtn = validationDialog.querySelector('#confirm-and-seal') as HTMLButtonElement | null;
+      const rejectBtn = validationDialog.querySelector('#reject-validation') as HTMLButtonElement | null;
+      const cancelBtn = validationDialog.querySelector('#cancel-validation') as HTMLButtonElement | null;
+
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => handleValidationResponse(true));
+      }
+      
+      if (rejectBtn) {
+        rejectBtn.addEventListener('click', () => handleValidationResponse(false));
+      }
+      
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          validationDialog.style.display = 'none';
+          validationDialog.classList.add('hidden');
+        });
+      }
+    }
+
+    // Manejar la respuesta de validación
+    function handleValidationResponse(isValid: boolean) {
+      // Aquí puedes agregar la lógica para manejar la respuesta de validación
+      console.log('Validación:', isValid ? 'Aprobada' : 'Rechazada');
+      
+      // Cerrar el modal
+      const validationDialog = document.getElementById('validation-dialog');
+      if (validationDialog) {
+        validationDialog.style.display = 'none';
+        validationDialog.classList.add('hidden');
+      }
+      
+      if (isValid && validateButton) {
+        // Marcar como validado
+        Object.keys(inputStates).forEach(key => {
+          inputStates[key].status2Validated = true;
+        });
+        
+        // Actualizar la UI
+        validateButton.textContent = 'Validado ✓';
+        validateButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        validateButton.classList.add('bg-green-600', 'hover:bg-green-700');
+        validateButton.disabled = true;
+      }
+    }
+
+    // Configurar el botón de validar
+    if (validateButton) {
+      validateButton.addEventListener('click', () => {
+        // Disparar evento personalizado para mostrar el diálogo de validación
+        const validationDialog = document.getElementById('validation-dialog');
+        if (validationDialog) {
+          validationDialog.style.display = 'flex';
+          validationDialog.classList.remove('hidden');
+          
+          // Cargar vistas previas de los PDFs
+          Object.entries(inputStates).forEach(([_, state], index) => {
+            if (state.file) {
+              const iframe = document.getElementById(`preview-pdf${index + 1}`) as HTMLIFrameElement | null;
+              if (iframe) {
+                iframe.src = URL.createObjectURL(state.file);
+              }
+            }
+          });
+        }
+      });
+    }
+    
+    // Public methods to enable/disable the group
+    groupContainer.enableGroup = () => {
+      groupContainer.classList.remove('opacity-50', 'pointer-events-none');
+    };
+
+    groupContainer.disableGroup = () => {
+      groupContainer.classList.add('opacity-50', 'pointer-events-none');
+    };
+
+    // Initial check for disabled state
+    if (Astro.props.initiallyDisabled) {
+      groupContainer.disableGroup();
+    }
+  });
+</script>
+
+<style>
+  .file-input-group.opacity-50 {
+    /* Styles for disabled group */
+  }
+</style>

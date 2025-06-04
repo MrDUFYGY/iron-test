@@ -1,0 +1,284 @@
+---
+interface Props {
+  inputTitle?: string;
+  componentId?: string;
+}
+// Generar un ID único para este componente si no se proporciona uno
+const { inputTitle = 'Subir PDF', componentId = 'pdfinput_' + Math.random().toString(36).substring(2, 10) } = Astro.props;
+// IDs únicos para cada instancia
+const dropAreaId = `${componentId}_droparea`;
+const fileElemId = `${componentId}_fileElem`;
+const marcaId = `${componentId}_marca`;
+const estadoId = `${componentId}_estado`;
+const modalId = `${componentId}_modal`;
+const modalViewerId = `${componentId}_modalViewer`;
+const modalCloseId = `${componentId}_modalClose`;
+const modalCancelId = `${componentId}_modalCancel`;
+const modalConfirmId = `${componentId}_modalConfirm`;
+---
+
+<div class="w-full max-w-md mx-auto">
+  <label class="block text-sm font-medium text-gray-700 mb-2">{inputTitle}</label>
+  <!-- Área de input drag-and-drop -->
+  <div id={dropAreaId} class="border-2 border-dashed border-gray-400 rounded-lg p-8 text-center cursor-pointer bg-white hover:bg-blue-50 transition-colors">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 48 48">
+      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <p class="mt-2 text-gray-700">Arrastra y suelta un archivo aquí o haz clic para seleccionar</p>
+    <input id={fileElemId} type="file" accept=".pdf" class="hidden" />
+  </div>
+
+  <!-- Marca funcional -->
+  <div class="flex items-center mt-8 space-x-3">
+    <span id={marcaId} class="w-4 h-4 rounded-full bg-gray-300 border-2 border-gray-400 transition-colors"></span>
+    <span class="text-gray-700">Marca 1: <span id={estadoId} class="font-semibold">Pendiente</span></span>
+  </div>
+
+  <!-- Modal PDF -->
+  <div id={modalId} class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold">Vista previa del documento</h3>
+        <button id={modalCloseId} class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="border rounded-lg overflow-hidden mb-4 bg-gray-100 flex-grow">
+        <iframe id={modalViewerId} class="w-full h-full min-h-[50vh] border-0" src=""></iframe>
+      </div>
+      <div class="flex justify-end gap-4 pt-4 border-t">
+        <button id={modalCancelId} class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Cancelar</button>
+        <button id={modalConfirmId} class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    const marca = document.getElementById('{marcaId}');
+    const estado = document.getElementById('{estadoId}');
+    const dropArea = document.getElementById('{dropAreaId}');
+    const fileElem = document.getElementById('{fileElemId}');
+    const modal = document.getElementById('{modalId}');
+    const modalViewer = document.getElementById('{modalViewerId}');
+    const modalClose = document.getElementById('{modalCloseId}');
+    const modalCancel = document.getElementById('{modalCancelId}');
+    const modalConfirm = document.getElementById('{modalConfirmId}');
+    const staticPdfPath = '/assets/simulacion.pdf';
+    let funcional = false;
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, e => {
+        e.preventDefault();
+        dropArea.classList.add('border-blue-500', 'bg-blue-50');
+      });
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, e => {
+        e.preventDefault();
+        dropArea.classList.remove('border-blue-500', 'bg-blue-50');
+      });
+    });
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        abrirModalPdf();
+      }
+    });
+    // Click para seleccionar archivo
+    dropArea.addEventListener('click', () => fileElem.click());
+    fileElem.addEventListener('change', e => {
+      if (fileElem.files && fileElem.files.length > 0) {
+        abrirModalPdf();
+      }
+    });
+
+    // Modal
+    function abrirModalPdf() {
+      modalViewer.src = staticPdfPath;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarModalPdf() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      modalViewer.src = '';
+      document.body.style.overflow = 'auto';
+    }
+    modalClose.addEventListener('click', cerrarModalPdf);
+    modalCancel.addEventListener('click', cerrarModalPdf);
+    // Confirmar
+    modalConfirm.addEventListener('click', function () {
+      funcional = true;
+      marca.classList.remove('bg-gray-300', 'border-gray-400');
+      marca.classList.add('bg-green-500', 'border-green-600');
+      estado.textContent = 'Confirmado';
+      cerrarModalPdf();
+    });
+    // Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        cerrarModalPdf();
+      }
+    });
+    // Click fuera del modal
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        cerrarModalPdf();
+      }
+    });
+    // Estado inicial
+    marca.classList.remove('bg-green-500', 'border-green-600');
+    marca.classList.add('bg-gray-300', 'border-gray-400');
+    estado.textContent = 'Pendiente';
+    funcional = false;
+  });
+</script>
+
+<style>
+  .flex { display: flex; }
+  .hidden { display: none; }
+  .transition-colors { transition: background 0.3s, border 0.3s; }
+</style>
+
+<div class="w-full max-w-md mx-auto">
+  <label class="block text-sm font-medium text-gray-700 mb-2">{inputTitle}</label>
+  <!-- Área de input drag-and-drop -->
+  <div id={dropAreaId} class="border-2 border-dashed border-gray-400 rounded-lg p-8 text-center cursor-pointer bg-white hover:bg-blue-50 transition-colors">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 48 48">
+      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <p class="mt-2 text-gray-700">Arrastra y suelta un archivo aquí o haz clic para seleccionar</p>
+    <input id={fileElemId} type="file" accept=".pdf" class="hidden" />
+  </div>
+
+  <!-- Marca funcional -->
+  <div class="flex items-center mt-8 space-x-3">
+    <span id={marcaId} class="w-4 h-4 rounded-full bg-gray-300 border-2 border-gray-400 transition-colors"></span>
+    <span class="text-gray-700">Marca 1: <span id={estadoId} class="font-semibold">Pendiente</span></span>
+  </div>
+
+  <!-- Modal PDF -->
+  <div id={modalId} class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold">Vista previa del documento</h3>
+        <button id={modalCloseId} class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="border rounded-lg overflow-hidden mb-4 bg-gray-100 flex-grow">
+        <iframe id={modalViewerId} class="w-full h-full min-h-[50vh] border-0" src=""></iframe>
+      </div>
+      <div class="flex justify-end gap-4 pt-4 border-t">
+        <button id={modalCancelId} class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Cancelar</button>
+        <button id={modalConfirmId} class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  // IDs únicos para esta instancia
+  const dropAreaId = '{dropAreaId}';
+  const fileElemId = '{fileElemId}';
+  const marcaId = '{marcaId}';
+  const estadoId = '{estadoId}';
+  const modalId = '{modalId}';
+  const modalViewerId = '{modalViewerId}';
+  const modalCloseId = '{modalCloseId}';
+  const modalCancelId = '{modalCancelId}';
+  const modalConfirmId = '{modalConfirmId}';
+  const staticPdfPath = '/assets/simulacion.pdf';
+
+  let funcional = false;
+  let marca, estado, dropArea, fileElem, modal, modalViewer, modalClose, modalCancel, modalConfirm;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    marca = document.getElementById(marcaId);
+    estado = document.getElementById(estadoId);
+    dropArea = document.getElementById(dropAreaId);
+    fileElem = document.getElementById(fileElemId);
+    modal = document.getElementById(modalId);
+    modalViewer = document.getElementById(modalViewerId);
+    modalClose = document.getElementById(modalCloseId);
+    modalCancel = document.getElementById(modalCancelId);
+    modalConfirm = document.getElementById(modalConfirmId);
+
+    // Drag & Drop
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, e => {
+        e.preventDefault();
+        dropArea.classList.add('border-blue-500', 'bg-blue-50');
+      });
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, e => {
+        e.preventDefault();
+        dropArea.classList.remove('border-blue-500', 'bg-blue-50');
+      });
+    });
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        abrirModalPdf();
+      }
+    });
+    // Click para seleccionar archivo
+    dropArea.addEventListener('click', () => fileElem.click());
+    fileElem.addEventListener('change', e => {
+      if (fileElem.files && fileElem.files.length > 0) {
+        abrirModalPdf();
+      }
+    });
+
+    // Modal
+    function abrirModalPdf() {
+      modalViewer.src = staticPdfPath;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarModalPdf() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      modalViewer.src = '';
+      document.body.style.overflow = 'auto';
+    }
+    modalClose.addEventListener('click', cerrarModalPdf);
+    modalCancel.addEventListener('click', cerrarModalPdf);
+    // Confirmar
+    modalConfirm.addEventListener('click', () => {
+      funcional = true;
+      marca.classList.remove('bg-gray-300', 'border-gray-400');
+      marca.classList.add('bg-green-500', 'border-green-600');
+      estado.textContent = 'Confirmado';
+      cerrarModalPdf();
+    });
+    // Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        cerrarModalPdf();
+      }
+    });
+    // Click fuera del modal
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        cerrarModalPdf();
+      }
+    });
+  });
+</script>
+
+<style>
+  .flex { display: flex; }
+  .hidden { display: none; }
+  .transition-colors { transition: background 0.3s, border 0.3s; }
+</style>
