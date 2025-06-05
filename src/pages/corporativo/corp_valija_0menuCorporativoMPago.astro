@@ -1,10 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import MenuEstacion from "../components/MenuEstacion.astro";
-import Separador from "../components/Separador.astro";
-import Huella from "../components/ConfirmHuella.astro";
-import ProgressTracker from "../components/ResumenProcesos/ProgressTracker.svelte";
-import ResumenProcesosModal from "../components/ResumenProcesos/ResumenProcesosModal.svelte";
+import Layout from "../../layouts/Layout.astro";
+import MenuEstacion from "../../components/MenuEstacion.astro";
+import Separador from "../../components/Separador.astro";
+import Huella from "../../components/ConfirmHuella.astro";
+import ProgressTracker from "../../components/ResumenProcesos/ProgressTracker.svelte";
+import ResumenProcesosModal from "../../components/ResumenProcesos/ResumenProcesosModal.svelte";
 
 // Datos para el resumen de procesos
 const resumenProcesos = {
@@ -19,89 +19,42 @@ const resumenProcesos = {
     nombre: "Estación Central",
   },
   procesos: [
-    {
-      titulo: "1 - Hoja de Liquidacion",
-      estado: "pendiente",
-      subprocesos: {
-        "Subida de Hoja Open Pos": true,
-        "Comparación y confirmación": true,
-      },
-      description: "Sube la hoja de liquidación y compárala",
-      icon: "description",
-      link: "/hoja-liquidacion",
-    },
-    {
-      titulo: "2 - Movimientos de caja",
-      estado: "iniciado",
-      subprocesos: {
-        "Subida de Talón bancario": true,
-        "Hoja de Valores": true,
-        "Comparación con resultados": true,
-        "Confirmación": true,
-      },
-      description: "Gestiona los movimientos de caja",
-      icon: "account_balance_wallet",
-      link: "/movimientos-caja",
-    },
-    {
-      titulo: "3 - Nominas",
+  {
+      titulo: "1 - Vales por empresa",
       estado: "sellado",
       subprocesos: {
-        "Subida de comprobantes": true,
-        "Confirmación de nóminas ejecutivas": true,
-        "Confirmación de Nóminas": true,
+        "Registro de mermas": true,
+        "Documentación": true,
+        "Aprobación": true,
       },
-      description: "Administra las nóminas",
-      icon: "payments",
-      link: "/nominas",
+      description: "Controla las mermas y existencias",
+      icon: "inventory_2",
+      link: "/corp_valija_11valesEmpresa",
     },
     {
-      titulo: "4 - Listados de contadores, OpenPos, Mediciones y Corte de Perifericos por turno",
-      estado: "alertado",
+      titulo: "2 - Corte de terminales con vouchers",
+      estado: "sellado",
       subprocesos: {
-        "Listado de contadores (Turno 1, 2, 3)": true,
-        "H.L. Open Pos (Turno 1, 2, 3)": true,
-        "Mediciones con ticket (Turno 1, 2, 3)": true,
+        "Correo": true,
+        "Documento de extracciones": true,
+        "Documento histórico": true,
+        "Ticket / Veeder root": true,
       },
-      description: "Gestiona los listados de contadores y mediciones",
-      icon: "list_alt",
-      link: "/listados-contadores",
+      description: "Administra los procesos de jarreo",
+      icon: "inventory",
+      link: "/jarreo",
     },
     {
-      titulo: "5 - Recepción de carburantes",
-      estado: "alertado",
-      subprocesos: {
-        "Turno 1": true,
-        "Turno 2": false,
-        "Turno 3": true,
-      },
-      description: "Administra los cortes de periféricos por turno",
-      icon: "receipt_long",
-      link: "/corte-perifericos",
-    },
-    {
-      titulo: "6 - Listado de remisión de periféricos",
-      estado: "validado",
-      subprocesos: {
-        "Subir documentación": true,
-        "Factura pemex / VDM": true,
-        "Veeder root": true,
-      },
-      description: "7 - Regularización de existencias (Mermas)",
-      icon: "local_gas_station",
-      link: "/recepcion-carburantes",
-    },
-    {
-      titulo: "8 - Jarreo",
+      titulo: "3 - Lista de placas con tag",
       estado: "iniciado",
       subprocesos: {
-        "Formulario": true,
-        "Factura del cliente": true,
-        "Información adicional": true,
+        "Selección de empresas": true,
+        "Adjuntar PDF": true,
+        "Observaciones": true,
       },
-      description: "Gestiona las remisiones de periféricos",
-      icon: "assignment",
-      link: "/remision-perifericos",
+      description: "Gestiona los vales por empresa",
+      icon: "business",
+      link: "/vales-empresa",
     },
 
   ],
@@ -123,7 +76,7 @@ const resumenProcesos = {
             <!-- Contenido para la Hoja de Información (Caratula) -->
             <div class=" mx-auto bg-white rounded-xl shadow-md p-3">
                 <div class="mb-6">
-                    <h1 class="text-2xl font-bold uppercase mb-4">Resumen de Polizas</h1>
+                    <h1 class="text-2xl font-bold uppercase mb-4">Resumen de Medios de Pago</h1>
                 </div>
 
         <form id="formulario" class="space-y-8">
@@ -234,15 +187,9 @@ const resumenProcesos = {
   <script>
 
 const modalUrlMap: Record<string, string> = {
-  'modal-hoja-liquidacion-contador' : '/corp_valija_1hojaLiquidacion', //1
-  'modal-movimientos-caja-contador' : '/corp_valija_2resultadosBusqueda', //2
-  'modal-nominas-contador' : '/corp_valija_3nominas', //3
-  'modal-listado-contadores-contador' : '/corp_valija_4sistemaArchivosxTurno', //4
-  'modal-recepcion-carburantes-contador' : '/corp_valija_5historicoCarburante', //5
-  'modal-listado-remision-perifericos-contador' : '/corp_valija_6resultadoVentasxPeriodo', //6
-  'modal-regularizacion-mermas-contador' : '/corp_valija_7resultadosMermasRegul', //7
-  'modal-jarreo-contador' : '/corp_valija_8jarreo', //8 
- 
+    'modal-vales-empresa-contador' : '/corp_valija_11valesEmpresa', //9
+    'modal-corte-terminales-contador' : '/corp_valija_10terminalesVoucher', //10
+    'modal-placas-tag-contador' : '/corp_valija_11', //11
     };
     // Función para abrir el contenido en el panel del modal
     document.addEventListener("click", function (event) {
@@ -315,7 +262,7 @@ const modalUrlMap: Record<string, string> = {
       if (!header || !content || !icon) return;
 
       // Inicialmente cerrado
-      let isOpen = false;
+      let isOpen = true;
 
       header.addEventListener("click", () => {
         isOpen = !isOpen;
