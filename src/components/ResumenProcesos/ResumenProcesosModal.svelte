@@ -231,13 +231,13 @@
                 </div>
 
                 <!-- Lista de procesos -->
-                <div class="space-y-4">
+                <div class="flex flex-wrap gap-4">
                   {#each parsedData.procesos as proceso}
-                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="w-full sm:w-[calc(50%-0.5rem)] border border-gray-200 rounded-lg overflow-hidden">
                       <ProgressTracker
                         titulo={proceso.titulo}
                         descripcion={proceso.descripcion}
-                        estado={proceso.estado}
+                        estadoProp={proceso.estado}
                         subprocesos={proceso.subprocesos}
                         pasoActual={proceso.pasoActual}
                         totalPasos={proceso.totalPasos}

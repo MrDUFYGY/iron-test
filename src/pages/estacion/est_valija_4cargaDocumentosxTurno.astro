@@ -1,0 +1,231 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import "../../styles/global.css";
+import PdfInputGroup from '../../components/customInput/PdfInputGroup.svelte';
+
+---
+
+<Layout>
+
+
+    <div class="font-sans flex  items-center justify-center max-w-4xl mx-auto">
+    <div x-data="{ openTab: 1 }" class="">
+        <div class="p-5 mx-auto">
+            <div class="mb-4 flex space-x-4 p-2 bg-white rounded-lg shadow-md">
+                <button x-on:click="openTab = 1" :class="{ 'bg-blue-600 text-white': openTab === 1 }" class="flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300">Mediciones Comprobantes</button>
+                <button x-on:click="openTab = 2" :class="{ 'bg-blue-600 text-white': openTab === 2 }" class="flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300">Listados Tag</button>
+                <button x-on:click="openTab = 3" :class="{ 'bg-blue-600 text-white': openTab === 3 }" class="flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300">Listados Contadores</button>
+                <button x-on:click="openTab = 4" :class="{ 'bg-blue-600 text-white': openTab === 4 }" class="flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300">Hojas OpenPOS</button>
+            </div>
+
+            <div x-show="openTab === 1" class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
+                <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Mediciones con Comprobantes</h2>
+                <p class="text-gray-700">Cargue los archivos PDF de las mediciones con comprobantes.</p>
+                <PdfInputGroup
+                  groupId="mediciones-comprobantes"
+                  client:visible
+                />
+            </div>
+
+            <div x-show="openTab === 2" class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
+                <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de tarjetas con Tag</h2>
+                <p class="text-gray-700">Cargue los listados PDF de las tarjetas con tag.</p>
+                <PdfInputGroup
+                  groupId="listado-tarjetas-tag"
+                  client:visible            
+                />
+            </div>
+
+            <div x-show="openTab === 3" class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
+                <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Contadores</h2>
+                <p class="text-gray-700">Cargue los listados contadores pára su validación.</p>
+                <PdfInputGroup
+                  groupId="listado-contadores"
+                  client:visible  
+                />
+            </div>
+
+            <div x-show="openTab === 4" class="transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
+                <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Open POS</h2>
+                <p class="text-gray-700">Cargue los listados Open POS para su validación.</p>
+                <PdfInputGroup
+                  groupId="listado-open-pos"
+                  client:visible       
+                />
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+
+    
+<script>
+  document.addEventListener('astro:page-load', () => {
+    // Elementos del DOM
+    const confirmDialog = document.getElementById('confirm-dialog');
+    const validationDialog = document.getElementById('validation-dialog');
+    
+    if (!confirmDialog || !validationDialog) {
+      console.error('No se encontraron los elementos de diálogo necesarios');
+      return;
+    }
+    
+    // Mostrar diálogo de confirmación
+    const showConfirmDialog = () => {
+      if (confirmDialog) {
+        confirmDialog.style.display = 'flex';
+        confirmDialog.classList.remove('hidden');
+      }
+    };
+
+    // Ocultar diálogo de confirmación
+    const hideConfirmDialog = () => {
+      if (confirmDialog) {
+        confirmDialog.style.display = 'none';
+        confirmDialog.classList.add('hidden');
+      }
+    };
+
+    // Mostrar diálogo de validación
+    const showValidationDialog = () => {
+      if (validationDialog) {
+        validationDialog.style.display = 'flex';
+        validationDialog.classList.remove('hidden');
+      }
+    };
+
+    // Ocultar diálogo de validación
+    const hideValidationDialog = () => {
+      if (validationDialog) {
+        validationDialog.style.display = 'none';
+        validationDialog.classList.add('hidden');
+      }
+    };
+
+    // Event listeners para los botones
+    document.addEventListener('click', (e) => {
+      if (!e.target) return;
+      
+      // Cerrar diálogos al hacer clic fuera del contenido
+      if (e.target === confirmDialog) {
+        hideConfirmDialog();
+      } else if (e.target === validationDialog) {
+        hideValidationDialog();
+      }
+    });
+
+    // Evento personalizado para mostrar el diálogo de confirmación
+    document.addEventListener('showConfirmDialog', () => {
+      showConfirmDialog();
+    });
+
+    // Evento personalizado para mostrar el diálogo de validación
+    document.addEventListener('showValidationDialog', () => {
+      showValidationDialog();
+    });
+
+    // Configurar botones del diálogo de confirmación
+    const confirmUploadBtn = document.getElementById('confirm-upload');
+    const cancelUploadBtn = document.getElementById('cancel-upload');
+    
+    if (confirmUploadBtn) {
+      confirmUploadBtn.addEventListener('click', () => {
+        hideConfirmDialog();
+      });
+    }
+    
+    if (cancelUploadBtn) {
+      cancelUploadBtn.addEventListener('click', () => {
+        hideConfirmDialog();
+      });
+    }
+  });
+
+  // Script para manejar el modal global de vista previa de PDF
+  document.addEventListener('DOMContentLoaded', function() {
+    // Elementos del DOM
+    const modal = document.getElementById('pdf-preview-modal');
+    const pdfViewer = document.getElementById('pdf-viewer');
+    const fileInfo = document.getElementById('pdf-file-info');
+    const confirmBtn = document.getElementById('confirm-pdf-upload');
+    const cancelBtn = document.getElementById('cancel-pdf-upload');
+    const closeBtn = document.getElementById('close-pdf-modal');
+
+    // Función para cerrar el modal
+    function closeModal() {
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        
+        // Limpiar el visor PDF
+        if (pdfViewer) {
+          pdfViewer.src = '';
+        }
+      }
+    }
+
+    // Cerrar al hacer clic en el botón de cierre
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+
+    // Cerrar al hacer clic en Cancelar
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function() {
+        const inputId = modal?.dataset.inputId;
+        const inputBase = modal?.dataset.inputBase;
+        const fileInput = document.getElementById(inputId);
+        const fileNameElement = document.getElementById(`${inputBase}-filename`);
+        const status1 = document.getElementById(`${inputBase}-status1`);
+        
+        if (fileInput) fileInput.value = '';
+        if (fileNameElement) fileNameElement.textContent = '';
+        if (status1) status1.className = 'w-3 h-3 rounded-full bg-gray-300';
+        
+        closeModal();
+      });
+    }
+
+    // Confirmar la carga del archivo
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', function() {
+        const inputId = modal?.dataset.inputId;
+        const inputBase = modal?.dataset.inputBase;
+        const status1 = document.getElementById(`${inputBase}-status1`);
+        
+        if (status1) {
+          status1.className = 'w-3 h-3 rounded-full bg-green-500';
+        }
+        
+        // Disparar evento personalizado
+        const event = new CustomEvent('pdfConfirmed', {
+          detail: { 
+            inputId: inputId,
+            fileName: document.getElementById(inputId)?.files?.[0]?.name || ''
+          }
+        });
+        document.dispatchEvent(event);
+        
+        closeModal();
+      });
+    }
+
+    // Cerrar al hacer clic fuera del contenido del modal
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+    }
+
+    // Cerrar con la tecla Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+        closeModal();
+      }
+    });
+  });
+</script>
+
+</Layout>

@@ -1,26 +1,124 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
-import Menu from "../components/Menu.astro";
 import Separador from "../components/Separador.astro";
-// import UsuariosListado from '../components/UsuariosLista.svelte';
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Separador texto="MENU DE MENUS" />
+<style>
+  .menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+  }
+  
+  .menu-button {
+    width: 250px;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  .menu-button:hover {
+    transform: translateY(-2px);
+  }
+  
+  .primary-button {
+    background-color: #3b82f6; /* Azul */
+    color: white;
+  }
+  
+  .primary-button:hover {
+    background-color: #2563eb;
+  }
+  
+  .secondary-button {
+    background-color: #10b981; /* Verde */
+    color: white;
+  }
+  
+  .secondary-button:hover {
+    background-color: #059669;
+  }
+  
+  .submenu {
+    display: none;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    width: 250px;
+  }
+  
+  .submenu.visible {
+    display: flex;
+  }
+  
+  .submenu-button {
+    background-color: #34d399;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .submenu-button:hover {
+    background-color: #10b981;
+  }
+</style>
 
-	<div class="flex justify-center mb-4">
-		<a
-			href="/login_valija_0estacion"
-			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-			>MENU DE ESTACIONES</a
-		>
-		<a
-			href="/visor_valija_0menuCorporativo"
-			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-			>MENU DE CORPORATIVO</a
-		>
-	</div>
+<Layout>
+  <Separador texto="MENU PRINCIPAL" />
+  <div class="menu-container">
+    <!-- Botón principal 1 -->
+    <a 
+      href="/login_valija_0estacion" 
+      class="menu-button primary-button"
+    >
+      MENU DE ESTACIONES
+    </a>
+    
+    <!-- Botón principal 2 - Desplegable -->
+    <div class="flex flex-col items-center">
+      <button 
+        id="menuButton"
+        class="menu-button secondary-button"
+      >
+        MENU CORPORATIVO
+      </button>
+      
+      <!-- Submenú -->
+      <div id="submenu" class="submenu">
+        <a 
+          href="/corporativo/corp_valija_0menuCorporativoContador"
+          class="submenu-button"
+        >
+          CONTADOR
+        </a>
+        <a 
+          href="/corporativo/corp_valija_0menuCorporativoMPago"
+          class="submenu-button"
+        >
+          MEDIOS DE PAGO
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <script type="text/javascript">
+    document.getElementById('menuButton').addEventListener('click', function() {
+      const submenu = document.getElementById('submenu');
+      submenu.classList.toggle('visible');
+    });
+  </script>
 </Layout>

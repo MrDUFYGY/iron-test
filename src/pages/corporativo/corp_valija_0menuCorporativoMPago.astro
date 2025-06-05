@@ -1,0 +1,214 @@
+---
+import "../../styles/menus.css";
+
+import Layout from "../../layouts/Layout.astro";
+import MenuEstacion from "../../components/MenuEstacion.astro";
+import Separador from "../../components/Separador.astro";
+import Huella from "../../components/ConfirmHuella.astro";
+import ProgressTracker from "../../components/ResumenProcesos/ProgressTracker.svelte";
+import ResumenProcesosModal from "../../components/ResumenProcesos/ResumenProcesosModal.svelte";
+
+// Datos para el resumen de procesos
+const resumenProcesos = {
+  usuario: {
+    nombre: 'Joaquin Perez Gonzales',
+    rol: 'Gerente',
+    correo: 'joaquin.perez@hidroprueba.com'
+  },
+  fecha: new Date().toISOString(),
+  estacion: {
+    id: "EST-001",
+    nombre: "Estación Central",
+  },
+  procesos: [
+  {
+      titulo: "1 - Vales por empresa",
+      estado: "sellado",
+      subprocesos: {
+        "Registro de mermas": true,
+        "Documentación": true,
+        "Aprobación": true,
+      },
+      description: "Controla las mermas y existencias",
+      icon: "inventory_2",
+      link: "/corp_valija_11valesEmpresa",
+    },
+    {
+      titulo: "2 - Corte de terminales con vouchers",
+      estado: "sellado",
+      subprocesos: {
+        "Correo": true,
+        "Documento de extracciones": true,
+        "Documento histórico": true,
+        "Ticket / Veeder root": true,
+      },
+      description: "Administra los procesos de jarreo",
+      icon: "inventory",
+      link: "/jarreo",
+    },
+    {
+      titulo: "3 - Lista de placas con tag",
+      estado: "iniciado",
+      subprocesos: {
+        "Selección de empresas": true,
+        "Adjuntar PDF": true,
+        "Observaciones": true,
+      },
+      description: "Gestiona los vales por empresa",
+      icon: "business",
+      link: "/vales-empresa",
+    },
+
+  ],
+};
+---
+
+<Layout>
+  <Separador
+    texto="MENÚ DE ESTACIÓN"
+    operadora="CR 88 SAPI DE CV"
+    estacion="45"
+    usuario={{
+      nombre: "LUIS ALVARO VILLEGAS",
+    }}
+  />
+
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; height: 90dvh;">
+        <div style="width: 50%; height: 100%; margin-left: 1vw; border-right: 1px solid #ccc; overflow-y: auto; padding: 0px; scrollbar-width: thin; scrollbar-color: #333 #e0e0e0;">
+            <!-- Contenido para la Hoja de Información (Caratula) -->
+            <div class=" mx-auto bg-white rounded-xl shadow-md p-3">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold uppercase mb-4">Resumen de Medios de Pago</h1>
+                </div>
+
+        <form id="formulario" class="space-y-8">
+          <!-- Resumen de Procesos -->
+          <div
+            class="bg-white p-4 rounded-xl border border-gray-200 mb-4 shadow-sm"
+          >
+            <div
+              id="resumen-procesos-header"
+              class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50"
+            >
+              <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
+              <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
+            </div>
+            <div
+              id="resumen-procesos-content"
+              class="overflow-hidden transition-all duration-300 ease-in-out text-sm"
+            >
+              {
+                resumenProcesos.procesos.map((proceso) => {
+                  const subprocesos = proceso.subprocesos || {};
+                  const totalPasos = Object.keys(subprocesos).length;
+
+                  // Encontrar el último paso completado
+                  let ultimoCompletado = 0;
+                  Object.entries(subprocesos).forEach(
+                    ([_, completado], index) => {
+                      if (completado) ultimoCompletado = index + 1;
+                    },
+                  );
+
+                  return (
+                    <div class="bg-gray-50  rounded-lg border border-gray-100">
+                      <ProgressTracker
+                        titulo={proceso.titulo}
+                        estado={proceso.estado}
+                        pasoActual={ultimoCompletado}
+                        totalPasos={totalPasos}
+                        subprocesos={subprocesos}
+                        client:load
+                      />
+                    </div>
+                  );
+                })
+              }
+              <!-- Resumen Procesos Modal -->
+              <div class="mt-4">
+                <ResumenProcesosModal
+                  data={JSON.stringify(resumenProcesos)}
+                  buttonText="Imprimir el resumen completo"
+                  client:load
+                />
+              </div>
+            </div>
+          </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <label for="observaciones" class="block font-medium text-sm mb-2 text-gray-800">Observaciones:</label>
+                        <textarea id="observaciones" class="w-full border border-gray-300 rounded p-2 text-sm" rows="4" placeholder="Escriba aquí..."></textarea>
+                    </div>
+                    
+                    <!-- Firma y turno -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                      <div>
+                        <label class="block font-medium mb-2 text-gray-800">Nombre y firma del verificador:</label>
+                        <input type="text" value="LUIS ALVARO VILLEGAS" disabled class="w-full bg-gray-200 border border-gray-300 rounded p-2">
+                      </div>
+                    </div>
+                    
+                    <!-- Botones -->
+
+          <div class="flex items-center justify-center  bg-gray-100">
+          <button
+            onclick="window.location.href='/boton_Master'"
+            class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300"
+          >
+            Confirmar
+          </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div
+      id="modal-container"
+      style="width: 50%; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; "
+    >
+      <!-- Espacio para Modales -->
+      <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
+        <h2 class="text-lg font-semibold">Menu de procesos.</h2>
+        <p class="text-gray-600">
+          Puedes ingresar al proceso deseado o seguir la hoja .
+        </p>
+        <!-- Aquí se cargará el contenido del modal -->
+      </div>
+      <MenuEstacion
+        items={resumenProcesos.procesos.map(proceso => ({
+          title: proceso.titulo,
+          description: proceso.description,
+          icon: proceso.icon,
+          link: proceso.link,
+        }))}
+      />
+    </div>
+  </div>
+
+  <script>
+
+    // Import the modalRightArea function
+    import { modalRightArea, initResumenProcesos } from '../../components/utils/modalRightArea_corporativo';
+    
+    // Initialize the modal functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      modalRightArea();
+      initResumenProcesos();
+
+    });
+
+
+    // Manejar el envío del formulario para evitar recarga
+    const form = document.getElementById("formulario");
+    if (form) {
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        // Aquí podrías agregar la lógica para guardar el formulario
+        console.log("Formulario simulado guardado.");
+      });
+    }
+  </script>
+
+
+</Layout>
