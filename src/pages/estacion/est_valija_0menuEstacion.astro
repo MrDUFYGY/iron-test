@@ -273,107 +273,22 @@ const resumenProcesos = {
       id="modal-container"
       style="width: 50%; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; "
     >
-      <!-- Espacio para Modales -->
-      <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
-        <h2 class="text-lg font-semibold">Menu de procesos.</h2>
-        <p class="text-gray-600">
-          Puedes ingresar al proceso deseado o seguir la hoja .
-        </p>
-        <!-- Aquí se cargará el contenido del modal -->
-      </div>
-      <MenuEstacion
-        items={[
-          // {
-          //   title: "Resumen",
-          //   description: "Muestrario de caratula digital",
-          //   icon: "1.- Hoja Caratula",
-          //   link: "/muestrario_valija_1caratula",
-
-          //   modalSide: "left"
-          // },
-          {
-            title: "1.- Hoja de liquidacion",
-            description: "Sube la hoja de liquidacion y comparala",
-            icon: "description",
-            link: "/muestrario_valija_2ingresoHojaLiquidacion",
-          },
-          {
-            title: "2.- Movimientos de caja",
-            description: "Confirma los movimientos hechos.",
-            icon: "inventory",
-            link: "/muestrario_valija_3resultadosBusqueda",
-          },
-          {
-            title: "3.- Nominas",
-            description: "Sube las nominas",
-            icon: "people",
-            link: "/muestrario_valija_4nominas",
-          },
-          {
-            title: "4.- Carga de documentos",
-            description:
-              'Subida de "Listados de Contadores", "Liquidacion Open", "Mediciones y sus comprobantes"',
-            icon: "upload_file",
-            link: "/muestrario_valija_5-7docsTurno",
-          },
-          {
-            title: "5.- Corte de Perifericos",
-            description: "Se sube 1 archivo por cada turno",
-            icon: "",
-            link: "/muestrario_valija_7resultadoVentasxPeriordo",
-          },
-          {
-            title: "6.- Historico de Carburante",
-            description:
-              "Confirma el historico de carburante y sube su comprobante",
-            icon: "history",
-            link: "/muestrario_valija_8historicoCarburante",
-          },
-          {
-            title: "7.- Consulta de Ventas por Periodo",
-            description:
-              "Confirma las ventas por periodo y sube su comprobante",
-            icon: "bar_chart",
-            link: "/muestrario_valija_9resultadoVentasxPeriordo",
-          },
-          {
-            title: "8.- Mermas y Regularizacion",
-            description: "Confirma las Mermas y Regularizacion",
-            icon: "analytics",
-            link: "/muestrario_valija_10resultadosMermasRegul",
-          },
-          {
-            title: "9.- Jarreo",
-            description: "Confirma el jarreo de documentos",
-            icon: "analytics",
-            link: "/muestrario_valija_9jarreo",
-          },
-          {
-            title: "10.- Vales por Empresa",
-            description: "Se cargan los vales de acuerdo a la proveedor",
-            icon: "inventory",
-            link: "/muestrario_valija_11valesEmpresa",
-          },
-          {
-            title: "11.- Corte de Terminales con Vouchers",
-            description: "Se cargan los vales de acuerdo a la proveedor",
-            icon: "inventory",
-            link: "/muestrario_valija_12terminalesVoucher",
-          },
-          {
-            title: "12.- Listado de placas con Tag",
-            description: "Se sube el registro de las placas con tag",
-            icon: "inventory",
-            link: "/muestrario_valija_13listaTag",
-          },
-          {
-            title: "Otro",
-            description: "Otro",
-            icon: "inventory",
-            link: "/mesa_trabajo_componentes",
-          },
-        ]}
-      />
+    <!-- Espacio para Modales -->
+    <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
+      <h2 class="text-lg font-semibold">Menu de procesos.</h2>
+      <p class="text-gray-600">
+        Puedes ingresar al proceso deseado o seguir la hoja .
+      </p>
+      <!-- Aquí se cargará el contenido del modal -->
+    </div>
+    <MenuEstacion
+    items={resumenProcesos.procesos.map(proceso => ({
+      title: proceso.titulo,
+      description: proceso.description,
+      icon: proceso.icon,
+      link: proceso.link,
+    }))}
+    />
     </div>
   </div>
 
@@ -432,11 +347,32 @@ const resumenProcesos = {
           modalTitle.textContent =
             "Detalle de " + modalId.replace("modal-", "").replace(/-/g, " ");
 
+          // Create button container for better spacing
+          const buttonContainer = document.createElement("div");
+          buttonContainer.className = "flex space-x-2";
+          
+          // Create button to open in new tab
+          const newTabButton = document.createElement("button");
+          newTabButton.className =
+            "bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors flex items-center";
+          newTabButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Abrir en nueva pestaña
+          `;
+          newTabButton.onclick = function (e) {
+            e.stopPropagation();
+            window.open(url, '_blank');
+          };
+
+          // Create close button
           const closeButton = document.createElement("button");
           closeButton.className =
-            "ml-4 bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors";
+            "bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors";
           closeButton.textContent = "Cerrar";
-          closeButton.onclick = function () {
+          closeButton.onclick = function (e) {
+            e.stopPropagation();
             // Restaurar el menú original sin recargar
             const modalContainer = document.getElementById("modal-container");
             if (modalContainer && window._originalMenuContent) {
@@ -445,8 +381,13 @@ const resumenProcesos = {
             }
           };
 
+          // Append buttons to container
+          buttonContainer.appendChild(newTabButton);
+          buttonContainer.appendChild(closeButton);
+          
+          // Append title and buttons to header
           modalHeader.appendChild(modalTitle);
-          modalHeader.appendChild(closeButton);
+          modalHeader.appendChild(buttonContainer);
 
           modalContainer.appendChild(modalHeader);
           modalContainer.appendChild(iframe);
