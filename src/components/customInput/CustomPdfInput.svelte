@@ -44,18 +44,20 @@
   function closeModal() {
     isModalOpen = false;
     document.body.style.overflow = 'auto';
+    
+    // Only reset if not in soloConsulta mode and not confirmed
+    if (!soloConsulta && !isConfirmedInternal) {
+      if (fileInput) {
+        fileInput.value = '';
+      }
+      if (pdfUrl && !pdfUrl.startsWith('/assets/')) {
+        URL.revokeObjectURL(pdfUrl);
+        pdfUrl = null;
+      }
+    }
   }
   
   function handleCancel() {
-    // Reset the file input and clean up
-    if (fileInput) {
-      fileInput.value = '';
-    }
-    // Only clean up the URL if we haven't confirmed the selection and it's not the default PDF
-    if (pdfUrl && !isConfirmed && !pdfUrl.startsWith('/assets/')) {
-      URL.revokeObjectURL(pdfUrl);
-      pdfUrl = null;
-    }
     closeModal();
   }
 

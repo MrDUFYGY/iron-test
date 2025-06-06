@@ -39,42 +39,53 @@
         >Hojas OpenPOS</button>
       </div>
 
-      {#if activeTab === 1}
-        <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Mediciones con Comprobantes</h2>
-        <PdfInputGroup
-          groupId="mediciones-comprobantes"
-          title="Mediciones y Comprobantes"
-          isSealed={sealedGroups['mediciones-comprobantes']}
-          on:sealed={handleSealed}
-        />
-      {/if}
-      {#if activeTab === 2}
-        <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de tarjetas con Tag</h2>
-        <PdfInputGroup
-          groupId="Listado de tarjetas con Tag"
-          title="Listado de tarjetas con Tag"
-          isSealed={sealedGroups['Listado de tarjetas con Tag']}
-          on:sealed={handleSealed}
-        />
-      {/if}
-      {#if activeTab === 3}
-        <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Contadores</h2>
-        <PdfInputGroup
-          groupId="Listado de Contadores"
-          title="Listado de Contadores"
-          isSealed={sealedGroups['Listado de Contadores']}
-          on:sealed={handleSealed}
-        />
-      {/if}
-      {#if activeTab === 4}
-        <h2 class="text-2xl font-semibold mb-2 text-blue-600">Hojas OpenPOS</h2>
-        <PdfInputGroup
-          groupId="Listado de Open POS"
-          title="Hojas OpenPOS"
-          isSealed={sealedGroups['Listado de Open POS']}
-          on:sealed={handleSealed}
-        />
-      {/if}
+      <div class="w-full transition-opacity duration-300" class:invisible={activeTab !== 1} class:opacity-0={activeTab !== 1} class:absolute={activeTab !== 1}>
+        <div class="relative">
+          <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Mediciones con Comprobantes</h2>
+          <PdfInputGroup
+            groupId="mediciones-comprobantes"
+            title="Mediciones y Comprobantes"
+            isSealed={sealedGroups['mediciones-comprobantes']}
+            on:sealed={handleSealed}
+          />
+        </div>
+      </div>
+      
+      <div class="w-full transition-opacity duration-300" class:invisible={activeTab !== 2} class:opacity-0={activeTab !== 2} class:absolute={activeTab !== 2}>
+        <div class="relative">
+          <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de tarjetas con Tag</h2>
+          <PdfInputGroup
+            groupId="Listado de tarjetas con Tag"
+            title="Listado de tarjetas con Tag"
+            isSealed={sealedGroups['Listado de tarjetas con Tag']}
+            on:sealed={handleSealed}
+          />
+        </div>
+      </div>
+      
+      <div class="w-full transition-opacity duration-300" class:invisible={activeTab !== 3} class:opacity-0={activeTab !== 3} class:absolute={activeTab !== 3}>
+        <div class="relative">
+          <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Contadores</h2>
+          <PdfInputGroup
+            groupId="Listado de Contadores"
+            title="Listado de Contadores"
+            isSealed={sealedGroups['Listado de Contadores']}
+            on:sealed={handleSealed}
+          />
+        </div>
+      </div>
+      
+      <div class="w-full transition-opacity duration-300" class:invisible={activeTab !== 4} class:opacity-0={activeTab !== 4} class:absolute={activeTab !== 4}>
+        <div class="relative">
+          <h2 class="text-2xl font-semibold mb-2 text-blue-600">Hojas OpenPOS</h2>
+          <PdfInputGroup
+            groupId="Listado de Open POS"
+            title="Hojas OpenPOS"
+            isSealed={sealedGroups['Listado de Open POS']}
+            on:sealed={handleSealed}
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>
