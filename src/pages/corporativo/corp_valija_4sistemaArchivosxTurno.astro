@@ -1,0 +1,429 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DocumentoEstado from '../../components/DocumentoEstado.astro';
+
+// Las declaraciones de tipo para Window parecen causar conflictos en este contexto.
+// Eliminaremos las declaraciones explícitas de las funciones globales por ahora
+// y manejaremos los eventos a través de addEventListener.
+// interface Window {
+//   handleAreaClick: (id: string) => void;
+//   documentoSeleccionado: string | null;
+//   closeConfirmModal: () => void;
+//   confirmarDocumentoSeleccionado: () => void;
+//   openPdfViewer: (id: string) => void;
+//   closeModal: () => void;
+//   showValidationDialog: () => void;
+//   closeValidationDialog: () => void;
+// }
+
+// declare const window: Window;
+---
+
+<Layout>
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Visor de Documentos de Turno</h1>
+
+    <!-- Modal para visualizar PDF -->
+    <div id="pdf-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-6xl w-full h-[90vh] relative">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold" id="modal-title">Visualización de Documento</h3>
+          <button id="close-pdf-modal-btn" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="h-[calc(90vh-8rem)]">
+          <iframe id="pdf-viewer" class="w-full h-full border border-gray-300 rounded" title="Visor PDF"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Confirmar Documento</h3>
+          <button onclick="closeConfirmModal()" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <p class="mb-6">¿Deseas confirmar este documento?</p>
+        <div class="flex justify-end gap-4">
+          <button onclick="closeConfirmModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors">
+            Cancelar
+          </button>
+          <button onclick="confirmarDocumentoSeleccionado()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de validación de montos -->
+    <div id="validation-dialog" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-6xl w-full relative z-50">
+        <h3 class="text-lg font-semibold mb-4">Validación de Archivos de Listado de Contadores</h3>
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="border rounded overflow-hidden h-96">
+            <iframe id="preview-pdf1" class="w-full h-full" title="Vista previa PDF 1"></iframe>
+          </div>
+          <div class="border rounded overflow-hidden h-96">
+            <iframe id="preview-pdf2" class="w-full h-full" title="Vista previa PDF 2"></iframe>
+          </div>
+          <div class="border rounded overflow-hidden h-96">
+            <iframe id="preview-pdf3" class="w-full h-full" title="Vista previa PDF 3"></iframe>
+          </div>
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button id="cancel-validation" class="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Cancelar</button>
+          <button id="confirm-validation" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Confirmar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen de archivos -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-semibold mb-6 text-gray-700">Resumen de Archivos</h2>
+      
+      <!-- Listado de Contadores -->
+      <div class="mb-8">
+        <div class="flex items-center mb-1">
+          <h3 class="font-medium text-gray-700 text-lg">Listado de Contadores.</h3>
+          <div class="flex-1 border-b border-black mx-4"></div>
+          <button id="validate-contadores-btn" data-section="contadores" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+        </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="espera" turno="Turno 1" docId="contador-turno1" />
+          <DocumentoEstado estado="espera" turno="Turno 2" docId="contador-turno2" />
+          <DocumentoEstado estado="espera" turno="Turno 3" docId="contador-turno3" />
+        </div>
+      </div>
+
+      <!-- Hojas de Open Pos -->
+      <div class="mb-8">
+        <div class="flex items-center mb-1">
+          <h3 class="font-medium text-gray-700 text-lg">Hojas de Open Pos</h3>
+          <div class="flex-1 border-b border-black mx-4"></div>
+          <button id="validate-openpos-btn" data-section="openpos" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+        </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="faltante" turno="Turno 1" docId="openpos-turno1" />
+          <DocumentoEstado estado="faltante" turno="Turno 2" docId="openpos-turno2" />
+          <DocumentoEstado estado="faltante" turno="Turno 3" docId="openpos-turno3" />
+        </div>
+      </div>
+
+      <!-- Hoja de Mediciones con Comprobante -->
+      <div class="mb-8">
+        <div class="flex items-center mb-1">
+          <h3 class="font-medium text-gray-700 text-lg">Hoja de Mediciones con Comprobante</h3>
+          <div class="flex-1 border-b border-black mx-4"></div>
+          <button id="validate-comprobante-btn" data-section="comprobante" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+        </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="confirmado" turno="Turno 1" docId="comprobante-turno1" />
+          <DocumentoEstado estado="confirmado" turno="Turno 2" docId="comprobante-turno2" />
+          <DocumentoEstado estado="confirmado" turno="Turno 3" docId="comprobante-turno3" />
+        </div>
+      </div>
+
+      <!-- Inventarios -->
+      <div class="mb-8">
+        <div class="flex items-center mb-1">
+          <h3 class="font-medium text-gray-700 text-lg">Inventarios</h3>
+          <div class="flex-1 border-b border-black mx-4"></div>
+          <button id="validate-inventarios-btn" data-section="inventarios" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors">Validar</button>
+        </div>
+        <div class="flex gap-x-10 px-8 turn-items-container">
+          <DocumentoEstado estado="faltante" turno="Turno 1" docId="inventarios-turno1" />
+          <DocumentoEstado estado="faltante" turno="Turno 2" docId="inventarios-turno2" />
+          <DocumentoEstado estado="faltante" turno="Turno 3" docId="inventarios-turno3" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Las funciones ahora son locales al scope del script
+
+    function handleAreaClick(event: Event) {
+      const item = event.currentTarget as HTMLElement;
+      if (item) {
+        const id = item.dataset.docId;
+        if (!id) return;
+
+        const status = document.getElementById(`${id}-status`);
+        if (status && status.textContent === 'Archivo no subido') {
+          alert('No hay archivo disponible para visualizar');
+          return;
+        }
+
+        // Abrir el modal de confirmación
+        const confirmModal = document.getElementById('confirm-modal');
+        if (confirmModal) {
+          confirmModal.dataset.documentoSeleccionado = id; // Almacenar ID en el modal
+          confirmModal.classList.remove('hidden');
+          confirmModal.style.display = 'flex';
+        }
+      }
+    };
+
+    function closeConfirmModal() {
+      const confirmModal = document.getElementById('confirm-modal');
+      if (confirmModal) {
+        confirmModal.classList.add('hidden');
+        confirmModal.style.display = 'none';
+        confirmModal.dataset.documentoSeleccionado = ''; // Limpiar el ID almacenado
+      }
+    };
+
+    function confirmarDocumentoSeleccionado() {
+      const confirmModal = document.getElementById('confirm-modal');
+      const documentoSeleccionado = confirmModal?.dataset.documentoSeleccionado; // Obtener ID del modal
+
+      if (documentoSeleccionado) {
+        const statusSpan = document.getElementById(`${documentoSeleccionado}-status`);
+        const container = statusSpan?.closest('.border-4'); // Encontrar el contenedor padre
+        
+        if (container && statusSpan) {
+          // Remover clases de estado anteriores y añadir las de confirmado
+          container.classList.remove('border-gray-300', 'border-yellow-400', 'bg-white', 'bg-yellow-50', 'hover:bg-gray-100', 'hover:bg-yellow-50');
+          container.classList.add('border-green-600', 'bg-green-50', 'hover:bg-green-50');
+
+          statusSpan.textContent = 'Confirmado';
+          statusSpan.classList.remove('text-gray-500', 'text-yellow-600');
+          statusSpan.classList.add('text-green-600');
+        }
+      }
+      closeConfirmModal(); // Llamar a la función local
+    };
+
+    function openPdfViewer(id: string) {
+      const modal = document.getElementById('pdf-modal');
+      const viewer = document.getElementById('pdf-viewer') as HTMLIFrameElement | null; // Tipado mejorado y permitir null
+      const title = document.getElementById('modal-title');
+      const status = document.getElementById(`${id}-status`); // Usar el ID del span de estado
+
+      if (!modal || !viewer || !title) {
+        console.error('No se encontraron los elementos necesarios para el modal');
+        return;
+      }
+
+      // Si es un documento combinado
+      if (id.includes('combinado')) {
+        const section = id.split('-')[0];
+        const turnos = ['turno1', 'turno2', 'turno3'];
+        const allUploaded = turnos.every(turno => {
+          const status = document.getElementById(`${section}-${turno}-status`);
+          return status && status.textContent !== 'Archivo no subido';
+        });
+
+        if (!allUploaded) {
+          alert('Todos los turnos deben tener archivos subidos para ver la versión combinada');
+          return;
+        }
+
+        // Aquí iría la lógica para combinar los PDFs
+        viewer.src = '/assets/simulacion.pdf';
+        title.textContent = `Visualización Combinada: ${section.toUpperCase()}`;
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        return;
+      }
+
+      // Para documentos individuales
+      if (status && status.textContent === 'Archivo no subido') {
+        alert('No hay archivo disponible para visualizar');
+        return;
+      }
+
+      // Establecer la URL del PDF y el título
+      viewer.src = '/assets/simulacion.pdf';
+      title.textContent = `Visualización: ${id.replace('-', ' ').toUpperCase()}`;
+      
+      // Mostrar el modal
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+    };
+
+    function closeModal() {
+      const modal = document.getElementById('pdf-modal');
+      const viewer = document.getElementById('pdf-viewer') as HTMLIFrameElement | null; // Tipado mejorado y permitir null
+      
+      if (!modal || !viewer) return;
+      
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+      viewer.src = '';
+    };
+
+    function showValidationDialog(event: Event) {
+      const validationDialog = document.getElementById('validation-dialog');
+      if (validationDialog) {
+        const button = event.currentTarget as HTMLElement; // Obtener el botón que disparó el evento y castear a HTMLElement
+        if (button && button.dataset) { // Verificar si button y button.dataset no son null/undefined
+          const section = button.dataset.section; // Obtener la sección del atributo data
+          if (section) {
+            validationDialog.dataset.section = section; // Almacenar la sección en el modal
+          }
+        }
+        
+        // Cargar el PDF de simulación en los tres visores
+        const pdfPreviews = ['preview-pdf1', 'preview-pdf2', 'preview-pdf3'];
+        pdfPreviews.forEach(id => {
+          const iframe = document.getElementById(id) as HTMLIFrameElement | null; // Tipado mejorado y permitir null
+          if (iframe) {
+            iframe.src = '/assets/simulacion.pdf';
+          }
+        });
+        
+        validationDialog.classList.remove('hidden');
+        validationDialog.style.display = 'flex';
+      }
+    };
+
+    function closeValidationDialog() {
+      const validationDialog = document.getElementById('validation-dialog');
+      if (validationDialog) {
+        validationDialog.classList.add('hidden');
+        validationDialog.style.display = 'none';
+        
+        // Limpiar las URLs de los PDFs
+        const pdfPreviews = ['preview-pdf1', 'preview-pdf2', 'preview-pdf3'];
+        pdfPreviews.forEach(id => {
+          const iframe = document.getElementById(id) as HTMLIFrameElement | null; // Tipado mejorado y permitir null
+          if (iframe) {
+            iframe.src = '';
+          }
+        });
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Event listeners para los divs de turno individuales para abrir el modal de visualización de PDF (MODIFICADO)
+      const turnItemsToView = document.querySelectorAll('.turn-items-container > div.border-4');
+      turnItemsToView.forEach(item => {
+        // Obtener el ID del documento del atributo data
+        const id = (item as HTMLElement).dataset.docId; // Cast a HTMLElement para acceder a dataset
+        if (id) {
+          // Añadir event listener para abrir el modal de visualización de PDF
+          item.addEventListener('click', () => openPdfViewer(id)); // Usar la función local openPdfViewer
+        }
+      });
+
+      // Event listeners para los botones Validar para mostrar el modal de validación
+      const allValidateButtonIds = [
+        'validate-contadores-btn',
+        'validate-openpos-btn',
+        'validate-comprobante-btn',
+        'validate-inventarios-btn'
+      ];
+
+      allValidateButtonIds.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+          button.addEventListener('click', showValidationDialog); // Llamar a la función local showValidationDialog
+        }
+      });
+
+      // Event listeners para los botones del modal de confirmación (mantener si es necesario para otro flujo)
+      const confirmDocumentoBtn = document.querySelector('#confirm-modal button.bg-green-600');
+      const cancelConfirmBtn = document.querySelector('#confirm-modal button.bg-gray-200');
+
+      if (confirmDocumentoBtn) {
+        confirmDocumentoBtn.addEventListener('click', confirmarDocumentoSeleccionado); // Llamar a la función local confirmarDocumentoSeleccionado
+      }
+      if (cancelConfirmBtn) {
+        cancelConfirmBtn.addEventListener('click', closeConfirmModal); // Llamar a la función local closeConfirmModal
+      }
+
+      // Event listeners para los botones del modal de validación
+      const cancelValidationBtn = document.getElementById('cancel-validation');
+      const confirmValidationBtn = document.getElementById('confirm-validation');
+
+      if (cancelValidationBtn) {
+        cancelValidationBtn.addEventListener('click', closeValidationDialog); // Llamar a la función local closeValidationDialog
+      }
+
+      if (confirmValidationBtn) {
+        confirmValidationBtn.addEventListener('click', function() {
+          const validationDialog = document.getElementById('validation-dialog');
+          const section = validationDialog?.dataset.section;
+
+          if (section) {
+            let prefix = section === "contadores" ? "contador-" : section + "-";
+            const itemsToUpdate = document.querySelectorAll(`.turn-items-container [data-doc-id^="${prefix}"]`);
+            itemsToUpdate.forEach(item => {
+              item.classList.remove('border-gray-300', 'hover:bg-gray-100', 'hover:bg-yellow-50');
+              item.classList.add('border-green-600', 'hover:bg-green-50');
+              const statusSpan = item.querySelector('span.font-semibold');
+              if (statusSpan) {
+                statusSpan.textContent = 'Confirmado';
+                statusSpan.classList.remove('text-gray-500', 'text-yellow-600');
+                statusSpan.classList.add('text-green-600');
+              }
+              const descriptiveSpan = item.querySelector('div.text-base.text-gray-500');
+              if (descriptiveSpan) {
+                descriptiveSpan.textContent = 'Archivo subido';
+              }
+            });
+            console.log(`Validación confirmada para la sección: ${section}`);
+          }
+          closeValidationDialog();
+        });
+      }
+
+      // Event listeners para cerrar modales con ESC y clics fuera del contenido
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+          closeConfirmModal();
+          closeValidationDialog(); // Añadido para cerrar también el modal de validación
+        }
+      });
+
+      const modal = document.getElementById('pdf-modal');
+      const confirmModal = document.getElementById('confirm-modal');
+      const validationDialog = document.getElementById('validation-dialog'); // Obtener referencia al modal de validación
+      
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+      }
+
+      if (confirmModal) {
+        confirmModal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeConfirmModal();
+          }
+        });
+      }
+
+      if (validationDialog) { // Añadir listener para el modal de validación
+        validationDialog.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeValidationDialog();
+          }
+        });
+      }
+
+      // Event listener para el botón de cierre del modal del visor de PDF
+      const closePdfModalBtn = document.getElementById('close-pdf-modal-btn');
+      if (closePdfModalBtn) {
+        closePdfModalBtn.addEventListener('click', closeModal); // Llamar a la función local closeModal
+      }
+    });
+
+    // window.documentoSeleccionado ya no se usa
+    // window.documentoSeleccionado = null;
+
+  </script>
+</Layout> 

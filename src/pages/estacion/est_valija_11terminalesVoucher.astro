@@ -1,0 +1,218 @@
+---
+import "../../styles/global.css";
+import Layout from "../../layouts/Layout.astro";
+import Huella from "../../components/ConfirmHuella.astro";
+import Input from "../../components/ConfirmInput.astro";
+---
+
+<Layout>
+  <!-- Contenedor principal con mejor diseño -->
+  <div
+    id="hl-contenedor-principal"
+    class="max-w-2xl mx-auto mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200"
+  >
+    <h2 class="text-xl font-bold mb-4 text-gray-800">
+      Corte de terminales con Voucher
+    </h2>
+
+    <!-- Input de archivo PDF con mejor diseño -->
+    Seleccione su proceso:
+
+    <div
+      id="hl-input-wrapper"
+      class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 transition-all duration-200 hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200"
+    >
+      <form id="formulario" class="space-y-8">
+        <!-- Puntos de Amarre -->
+        <div
+          class="bg-gray-50 p-4 rounded-xl border border-gray-200 muestrario-collapse-section"
+        >
+          <div
+            class="cursor-pointer collapse-header muestrario-collapse-header flex justify-between items-center"
+            data-section="muestrario-puntos-amarre"
+          >
+            <h2 class="font-bold uppercase text-gray-800">Voucher:</h2>
+            <span class="collapse-icon muestrario-collapse-icon">▼</span>
+          </div>
+
+          <div
+            id="muestrario-puntos-amarre-content"
+            class="collapse-content muestrario-collapse-content max-h-0 overflow-hidden invisible transition-all duration-300 ease-in-out space-y-4 text-sm"
+          >
+            <!-- Punto 1 con subpuntos -->
+            <div>
+              <div class="flex items-center p-2 bg-gray-100 rounded-t-lg">
+                <p class="font-medium">1.- Verificar :</p>
+              </div>
+
+              <div class="space-y-2 bg-white p-3 rounded-b-lg">
+                <!-- a) Información -->
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-gray-700 whitespace-nowrap"
+                    >a) Información</span
+                  >
+                  <label
+                    for="input-hojaLiquidacion"
+                    class="block w-full max-w-xs"
+                  >
+                    <input
+                      id="input-hojaLiquidacion"
+                      type="file"
+                      accept=".pdf"
+                      class="w-full text-sm text-gray-500
+                        file:mr-4 file:py-2.5 file:px-5
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                        cursor-pointer"
+                    />
+                  </label>
+                </div>
+
+                <!-- b) Información 2 -->
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-gray-700 whitespace-nowrap"
+                    >b) Información 2</span
+                  >
+                  <label for="input-perifericos" class="block w-full max-w-xs">
+                    <input
+                      id="input-perifericos"
+                      type="file"
+                      accept=".pdf"
+                      class="w-full text-sm text-gray-500
+                        file:mr-4 file:py-2.5 file:px-5
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                        cursor-pointer"
+                    />
+                  </label>
+                </div>
+
+                <!-- c) Información 3 -->
+                <div class="flex items-center justify-between gap-4 mt-4">
+                  <span class="text-gray-700 whitespace-nowrap"
+                    >c) Información 3</span
+                  >
+                  <label for="input-vales" class="block w-full max-w-xs">
+                    <input
+                      id="input-vales"
+                      type="file"
+                      accept=".pdf"
+                      class="w-full text-sm text-gray-500
+                        file:mr-4 file:py-2.5 file:px-5
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                        cursor-pointer"
+                    />
+                  </label>
+                </div>
+
+                <!-- d) Información 4 -->
+                <div class="flex items-center justify-between gap-4 mt-4">
+                  <span class="text-gray-700 whitespace-nowrap"
+                    >d) Información 4</span
+                  >
+                  <label for="input-fajillas" class="block w-full max-w-xs">
+                    <input
+                      id="input-fajillas"
+                      type="file"
+                      accept=".pdf"
+                      class="w-full text-sm text-gray-500
+                        file:mr-4 file:py-2.5 file:px-5
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                        cursor-pointer"
+                    />
+                  </label>
+                </div>
+
+                <!-- e) Información 5 -->
+                <div class="flex items-center justify-between gap-4 mt-4">
+                  <span class="text-gray-700 whitespace-nowrap"
+                    >e) Información 5</span
+                  >
+                  <label for="input-gastos" class="block w-full max-w-xs">
+                    <input
+                      id="input-gastos"
+                      type="file"
+                      accept=".pdf"
+                      class="w-full text-sm text-gray-500
+                        file:mr-4 file:py-2.5 file:px-5
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                        cursor-pointer"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <Huella />
+
+  <style>
+    /* Estilos específicos para esta página */
+    #hl-input-wrapper.archivo-seleccionado {
+      border-color: #10b981;
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+
+    #hl-input-wrapper.archivo-confirmado {
+      border-color: #059669;
+      background-color: rgba(5, 150, 105, 0.1);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+    }
+
+    #punto1-hojaLiquidacion.activo {
+      background-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    }
+
+    #punto2-hojaLiquidacion.activo {
+      background-color: #059669;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
+    }
+
+    /* Animación sutil para los cambios de estado */
+    #hl-input-wrapper,
+    #punto1-hojaLiquidacion,
+    #punto2-hojaLiquidacion {
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
+
+  <script type="module" is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".collapse-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          const section = header.getAttribute("data-section");
+          const content = document.getElementById(`${section}-content`);
+          const icon = header.querySelector(".collapse-icon");
+
+          if (content.classList.contains("invisible")) {
+            content.classList.remove("invisible");
+            content.classList.add("max-h-screen");
+            icon.classList.add("rotate-180");
+          } else {
+            content.classList.add("invisible");
+            content.classList.remove("max-h-screen");
+            icon.classList.remove("rotate-180");
+          }
+        });
+      });
+    });
+  </script>
+</Layout>

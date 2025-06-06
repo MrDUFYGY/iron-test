@@ -1,0 +1,41 @@
+.muestrario-collapse-section {
+  position: relative;
+  width: 100%;
+}
+.muestrario-collapse-header {
+  transition: background-color 0.3s ease;
+  padding: 10px;
+  border-radius: 0.5rem;
+  user-select: none;
+}
+.muestrario-collapse-header:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.muestrario-collapse-icon {
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+  display: inline-block;
+}
+/* Estilos para las secciones colapsables */
+#resumen-procesos-content,
+#documentos-poliza-content,
+#metodos-pago-content {
+  transition: max-height 0.3s ease-out;
+  overflow: hidden;
+}
+
+/* Estilo para los botones de verificación */
+.verification-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.verification-button:hover {
+  background-color: #1d4ed8;
+}
