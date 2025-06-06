@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PdfInputGroup from '../../components/customInput/PdfInputGroup.svelte';
+  import PdfInputGroup from './PdfInputGroup.svelte';
 
   let activeTab = 1;
 
@@ -44,6 +44,7 @@
         <PdfInputGroup
           groupId="mediciones-comprobantes"
           title="Mediciones y Comprobantes"
+          isSealed={sealedGroups['mediciones-comprobantes']}
           on:sealed={handleSealed}
         />
       {/if}
@@ -52,6 +53,7 @@
         <PdfInputGroup
           groupId="Listado de tarjetas con Tag"
           title="Listado de tarjetas con Tag"
+          isSealed={sealedGroups['Listado de tarjetas con Tag']}
           on:sealed={handleSealed}
         />
       {/if}
@@ -60,14 +62,16 @@
         <PdfInputGroup
           groupId="Listado de Contadores"
           title="Listado de Contadores"
+          isSealed={sealedGroups['Listado de Contadores']}
           on:sealed={handleSealed}
         />
       {/if}
       {#if activeTab === 4}
-        <h2 class="text-2xl font-semibold mb-2 text-blue-600">Listado de Open POS</h2>
+        <h2 class="text-2xl font-semibold mb-2 text-blue-600">Hojas OpenPOS</h2>
         <PdfInputGroup
           groupId="Listado de Open POS"
-          title="Listado de Open POS"
+          title="Hojas OpenPOS"
+          isSealed={sealedGroups['Listado de Open POS']}
           on:sealed={handleSealed}
         />
       {/if}

@@ -4,6 +4,7 @@
 
   export let groupId: string;
   export let title: string;
+  export let isSealed = false; // Control sealed state from parent
   
   const inputs = [
     { id: 1, label: 'Turno 1' },
@@ -13,9 +14,19 @@
 
   const inputStates = new Map();
   let allConfirmed = false;
-  let isSealed = false;
   let showSealModal = false;
   const borderColor = 'border-yellow-400';
+  
+  // Set all inputs to soloConsulta mode when sealed
+  $: if (isSealed) {
+    inputs.forEach(input => {
+      const inputId = `${groupId}-turno-${input.id}`;
+      inputStates.set(inputId, { 
+        ...inputStates.get(inputId), 
+        soloConsulta: true 
+      });
+    });
+  }
 
   const dispatch = createEventDispatcher<{
     sealed: { groupId: string; sealed: boolean };
@@ -23,7 +34,11 @@
 
   function handlePdfConfirmed(event: CustomEvent) {
     const { inputId, file } = event.detail;
-    inputStates.set(inputId, { confirmed: true, file });
+    inputStates.set(inputId, { 
+      ...inputStates.get(inputId),
+      confirmed: true, 
+      file 
+    });
     checkAllConfirmed();
   }
 
@@ -38,7 +53,6 @@
   }
 
   function confirmSeal() {
-    isSealed = true;
     showSealModal = false;
     dispatch('sealed', { groupId, sealed: true });
   }
@@ -55,8 +69,10 @@
       <CustomPdfInput
         inputId={`${groupId}-turno-${input.id}`}
         label={input.label}
-        borderColor={borderColor}
         on:pdfConfirmed={handlePdfConfirmed}
+        isConfirmed={inputStates.get(`${groupId}-turno-${input.id}`)?.confirmed || false}
+        soloConsulta={inputStates.get(`${groupId}-turno-${input.id}`)?.soloConsulta || isSealed}
+        {borderColor}
       />
     {/each}
   </div>
