@@ -2,7 +2,6 @@
 import "../../styles/menus.css";
 
 import Layout from "../../layouts/Layout.astro";
-import MenuEstacion from "../../components/MenuEstacion.astro";
 import Separador from "../../components/Separador.astro";
 import ProgressTracker from "../../components/ResumenProcesos/ProgressTracker.svelte";
 import ResumenProcesosModal from "../../components/ResumenProcesos/ResumenProcesosModal.svelte";
@@ -10,9 +9,9 @@ import ResumenProcesosModal_Resumen from "../../components/ResumenProcesos/Resum
 
 const resumenProcesos = {
   usuario: {
-    nombre: "Joaquin Perez Gonzales",
+    nombre: "LUIS ALVARO VILLEGAS",
     rol: "Gerente",
-    correo: "joaquin.perez@hidroprueba.com",
+    correo: "luis.alvaro.villegas@hidroprueba.com",
   },
   fecha: new Date().toISOString(),
   estacion: {
@@ -165,7 +164,7 @@ const resumenProcesos = {
     operadora="CR 88 SAPI DE CV"
     estacion="45"
     usuario={{
-      nombre: "LUIS ALVARO VILLEGAS",
+      nombre: resumenProcesos.usuario.nombre,
     }}
   />
 

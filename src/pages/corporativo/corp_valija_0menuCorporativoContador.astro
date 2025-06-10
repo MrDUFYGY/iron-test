@@ -10,9 +10,9 @@ import ResumenProcesosModal from "../../components/ResumenProcesos/ResumenProces
 // Datos para el resumen de procesos
 const resumenProcesos = {
   usuario: {
-    nombre: 'Joaquin Perez Gonzales',
-    rol: 'Gerente',
-    correo: 'joaquin.perez@hidroprueba.com'
+    nombre: 'MICHEL GUITERREZ LOPEZ',
+    rol: 'Contador',
+    correo: 'michel.guitierrez@hidroprueba.com'
   },
   fecha: new Date().toISOString(),
   estacion: {
@@ -22,7 +22,7 @@ const resumenProcesos = {
   procesos: [
     {
       titulo: "1 - Hoja de Liquidacion",
-      estado: "pendiente",
+      estado: "confirmado",
       subprocesos: {
         "Subida de Hoja Open Pos": true,
         "Comparación y confirmación": true,
@@ -127,7 +127,7 @@ const resumenProcesos = {
     operadora="CR 88 SAPI DE CV"
     estacion="45"
     usuario={{
-      nombre: "LUIS ALVARO VILLEGAS",
+      nombre: resumenProcesos.usuario.nombre,
     }}
   />
 
@@ -172,7 +172,7 @@ const resumenProcesos = {
                     <div class="bg-gray-50  rounded-lg border border-gray-100">
                       <ProgressTracker
                         titulo={proceso.titulo}
-                        estado={proceso.estado}
+                        estadoProp={proceso.estado}
                         pasoActual={ultimoCompletado}
                         totalPasos={totalPasos}
                         subprocesos={subprocesos}
