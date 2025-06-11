@@ -73,7 +73,7 @@ const resumenProcesos = {
       estado: "alertado",
       subprocesos: {
         "Turno 1": true,
-        "Turno 2": false,
+        "Turno 2": true,
         "Turno 3": true,
       },
       description: "Administra los cortes de periféricos por turno",
@@ -131,8 +131,8 @@ const resumenProcesos = {
     }}
   />
 
-    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start; height: 90dvh;">
-        <div style="width: 50%; height: 100%; margin-left: 1vw; border-right: 1px solid #ccc; overflow-y: auto; padding: 0px; scrollbar-width: thin; scrollbar-color: #333 #e0e0e0;">
+    <div id="resizable-container" style="display: flex; width: 100%; height: 90dvh; position: relative;">
+        <div id="left-panel" style="width: 50%; height: 100%; overflow-y: auto; padding: 0px; scrollbar-width: thin; scrollbar-color: #333 #e0e0e0; position: relative;">
             <!-- Contenido para la Hoja de Información (Caratula) -->
             <div class=" mx-auto bg-white rounded-xl shadow-md p-3">
                 <div class="mb-6">
@@ -172,7 +172,8 @@ const resumenProcesos = {
                     <div class="bg-gray-50  rounded-lg border border-gray-100">
                       <ProgressTracker
                         titulo={proceso.titulo}
-                        estadoProp={proceso.estado}
+                        // estadoProp={proceso.estado}
+                        estadoProp="confirmado"
                         pasoActual={ultimoCompletado}
                         totalPasos={totalPasos}
                         subprocesos={subprocesos}
@@ -221,10 +222,10 @@ const resumenProcesos = {
         </form>
       </div>
     </div>
-    <div
-      id="modal-container"
-      style="width: 50%; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; "
-    >
+    <div id="resizer" style="width: 10px; cursor: col-resize; background-color: #e0e0e0; height: 100%; position: relative; z-index: 10;" title="Arrastrar para ajustar">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 2px; height: 30px; background-color: #999;"></div>
+    </div>
+    <div id="modal-container" style="flex: 1; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0;">
       <!-- Espacio para Modales -->
       <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
         <h2 class="text-lg font-semibold">Menu de procesos.</h2>
@@ -247,6 +248,18 @@ const resumenProcesos = {
   <script>
     // Import the modalRightArea function
     import { modalRightArea, initResumenProcesos } from '../../components/utils/modalRightArea_corporativo';
+    import { initializeDivider } from "../../components/utils/divisor";
+    
+    // Inicializar el divisor
+    document.addEventListener("DOMContentLoaded", () => {
+      initializeDivider({
+        resizerId: 'resizer',
+        leftPanelId: 'left-panel',
+        containerId: 'resizable-container',
+        minWidth: 20,
+        maxWidth: 80
+      });
+    });
     
     // Initialize the modal functionality
     document.addEventListener('DOMContentLoaded', () => {
