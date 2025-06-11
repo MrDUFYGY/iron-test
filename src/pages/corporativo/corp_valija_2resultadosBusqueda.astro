@@ -46,6 +46,18 @@ const horaActual = fechaActual.toLocaleTimeString('es-MX', {
             </button>
         </div>
     </div>
+        <!-- Input de archivo -->
+        <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span class="font-medium">Archivo de Gastos</span>
+                </div>
+                <button onclick="abrirPDF()" class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50">
+                    Visualizar
+                </button>
+            </div>
+        </div>
 
     <!-- Tabla de movimientos -->
     <div class="overflow-x-auto border border-gray-300 rounded-lg shadow-sm">

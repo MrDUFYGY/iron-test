@@ -1,11 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import CustomPdfInputSvelte from '../components/customInput/CustomPdfInput.svelte';
+import CustomPdfInput from '../components/customInput/CustomPdfInput.svelte';
 ---
 
 <Layout title="Prueba de Carga de PDF">
-<CustomPdfInputSvelte inputTitle="Documento Principal" componentId="docPrincipal" confirmado={true} client:visible />
-
-
+    <CustomPdfInput
+    inputId="docPrincipal"
+    label="Documento Principal"
+    on:pdfConfirmed="alert('PDF confirmado')"
+    isConfirmed={false}
+    soloConsulta={true}
+    borderColor="border-green-500"
+    client:visible
+  />
 
 </Layout>

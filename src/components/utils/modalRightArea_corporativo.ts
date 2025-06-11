@@ -103,7 +103,7 @@ export function modalRightArea() {
     `;
     newTabButton.onclick = function (e) {
       e.stopPropagation();
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener,noreferrer,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
     };
 
     // Create close button
