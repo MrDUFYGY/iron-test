@@ -81,9 +81,15 @@ const resumenProcesos = {
         <div id="left-panel" style="width: 50%; height: 100%; overflow-y: auto; padding: 0px; scrollbar-width: thin; scrollbar-color: #333 #e0e0e0; position: relative;">
             <!-- Contenido para la Hoja de Información (Caratula) -->
             <div class=" mx-auto bg-white rounded-xl shadow-md p-3">
-                <div class="mb-6">
-                    <h1 class="text-2xl font-bold uppercase mb-4">Resumen de Medios de Pago</h1>
-                </div>
+              <div class="flex items-center mb-6 w-full">
+                <h1 class="text-2xl font-bold uppercase">Resumen de Pólizas</h1>
+                <ResumenProcesosModal
+                  data={JSON.stringify(resumenProcesos)}
+                  buttonText=""
+                  client:load
+                  buttonClass="ml-4 bg-gray-500 hover:bg-gray-600 text-white font-medium py-1.5 px-4 rounded transition"
+                />
+              </div>
 
         <form id="formulario" class="space-y-8">
           <!-- Resumen de Procesos -->
@@ -157,8 +163,8 @@ const resumenProcesos = {
 
           <div class="flex items-center justify-center  bg-gray-100">
           <button
-            onclick="window.location.href='/boton_Master'"
-            class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300"
+          onclick="window.location.href='/corporativo/corp_valija_999botonMaster'"
+          class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300"
           >
             Confirmar
           </button>

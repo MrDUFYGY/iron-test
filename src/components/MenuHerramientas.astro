@@ -1,23 +1,91 @@
 ---
-// MenuEstacion.astro
+interface MenuItem {
+  title: string;
+  description: string;
+  icon: string;
+  link: string;
+  modalSide?: 'left' | 'right' | 'center';
+  isOpen?: boolean;
+  sugerencia?: boolean;
+  backgroundColor?: string;
+  iconColor?: string;
+  textColor?: string;
+}
+
 interface Props {
-  items: Array<{
-    title: string;
-    description: string;
-    icon: string;
-    link: string;
-    modalSide?: 'left' | 'right' | 'center';
-    sugerencia?: boolean;
-  }>;
+  items: MenuItem[];
 }
 
 const { items } = Astro.props;
+
 ---
+
+{/* Script para abrir modales automáticamente */}
+{items.filter(item => item.isOpen && item.modalSide).length > 0 && (
+  <script is:inline>
+    // Serializa los items para usarlos en el contexto del navegador
+    const items = JSON.parse('{JSON.stringify(items)}');
+    // Función para abrir los modales
+    function openInitialModals() {
+      // Verificar si showModal está definido
+      if (typeof window.showModal !== 'function') {
+        console.warn('showModal function is not defined yet');
+        // Reintentar después de un breve retraso
+        setTimeout(openInitialModals, 100);
+        return;
+      }
+
+      // Obtener los modales que deben abrirse automáticamente
+      const openModals = Array.from({length: items.length})
+        .map((_, i) => items[i])
+        .filter(item => item.isOpen && item.modalSide)
+        .map(item => ({
+          link: item.link,
+          modalSide: item.modalSide,
+          title: item.title
+        }));
+      
+      console.log('Opening modals:', openModals);
+      
+      // Abrir cada modal con un pequeño retraso entre ellos
+      openModals.forEach((item, index) => {
+        setTimeout(() => {
+          console.log('Attempting to open modal:', item);
+          if (item.link && item.modalSide && typeof window.showModal === 'function') {
+            window.showModal(item.link, item.modalSide, item.title);
+          } else {
+            console.warn('Cannot open modal - missing required properties or showModal function');
+          }
+        }, 300 * (index + 1)); // Retraso de 300ms entre modales
+      });
+    }
+
+    // Esperar a que el DOM esté completamente cargado
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded, initializing modals...');
+        openInitialModals();
+      });
+    } else {
+      console.log('DOM already loaded, initializing modals immediately...');
+      // Usar setTimeout para asegurar que el resto del código se haya ejecutado
+      setTimeout(openInitialModals, 100);
+    }
+  </script>
+)}
 
 <div class="menu-container">
   <div class="menu-grid">
     {items.map((item) => (
-      <div class="menu-item" title={item.description}>
+      <div 
+        class="menu-item" 
+        title={item.description}
+        style={{
+          '--menu-bg-color': item.backgroundColor || '#1e293b',
+          '--menu-text-color': item.textColor || '#f8fafc',
+          '--menu-icon-color': item.iconColor || '#4ade80'
+        }}
+      >
         <button 
           class="menu-button"
           onclick={`showModal('${item.link}', '${item.modalSide || 'center'}', '${item.title}')`}
@@ -77,7 +145,7 @@ const { items } = Astro.props;
 
   .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
     padding: 1rem 0;
   }
@@ -88,10 +156,10 @@ const { items } = Astro.props;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: #1e293b;
+    background: var(--menu-bg-color, #1e293b);
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    color: #f8fafc;
+    color: var(--menu-text-color, #f8fafc);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
     cursor: pointer;
@@ -124,7 +192,7 @@ const { items } = Astro.props;
 
   .menu-icon {
     font-size: 1.5rem;
-    color: #4ade80;
+    color: var(--menu-icon-color, #4ade80);
     transition: transform 0.2s ease;
   }
 
@@ -243,11 +311,17 @@ const { items } = Astro.props;
 </style>
 
 <script is:inline>
+  // Inicializar el estado de los modales
   const activeModals = {
     left: null,
     right: null,
     center: null
   };
+
+  // Función para abrir un modal
+  function openModal(link, side, title) {
+    showModal(link, side, title);
+  }
 
   let isDragging = false;
   let offsetX, offsetY;
