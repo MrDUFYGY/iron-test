@@ -168,21 +168,21 @@ const items = [
     description: "Facturas del día",
     icon: "receipt",
     link: "/facturas-del-dia",
-    modalSide: "left",
+    modalSide: "left" as const,
   },
   {
     title: "Resumen de documentos",
     description: "Resumen de documentos",
     icon: "receipt",
     link: "/resumen-de-documentos",
-    modalSide: "center",
+    modalSide: "center" as const,
   },
   {
     title: "Ayuda",
     description: "Ayuda",
     icon: "receipt",
     link: "/ayuda",
-    modalSide: "right",
+    modalSide: "right" as const,
   },
   {
     title: "Resumen otro",
@@ -192,6 +192,7 @@ const items = [
     modalSide: "center" as const,
   },
 ];
+
 ---
 
 <Layout>
@@ -314,39 +315,6 @@ const items = [
         </p>
       </div>
       <MenuHerramientas items={items} />
-      <!-- <div class="bg-white p-6 rounded-xl shadow-md text-center">
-        <div class="flex justify-center items-center gap-4">
-          <a href="./menu_facturas">
-          <button
-            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded transition"
-          >
-            Facturas del día
-          </button>
-          </a>
-          <ResumenProcesosModal_Resumen
-            data={JSON.stringify(resumenProcesos)}
-            buttonText="Resumen de documentos"
-            client:load
-            buttonClass="bg-green-500 hover:bg-green-600 text-white font-medium py-1.5 px-4 rounded transition"
-          />
-          <div>
-           <ResumenProcesosModal
-            data={JSON.stringify(resumenProcesos)}
-            buttonText=""
-            client:load
-            buttonClass="bg-gray-500 hover:bg-gray-600 text-white font-medium py-1.5 px-4 rounded transition"
-          /></div>
-
-          <a href="./form_ayuda">
-            <button
-              onclick="mostrarAyuda()"
-              class="bg-red-500 hover:bg-red-600 text-white font-medium py-1.5 px-4 rounded transition"
-            >
-              Ayuda
-            </button>
-          </a>
-        </div>
-      </div> -->
     </div>
   </div>
 
@@ -362,8 +330,8 @@ const items = [
         resizerId: 'resizer',
         leftPanelId: 'left-panel',
         containerId: 'resizable-container',
-        minWidth: 1,
-        maxWidth: 99
+        minWidth: 30,
+        maxWidth: 70
       });
     });
 

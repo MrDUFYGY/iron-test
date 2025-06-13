@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+  const browser = typeof window !== 'undefined';
+  
   export let titulo: string;
   export let descripcion: string = "";
   export let estadoProp: 'pendiente' | 'iniciado' | 'sellado' | 'validado' | 'alertado' | null = null;
@@ -66,33 +69,29 @@
   };
   
   const modalUrlMap: Record<string, string> = {
-      "modal-litros": "/muestrario_valija_2hojaLiquidacion",
-      "modal-perifericos": "/muestrario_valija_9ventaHojaP1erifericos",
-      "modal-vales": "/muestrario_valija_11valesEmpresa",
-      "modal-nominas": "/muestrario_valija_4nominas",
-      "modal-gastos": "/muestrario_valija_5-7docsTurno",
-      "modal-formas-cobro": "/muestrario_valija_8historicoCarburante",
-      "modal-litros-jarros": "/muestrario_valija_9resultadoVentasxPeriordo",
-      "modal-depositos": "/muestrario_valija_10resultadosMermasRegul",
+    'modal-resumen-liquidacion': '/estacion/est_valija_1ingresoHojaLiquidacion',
+    'modal-movimientos-caja': '/estacion/est_valija_2resultadosBusqueda',
+    'modal-nominas': '/estacion/est_valija_3nominas',
+    'modal-listado-contadores-mediciones-tag': '/estacion/est_valija_4cargaDocumentosxTurno',
+    'modal-hojas-corte-perifericos': '/estacion/est_valija_5resultadoVentasxPeriodo',
+    'modal-recepcion-carburantes-soportes': '/estacion/est_valija_6historicoCarburante',
+    'modal-listado-remision-perifericos': '/estacion/est_valija_7remisionPerifericos',
+    'modal-regularizacion-mermas': '/estacion/est_valija_8resultadosMermasRegul',
+    'modal-jarreo': '/estacion/est_valija_9jarreo',
+    'modal-vales-empresa': '/estacion/est_valija_10valesEmpresa',
+    'modal-corte-terminales': '/estacion/est_valija_11terminalesVoucher',
 
-      "modal-listado-contadores-mediciones-tag": "/est_valija_4cargaDocumentosxTurno",
-      
-      "modal-recepcion-carburantes": "/muestrario_valija_2hojaLiquidacion",
-      "modal-remisiones-perifericos": "/muestrario_valija_3resultadosBusqueda",
-      "modal-resumen-liquidacion": "/muestrario_valija_2ingresoHojaLiquidacion",
-      "modal-movimientos-caja": "/muestrario_valija_3resultadosBusqueda",
-      "modal-regularizacion-mermas": "/muestrario_valija_10resultadosMermasRegul",
-      "modal-ficha-banco": "/muestrario_valija_9resultadoVentasxPeriordo",
-      "modal-hojas-corte-perifericos": "/muestrario_valija_7resultadoVentasxPeriordo",
-      "modal-comprobantes-gastos": "/muestrario_valija_4nominas",
-      "modal-tira-venta": "/muestrario_valija_5-7docsTurno",
-      "modal-hoja-corte-cambio-turno": "/muestrario_valija_5-7docsTurno",
-      "modal-listado-remision-perifericos": "/muestrario_valija_7Perifericos",
-      "modal-recepcion-carburantes-soportes": "/muestrario_valija_8historicoCarburante",
-      "modal-jarreo": "/muestrario_valija_9jarreo",
-      "modal-vales-empresa": "/muestrario_valija_11valesEmpresa",
-      "modal-corte-terminales": "/muestrario_valija_12terminalesVoucher",
-      "modal-placas-tag": "/muestrario_valija_13listaTag",
+    'modal-hoja-liquidacion-contador' : '/corporativo/corp_valija_1hojaLiquidacion', //1
+    'modal-movimientos-caja-contador' : '/corporativo/corp_valija_2resultadosBusqueda', //2
+    'modal-nominas-contador' : '/corporativo/corp_valija_3nominas', //3
+    'modal-listado-contadores-contador' : '/corporativo/corp_valija_4sistemaArchivosxTurno', //4
+    'modal-recepcion-carburantes-contador' : '/corporativo/corp_valija_5historicoCarburante', //5
+    'modal-listado-remision-perifericos-contador' : '/corporativo/corp_valija_6resultadoVentasxPeriodo', //6
+    'modal-regularizacion-mermas-contador' : '/corporativo/corp_valija_7resultadosMermasRegul', //7
+    'modal-jarreo-contador' : '/corporativo/corp_valija_8jarreo', //8 
+    'modal-vales-empresa-contador' : '/corp_valija_11valesEmpresa', //9
+    'modal-corte-terminales-contador' : '/corp_valija_10terminalesVoucher', //10
+    'modal-placas-tag-contador' : '/corp_valija_11placasTag', //11
     };
   // Determinar el ID del modal basado en el título
   $: modalId = modalTarget || (titulo in titleToModalMap ? titleToModalMap[titulo] : '');
@@ -103,19 +102,70 @@
     estado = estado; // Forzar la actualización
   }
   
+  // Referencia al elemento contenedor
+  let container: HTMLElement;
+  let containerWidth = 0;
+  
+  // Función para actualizar el ancho del contenedor
+  function updateContainerWidth() {
+    if (container) {
+      containerWidth = container.offsetWidth;
+    }
+  }
+  
+  // Configurar el ResizeObserver para detectar cambios en el tamaño del contenedor
+  let resizeObserver: ResizeObserver;
+  
+  onMount(() => {
+    if (browser) {
+      updateContainerWidth();
+      
+      // Usar ResizeObserver para detectar cambios en el tamaño del contenedor
+      if (typeof ResizeObserver !== 'undefined') {
+        resizeObserver = new ResizeObserver(updateContainerWidth);
+        if (container) {
+          resizeObserver.observe(container);
+        }
+      }
+      
+      // También actualizar en caso de redimensionamiento de la ventana
+      window.addEventListener('resize', updateContainerWidth);
+    }
+    
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      if (browser) {
+        window.removeEventListener('resize', updateContainerWidth);
+      }
+    };
+  });
+  
   // Función para manejar el clic en el botón
-  function handleButtonClick() {
+  function handleButtonClick(event: MouseEvent) {
     if (!modalId) return;
     
-    // Disparar un evento personalizado que será manejado por el script principal
-    const event = new CustomEvent('openModal', { 
-      detail: { modalId },
-      bubbles: true,
-      cancelable: true
-    });
+    // Obtener la URL del modal desde el mapa
+    const url = modalUrlMap[modalId];
     
-    // Disparar el evento
-    window.dispatchEvent(event);
+    // Actualizar el ancho del contenedor antes de la verificación
+    updateContainerWidth();
+    
+    // Si el ancho del contenedor es mayor a 800px y tenemos una URL, abrir en ventana emergente
+    if (containerWidth > 800 && url) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.open(url, '_blank', 'width=1200,height=800,scrollbars=yes');
+    } else {
+      // Para contenedores pequeños o si no hay URL, mantener el comportamiento del modal
+      const modalEvent = new CustomEvent('openModal', { 
+        detail: { modalId },
+        bubbles: true,
+        cancelable: true
+      });
+      window.dispatchEvent(modalEvent);
+    }
   }
 
   // Calcular el porcentaje completado basado en el paso actual
@@ -181,7 +231,7 @@
 
 </script>
 
-<div class="proceso-card bg-white rounded-lg p-4 mb-1 ">
+<div class="proceso-card bg-white rounded-lg p-4 mb-1" bind:this={container}>
   <!-- Encabezado del proceso principal -->
   <div class="flex justify-between items-start mb-4">
     <div class="flex-1">
