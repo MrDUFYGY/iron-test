@@ -7,13 +7,18 @@ import Huella from "../../components/ConfirmHuella.astro";
   <div
     class="fixed inset-0 bg-cover bg-center z-0"
     style="background-image: url('../../public/assets/hidrosina-3.jpg');"
-  ></div>
+  >
+  </div>
 
   <div class="relative z-10 max-w-md mx-auto p-6 rounded shadow mt-10 bg-white">
-    <h1 class="text-2xl font-bold mb-6 text-center">Formulario de Autorización</h1>
+    <h1 class="text-2xl font-bold mb-6 text-center">
+      Formulario de Autorización
+    </h1>
 
     <form onsubmit="event.preventDefault();">
-      <label for="nombreGerente" class="block mb-2 font-semibold">Nombre del gerente:</label>
+      <label for="nombreGerente" class="block mb-2 font-semibold"
+        >Nombre del gerente:</label
+      >
       <input
         type="text"
         id="nombreGerente"
@@ -23,7 +28,9 @@ import Huella from "../../components/ConfirmHuella.astro";
         required
       />
 
-      <label for="idAutorizacion" class="block mb-2 font-semibold">ID de autorización:</label>
+      <label for="idAutorizacion" class="block mb-2 font-semibold"
+        >ID de autorización:</label
+      >
       <input
         type="text"
         id="idAutorizacion"
@@ -33,7 +40,9 @@ import Huella from "../../components/ConfirmHuella.astro";
         required
       />
 
-      <label for="fechaAutorizacion" class="block mb-2 font-semibold">Fecha de autorización:</label>
+      <label for="fechaAutorizacion" class="block mb-2 font-semibold"
+        >Fecha de autorización:</label
+      >
       <input
         type="date"
         id="fechaAutorizacion"
@@ -55,7 +64,11 @@ import Huella from "../../components/ConfirmHuella.astro";
 
       <!-- Video -->
       <div class="mb-4">
-        <video id="videoFacial" class="w-full rounded border border-gray-300" autoplay muted></video>
+        <video
+          id="videoFacial"
+          class="w-full rounded border border-gray-300"
+          autoplay
+          muted></video>
       </div>
 
       <!-- Botones de captura, descarga y envío -->
@@ -86,19 +99,16 @@ import Huella from "../../components/ConfirmHuella.astro";
         </button>
       </div>
 
-         <div>
-        <Huella/>
+      <div>
+        <Huella />
       </div>
-
-      
 
       <!-- Imagen capturada -->
       <div class="text-center">
         <canvas
           id="fotoCanvas"
           class="mx-auto border border-gray-300 rounded max-w-full"
-          style="max-width: 400px;"
-        ></canvas>
+          style="max-width: 400px;"></canvas>
       </div>
     </form>
   </div>
@@ -109,7 +119,9 @@ import Huella from "../../components/ConfirmHuella.astro";
     async function iniciarReconocimientoFacial() {
       video = document.getElementById("videoFacial");
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         video.srcObject = stream;
         video.play();
       } catch (err) {
