@@ -2,6 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import HuellaLogin from "../components/huellaLogin.astro";
 import Separador from "../components/Separador.astro"
+
+
+import imagen from "../assets/logo_hidrosina.png";
 ---
 
 <Layout>
@@ -10,7 +13,7 @@ import Separador from "../components/Separador.astro"
     <div class="flex max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden">
       
       <!-- Banner Izquierdo -->
-      <div class="w-1/2 bg-cover bg-center" style="background-image: url('./public/assets/logo_hidrosina.png');"></div>
+      <div class="w-1/2 bg-cover bg-center" style={`background-image: url(${imagen.src})`}></div>
 
       <!-- Formulario de Login -->
       <div class="w-1/2 p-10 flex flex-col justify-center">
