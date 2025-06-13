@@ -74,7 +74,7 @@ export function modalRightArea() {
       </svg>
       Abrir en nueva pestaña
     `;
-    newTabButton.onclick = function (e) {
+    newTabButton.onclick = (e) => {
       e.stopPropagation();
       window.open(url, '_blank', 'noopener,noreferrer,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
     };
@@ -83,7 +83,7 @@ export function modalRightArea() {
     const closeButton = document.createElement("button");
     closeButton.className = "bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors";
     closeButton.textContent = "Cerrar";
-    closeButton.onclick = function (e) {
+    closeButton.onclick = (e) => {
       e.stopPropagation();
       // Restaurar el menú original sin recargar
       if (modalContainer && window._originalMenuContent) {

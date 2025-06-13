@@ -55,12 +55,10 @@
   }
 </script>
 
-<style>
+<style >
   /* PARA IMPRESIÓN: oculta TODO excepto #printable-content */
   @media print {
-    body * {
-      visibility: hidden !important;
-    }
+
     #printable-content, #printable-content * {
       visibility: visible !important;
     }
@@ -78,6 +76,7 @@
 <!-- Botón para imprimir -->
 <button
   on:click={handlePrint}
+  aria-label="Imprimir resumen de procesos"
   class={`${$$props.buttonClass} bg-gray-600 hover:bg-gray-700 text-white font-medium text-sm py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2`}
 >
   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
