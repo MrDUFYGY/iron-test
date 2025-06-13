@@ -162,42 +162,27 @@ const resumenProcesos = {
   ],
 };
 
-interface MenuItem {
-  title: string;
-  description: string;
-  icon: string;
-  link: string;
-  modalSide: "left" | "center" | "right";
-  isOpen: boolean;
-  backgroundColor?: string;
-  iconColor?: string;
-  textColor?: string;
-}
-
-const items: MenuItem[] = [
+const items = [
   {
     title: "Facturas del día",
     description: "Facturas del día",
     icon: "receipt",
     link: "/facturas-del-dia",
-    modalSide: "right",
-    isOpen: true,  // Este modal se abrirá automáticamente
+    modalSide: "left",
   },
   {
     title: "Resumen de documentos",
     description: "Resumen de documentos",
     icon: "receipt",
     link: "/resumen-de-documentos",
-    modalSide: "center" as const,
-    isOpen: false
+    modalSide: "center",
   },
   {
     title: "Ayuda",
     description: "Ayuda",
     icon: "receipt",
     link: "/ayuda",
-    modalSide: "right" as const,
-    isOpen: false
+    modalSide: "right",
   },
   {
     title: "Resumen otro",
@@ -205,21 +190,8 @@ const items: MenuItem[] = [
     icon: "receipt",
     link: "/resumen-de-procesos",
     modalSide: "center" as const,
-    isOpen: false
-  },
-  {
-    title: "Mi Item",
-    description: "Descripción del ítem",
-    icon: "star",
-    link: "#",
-    modalSide: "center" as const,
-    isOpen: false,
-    backgroundColor: "red",
-    iconColor: "#63b3ed",
-    textColor: "#ffffff"
   },
 ];
-
 ---
 
 <Layout>
@@ -237,15 +209,9 @@ const items: MenuItem[] = [
       id="left-panel"
       style="width: 50%; height: 100%; overflow-y: auto; padding: 0px; scrollbar-width: thin; scrollbar-color: #333 #e0e0f0; position: relative;"
     >
-      <div class="mx-auto bg-white rounded-xl shadow-md p-3" style="width: 100%;">
-        <div class="flex items-center mb-6 w-full">
-          <h1 class="text-2xl font-bold uppercase">Resumen de Pólizas</h1>
-          <ResumenProcesosModal
-            data={JSON.stringify(resumenProcesos)}
-            buttonText=""
-            client:load
-            buttonClass="ml-4 bg-gray-500 hover:bg-gray-600 text-white font-medium py-1.5 px-4 rounded transition"
-          />
+      <div class="mx-auto bg-white rounded-xl shadow-md p-3">
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold uppercase mb-4">Resumen de Pólizas</h1>
         </div>
 
         <form id="formulario" class="space-y-8">
@@ -256,7 +222,6 @@ const items: MenuItem[] = [
               id="resumen-procesos-header"
               class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50"
             >
-
               <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
               <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
             </div>
@@ -348,7 +313,40 @@ const items: MenuItem[] = [
           Si necesitas ayuda con algun proceso selecciona un botón.
         </p>
       </div>
-      <MenuHerramientas items={items}  />
+      <MenuHerramientas items={items} />
+      <!-- <div class="bg-white p-6 rounded-xl shadow-md text-center">
+        <div class="flex justify-center items-center gap-4">
+          <a href="./menu_facturas">
+          <button
+            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded transition"
+          >
+            Facturas del día
+          </button>
+          </a>
+          <ResumenProcesosModal_Resumen
+            data={JSON.stringify(resumenProcesos)}
+            buttonText="Resumen de documentos"
+            client:load
+            buttonClass="bg-green-500 hover:bg-green-600 text-white font-medium py-1.5 px-4 rounded transition"
+          />
+          <div>
+           <ResumenProcesosModal
+            data={JSON.stringify(resumenProcesos)}
+            buttonText=""
+            client:load
+            buttonClass="bg-gray-500 hover:bg-gray-600 text-white font-medium py-1.5 px-4 rounded transition"
+          /></div>
+
+          <a href="./form_ayuda">
+            <button
+              onclick="mostrarAyuda()"
+              class="bg-red-500 hover:bg-red-600 text-white font-medium py-1.5 px-4 rounded transition"
+            >
+              Ayuda
+            </button>
+          </a>
+        </div>
+      </div> -->
     </div>
   </div>
 
