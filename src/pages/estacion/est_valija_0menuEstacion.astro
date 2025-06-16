@@ -177,6 +177,7 @@ const items: MenuItem[] = [
     icon: "receipt",
     link: "/facturas-del-dia",
     modalSide: "left" as const,
+    isOpen: true,
   },
   {
     title: "Resumen de documentos",
@@ -191,6 +192,7 @@ const items: MenuItem[] = [
     icon: "receipt",
     link: "/ayuda",
     modalSide: "right" as const,
+    isOpen: true,
   },
   {
     title: "Resumen otro",
@@ -217,7 +219,7 @@ const items: MenuItem[] = [
   icon: "touch_app",
   link: "/estacion/contenido", // Asegúrate de que esta ruta sea correcta
   modalSide: "mov" as const,
-  isOpen: true,
+  //isOpen: true,
 },
 {
     title: "Mi Modal",
@@ -228,18 +230,7 @@ const items: MenuItem[] = [
   }
 
 ];
-// interface MenuItem {
-//   title: string;
-//   description: string;
-//   icon: string;
-//   link: string;
-//   modalSide?: 'left' | 'right' | 'center';
-//   isOpen?: boolean;
-//   sugerencia?: boolean;
-//   backgroundColor?: string;
-//   iconColor?: string;
-//   textColor?: string;
-// }
+
 ---
 
 <Layout>
