@@ -106,10 +106,15 @@
   let container: HTMLElement;
   let containerWidth = 0;
   
-  // Función para actualizar el ancho del contenedor
+  // Función para actualizar el ancho del contenedor en vw
   function updateContainerWidth() {
-    if (container) {
-      containerWidth = container.offsetWidth;
+    if (container && browser) {
+      // Obtener el ancho del viewport en píxeles
+      const viewportWidth = window.innerWidth;
+      // Obtener el ancho del contenedor en píxeles
+      const containerPx = container.offsetWidth;
+      // Convertir a vw (1vw = 1% del ancho del viewport)
+      containerWidth = (containerPx / viewportWidth) * 100;
     }
   }
   
@@ -152,8 +157,8 @@
     // Actualizar el ancho del contenedor antes de la verificación
     updateContainerWidth();
     
-    // Si el ancho del contenedor es mayor a 800px y tenemos una URL, abrir en ventana emergente
-    if (containerWidth > 800 && url) {
+    // Si el ancho del contenedor es mayor a 70vw y tenemos una URL, abrir en ventana emergente
+    if (containerWidth > 60 && url) {
       event.preventDefault();
       event.stopPropagation();
       window.open(url, '_blank', 'width=1200,height=800,scrollbars=yes');

@@ -4,7 +4,7 @@ interface MenuItem {
   description: string;
   icon: string;
   link: string;
-  modalSide?: 'left' | 'right' | 'center';
+  modalSide?: 'left' | 'right' | 'center' | 'mov';
   isOpen?: boolean;
   sugerencia?: boolean;
   backgroundColor?: string;
@@ -17,60 +17,86 @@ interface Props {
 }
 
 const { items } = Astro.props;
-
 ---
 
 {/* Script para abrir modales automáticamente */}
+<div id="menu-data" data-items={JSON.stringify(items)}></div>
 {items.filter(item => item.isOpen && item.modalSide).length > 0 && (
   <script is:inline>
-    // Serializa los items para usarlos en el contexto del navegador
-    const items = JSON.parse('{JSON.stringify(items)}');
-    // Función para abrir los modales
-    function openInitialModals() {
-      // Verificar si showModal está definido
-      if (typeof window.showModal !== 'function') {
-        console.warn('showModal function is not defined yet');
-        // Reintentar después de un breve retraso
+    (function() {
+      try {
+        // Obtener los items del data attribute
+        const menuData = document.getElementById('menu-data');
+        const menuItems = JSON.parse(menuData?.dataset.items || '[]');
+        
+        // Función para mostrar el loader
+        function showLoader(modalId) {
+          const modal = document.getElementById(modalId);
+          if (!modal) return;
+          
+          modal.innerHTML = `
+            <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+                <div class="flex flex-col items-center">
+                  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+                  <p class="text-gray-700">Cargando contenido...</p>
+                </div>
+              </div>
+            </div>`;
+          modal.classList.remove('hidden');
+        }
+
+        // Función para abrir los modales después de un retraso
+        async function openInitialModals() {
+          console.log('[openInitialModals] Iniciando carga de modales...');
+          
+          // Esperar 3 segundos antes de intentar abrir los modales
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          
+          const openModals = menuItems
+            .filter(item => item.isOpen && item.modalSide)
+            .map(item => ({
+              link: item.link,
+              modalSide: item.modalSide,
+              title: item.title
+            }));
+          
+          // Abrir cada modal marcado para abrirse inicialmente
+          console.log('Modales a abrir:', openModals);
+          openModals.forEach(({ link, modalSide, title }) => {
+            // Utiliza la función global openModal (que a su vez llama a showModal y guarda estado)
+            if (typeof window.openModal === 'function') {
+              window.openModal(link, modalSide, title);
+            } else if (typeof openModal === 'function') {
+              openModal(link, modalSide, title);
+            } else {
+              // Fallback directo a showModal si openModal no está disponible
+              if (typeof window.showModal === 'function') {
+                window.showModal(link, modalSide, title);
+              } else if (typeof showModal === 'function') {
+                showModal(link, modalSide, title);
+              }
+            }
+          });
+        }
+
+        // Esperar a que el DOM esté completamente cargado
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded, initializing modals...');
+            openInitialModals();
+          });
+        } else {
+          console.log('DOM already loaded, initializing modals immediately...');
+          openInitialModals();
+        }
+        
+        // Usar setTimeout para asegurar que el resto del código se haya ejecutado
         setTimeout(openInitialModals, 100);
-        return;
+      } catch (error) {
+        console.error('Error al abrir los modales:', error);
       }
-
-      // Obtener los modales que deben abrirse automáticamente
-      const openModals = Array.from({length: items.length})
-        .map((_, i) => items[i])
-        .filter(item => item.isOpen && item.modalSide)
-        .map(item => ({
-          link: item.link,
-          modalSide: item.modalSide,
-          title: item.title
-        }));
-      
-      console.log('Opening modals:', openModals);
-      
-      // Abrir cada modal con un pequeño retraso entre ellos
-      openModals.forEach((item, index) => {
-        setTimeout(() => {
-          console.log('Attempting to open modal:', item);
-          if (item.link && item.modalSide && typeof window.showModal === 'function') {
-            window.showModal(item.link, item.modalSide, item.title);
-          } else {
-            console.warn('Cannot open modal - missing required properties or showModal function');
-          }
-        }, 300 * (index + 1)); // Retraso de 300ms entre modales
-      });
-    }
-
-    // Esperar a que el DOM esté completamente cargado
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM fully loaded, initializing modals...');
-        openInitialModals();
-      });
-    } else {
-      console.log('DOM already loaded, initializing modals immediately...');
-      // Usar setTimeout para asegurar que el resto del código se haya ejecutado
-      setTimeout(openInitialModals, 100);
-    }
+    })();
   </script>
 )}
 
@@ -107,11 +133,22 @@ const { items } = Astro.props;
 <div id="modal-overlay" class="modal-overlay hidden"></div>
 <div id="modal-left" class="modal-content hidden" style="left: 0;"></div>
 <div id="modal-right" class="modal-content hidden" style="right: 0;"></div>
-<div id="modal-center" class="modal-content hidden draggable" style="left: 25%; width: 50%;">
-  <div class="modal-header" style="cursor: move;">
-    <span id="modal-center-title" class="modal-title"></span>
+<!-- Modal Center -->
+<div id="modal-center" class="modal-content hidden draggable" style="left: 25%; width: 50%; height: 80%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+  <div class="modal-header" style="cursor: move; border-bottom: 1px solid #e5e7eb; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <span id="modal-center-title" class="modal-title" style="font-weight: 600; font-size: 1.1rem;"></span>
+    <button class="close-button" onclick="closeModal('modal-center')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 0.25rem 0.5rem;">×</button>
   </div>
-  <div class="modal-body"></div>
+  <div class="modal-body" style="padding: 0; height: calc(100% - 60px); overflow: hidden;"></div>
+</div>
+
+<!-- Modal Móvil -->
+<div id="modal-mov" class="modal-content hidden draggable" style="width: 80%; max-width: 400px; height: 60vh; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+  <div class="modal-header" style="cursor: move; border-bottom: 1px solid #e5e7eb; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <span id="modal-mov-title" class="modal-title" style="font-weight: 600; font-size: 1.1rem;"></span>
+    <button class="close-button" onclick="closeModal('modal-mov')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 0.25rem 0.5rem;">×</button>
+  </div>
+  <div class="modal-body" style="padding: 0; height: calc(100% - 60px); overflow: hidden;"></div>
 </div>
 <style>
   /* Estilos adicionales específicos para esta página */
@@ -242,14 +279,14 @@ const { items } = Astro.props;
   .modal-content {
     background-color: white;
     width: 50%;
-    height: 80%;
+    height: 100%;
     position: fixed;
-    top: 10vh;
+    top: 9vh;
     right: 0;
     padding: 0;
     z-index: 1000;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    border-radius: 8px;
+    border-radius: 5px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -308,19 +345,84 @@ const { items } = Astro.props;
   .hidden {
     display: none;
   }
+
+  /* Estilos específicos para el modal móvil */
+  #modal-mov {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 60vh;
+    max-width: 400px;
+    width: 80%;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  /* Estilos para el botón de cerrar */
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    color: #666;
+  }
+
+  .close-button:hover {
+    color: #000;
+  }
 </style>
 
 <script is:inline>
+  // Clave para almacenar el estado de los modales en localStorage
+  const MODAL_STORAGE_KEY = 'modalStates';
+  
   // Inicializar el estado de los modales
-  const activeModals = {
+  let activeModals = {
     left: null,
     right: null,
-    center: null
+    center: null,
+    mov: null
   };
+
+  // Cargar estados guardados al iniciar
+  function loadModalStates() {
+    try {
+      const savedStates = localStorage.getItem(MODAL_STORAGE_KEY);
+      if (savedStates) {
+        return JSON.parse(savedStates);
+      }
+    } catch (e) {
+      console.error('Error al cargar estados de modales:', e);
+    }
+    return {};
+  }
+
+  // Guardar estados actuales
+  function saveModalStates() {
+    try {
+      const statesToSave = {};
+      Object.entries(activeModals).forEach(([side, modal]) => {
+        if (modal) {
+          statesToSave[side] = {
+            url: modal.url,
+            title: modal.title,
+            timestamp: Date.now()
+          };
+        }
+      });
+      localStorage.setItem(MODAL_STORAGE_KEY, JSON.stringify(statesToSave));
+    } catch (e) {
+      console.error('Error al guardar estados de modales:', e);
+    }
+  }
 
   // Función para abrir un modal
   function openModal(link, side, title) {
     showModal(link, side, title);
+    // Actualizar el estado en el localStorage
+    saveModalStates();
   }
 
   let isDragging = false;
@@ -350,12 +452,27 @@ const { items } = Astro.props;
     function drag(e) {
       if (!isDragging) return;
       
-      // Actualizar posición del modal
-      currentDraggedModal.style.left = (e.clientX - offsetX) + 'px';
-      currentDraggedModal.style.top = (e.clientY - offsetY) + 'px';
+      // Prevenir el comportamiento por defecto para evitar seleccionar texto
+      e.preventDefault();
       
-      // Resetear right para que no haya conflicto
+      // Calcular nueva posición
+      let x = e.clientX - offsetX;
+      let y = e.clientY - offsetY;
+      
+      // Limitar la posición para que no se salga de la pantalla
+      const rect = currentDraggedModal.getBoundingClientRect();
+      const maxX = window.innerWidth - rect.width;
+      const maxY = window.innerHeight - rect.height;
+      
+      x = Math.max(0, Math.min(x, maxX));
+      y = Math.max(0, Math.min(y, maxY));
+      
+      // Aplicar la nueva posición
+      currentDraggedModal.style.left = `${x}px`;
+      currentDraggedModal.style.top = `${y}px`;
       currentDraggedModal.style.right = 'auto';
+      currentDraggedModal.style.bottom = 'auto';
+      currentDraggedModal.style.transform = 'none'; // Eliminar transform si existe
     }
     
     function stopDrag() {
@@ -366,6 +483,9 @@ const { items } = Astro.props;
       }
       document.removeEventListener('mousemove', drag);
       document.removeEventListener('mouseup', stopDrag);
+      
+      // Guardar la posición después de arrastrar
+      saveModalStates();
     }
   }
 
@@ -374,45 +494,59 @@ const { items } = Astro.props;
     const modal = document.getElementById(modalId);
     const overlay = document.getElementById('modal-overlay');
 
-    // Close existing modal on this side if there is one
+    // Cerrar el modal actual si ya está abierto
     if (activeModals[side]) {
-      closeModal(modalId);
+      closeModal(modalId, false);
+    }
+    
+    // Actualizar el estado del modal
+    activeModals[side] = { url, title };
+    
+    // Actualizar el localStorage
+    saveModalStates();
+    
+    // Resetear posición inicial
+    if (side === 'center') {
+      modal.style.left = '25%';
+      modal.style.top = '10vh';
+      modal.style.transform = 'none';
+    } else if (side === 'mov') {
+      // Centrar el modal móvil
+      modal.style.left = '50%';
+      modal.style.top = '50%';
+      modal.style.transform = 'translate(-50%, -50%)';
     }
 
-    // Mostrar overlay solo para el modal centrado
+    // Mostrar overlay solo para el modal centrado, no para el móvil
     if (side === 'center') {
       overlay.classList.remove('hidden');
       overlay.classList.add('visible');
+    } else if (side === 'mov') {
+      // Para el modal móvil, aseguramos que el overlay esté oculto
+      overlay.classList.add('hidden');
+      overlay.classList.remove('visible');
     }
 
     // Crear contenido del modal según el tipo
-    if (side === 'center') {
-      // Para el modal centrado (arrastrable)
-      modal.querySelector('.modal-title').textContent = title;
+    if (side === 'center' || side === 'mov') {
+      // Para el modal centrado o móvil (ambos arrastrables)
+      const titleElement = modal.querySelector(`#${modalId}-title`);
+      if (titleElement) {
+        titleElement.textContent = title;
+      }
+      
       const modalBody = modal.querySelector('.modal-body');
-      modalBody.innerHTML = `
-        <iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>
-        <button onclick="closeModal('${modalId}')" class="modal-close-button">Cerrar</button>
-        <style>
-          .modal-close-button {
-            position: absolute;
-            top: 0.5rem;
-            right: 1rem;
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 999px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            z-index: 10;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-          }
-          .modal-close-button:hover {
-            background-color: #dc2626;
-            transform: scale(1.1);
-          }
-        </style>
-      `;
+      if (modalBody) {
+        modalBody.innerHTML = `
+          <iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>
+        `;
+      }
+      
+      // Hacer el modal arrastrable
+      const header = modal.querySelector('.modal-header');
+      if (header) {
+        makeDraggable(modal, header);
+      }
     } else {
       // Para los modales laterales (comportamiento original)
       modal.innerHTML = `
@@ -454,42 +588,48 @@ const { items } = Astro.props;
     // Mostrar el modal y actualizar el seguimiento
     modal.classList.remove('hidden');
     activeModals[side] = { url, title };
-
-    // Configurar arrastre si es el modal centrado
-    if (side === 'center') {
-      const header = modal.querySelector('.modal-header');
-      makeDraggable(modal, header);
-    }
+    
+    // Asegurarse de que el modal esté en la parte superior
+    modal.style.zIndex = '1001';
 
     // Agregar listener para la tecla Escape
     document.addEventListener('keydown', handleEscapeKey);
   }
 
-  function closeModal(modalId) {
+  function closeModal(modalId, updateStorage = true) {
     const modal = document.getElementById(modalId);
     const overlay = document.getElementById('modal-overlay');
+    
+    if (!modal) return;
     
     modal.classList.add('hidden');
     overlay.classList.remove('visible');
     overlay.classList.add('hidden');
     
-    // Limpiar solo el contenido del body para el modal centrado
-    if (modalId === 'modal-center') {
-      modal.querySelector('.modal-body').innerHTML = '';
-      modal.querySelector('.modal-title').textContent = '';
+    // Limpiar solo el contenido del body para los modales arrastrables
+    if (modalId === 'modal-center' || modalId === 'modal-mov') {
+      const modalBody = modal.querySelector('.modal-body');
+      const modalTitle = modal.querySelector('.modal-title');
+      if (modalBody) modalBody.innerHTML = '';
+      if (modalTitle) modalTitle.textContent = '';
     } else {
       modal.innerHTML = '';
     }
     
     const side = modalId.replace('modal-', '');
     activeModals[side] = null;
+    
+    // Actualizar el localStorage si es necesario
+    if (updateStorage) {
+      saveModalStates();
+    }
 
     // Remover listeners de arrastre
     isDragging = false;
     currentDraggedModal = null;
 
     // Remover listener de tecla Escape si no hay modales activos
-    if (!activeModals.left && !activeModals.right && !activeModals.center) {
+    if (!activeModals.left && !activeModals.right && !activeModals.center && !activeModals.mov) {
       document.removeEventListener('keydown', handleEscapeKey);
     }
   }
