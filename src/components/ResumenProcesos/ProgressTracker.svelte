@@ -158,7 +158,7 @@
     updateContainerWidth();
     
     // Si el ancho del contenedor es mayor a 70vw y tenemos una URL, abrir en ventana emergente
-    if (containerWidth > 60 && url) {
+    if (containerWidth > 59 && url) {
       event.preventDefault();
       event.stopPropagation();
       window.open(url, '_blank', 'width=1200,height=800,scrollbars=yes');

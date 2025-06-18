@@ -1,0 +1,341 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { facturasData, ingresosData } from "../../data/facturasIngresosData";
+
+// Define the usedIngresos Set in the component scope
+const usedIngresos = new Set<number>();
+
+// Add type for window.usedIngresos
+declare global {
+  interface Window {
+    usedIngresos?: Set<number>;
+  }
+}
+
+// Get today's date in DD/MM/YYYY format
+const today = new Date().toLocaleDateString("es-ES", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric"
+});
+
+// Function to get all available ingresos (not used yet)
+const getAvailableIngresos = () => {
+  return ingresosData.filter((ingreso) => !ingreso.isUsed);
+};
+
+// Function to get all ingresos (including used ones)
+const getAllIngresos = () => {
+  return [...ingresosData];
+};
+
+// Declare global usedIngresos Set
+declare global {
+  interface Window {
+    usedIngresos: Set<number>;
+  }
+}
+
+// Initialize usedIngresos from localStorage if available
+if (typeof window !== 'undefined') {
+  const savedUsedIngresos = localStorage.getItem('usedIngresos');
+  if (savedUsedIngresos) {
+    try {
+      const ids = JSON.parse(savedUsedIngresos) as number[];
+      ids.forEach(id => usedIngresos.add(id));
+    } catch (e) {
+      console.error('Error parsing usedIngresos from localStorage', e);
+    }
+  }
+  
+  // Mark ingresos as used based on the usedIngresos Set
+  ingresosData.forEach(ingreso => {
+    ingreso.isUsed = usedIngresos.has(ingreso.id);
+  });
+  
+  // Save to window for client-side access
+  window.usedIngresos = usedIngresos;
+}
+---
+<Layout class="h-screen flex flex-col bg-gray-50">
+  <div class="container mx-auto p-6 max-w-4xl">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold text-gray-800">Facturas e Ingresos de Carburantes.</h1>
+      <div class="flex items-center space-x-4">
+        <span class="text-gray-600">Fecha {today}</span>
+        <div class="flex items-center bg-gray-100 px-3 py-1 rounded">
+          <span class="text-gray-600 mr-2">Hora de cierre:</span>
+          <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm">23:00Hrs</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Facturas List -->
+    <div class="space-y-6" id="facturasList">
+      {facturasData.map((factura) => {
+        const availableIngresos = getAvailableIngresos();
+        const allIngresos = getAllIngresos();
+        const isJustificada = factura.estado === "justificado";
+        const facturaIngresoId = factura.ingresoId; // Track which ingreso is used by this factura
+
+        return (
+          <div class="flex items-center factura-item" data-factura-numero={factura.numero}>
+            <!-- Status Circle -->
+            <div class={`w-6 h-6 rounded-full ${isJustificada ? "bg-green-500" : "bg-gray-300"} mr-4`}></div>
+
+            <!-- Factura Label -->
+            <div class="bg-gray-200 px-4 py-2 rounded">
+              VDM - {factura.numero}
+            </div>
+
+            <!-- Dashed Line -->
+            <div class="flex-1 border-t-2 border-dashed border-gray-300 mx-4"></div>
+
+            {isJustificada ? (
+              <!-- Status Label -->
+              <div class="bg-green-100 text-green-800 px-6 py-2 rounded">
+                Justificado
+              </div>
+            ) : (
+              <!-- Action Button -->
+              <div class="relative">
+                <button
+                  class="justificar-btn bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded flex items-center transition-colors"
+                  data-factura-numero={factura.numero}
+                >
+                  Justificar
+                  <span class="ml-2">▼</span>
+                </button>
+                <!-- Ingresos Container -->
+                <div class="ingresos-container hidden absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg p-4 z-20 max-h-72 overflow-y-auto">
+                  <div class="ingresos-list">
+                    {availableIngresos.length > 0 ? (
+                      availableIngresos.map((ingreso) => (
+                        <div 
+                          class="ingreso-card card-hover relative transition-opacity duration-200 ${ingreso.isUsed ? 'opacity-50' : ''}"
+                          data-ingreso-id={ingreso.id}
+                        >
+                          <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-medium text-gray-800">Ingreso {ingreso.id}</h3>
+                            <span class="text-sm text-gray-500">{ingreso.fecha}</span>
+                          </div>
+                          <div class="grid grid-cols-2 gap-2 mb-3">
+                            <div>
+                              <p class="text-xs text-gray-500">N. de remisión</p>
+                              <p class="font-medium">{ingreso.numeroRemision}</p>
+                            </div>
+                            <div>
+                              <p class="text-xs text-gray-500">N. de bomba</p>
+                              <p class="font-medium">{ingreso.numeroBomba}</p>
+                            </div>
+                            <div>
+                              <p class="text-xs text-gray-500">Importe</p>
+                              <p class="font-medium">{ingreso.importe}</p>
+                            </div>
+                            <div>
+                              <p class="text-xs text-gray-500">Litros</p>
+                              <p class="font-medium">{ingreso.litros}</p>
+                            </div>
+                            {ingreso.observaciones && (
+                              <div class="col-span-2">
+                                <p class="text-xs text-gray-500">Observaciones</p>
+                                <p class="text-sm">{ingreso.observaciones}</p>
+                              </div>
+                            )}
+                          </div>
+                          <div class="flex justify-end">
+                            <button
+                              class="seleccionar-btn px-4 py-1 text-sm text-white rounded bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                              data-ingreso-id={ingreso.id}
+                              data-factura-numero={factura.numero}
+                              disabled={ingreso.isUsed}
+                            >
+                              {ingreso.isUsed ? 'Ya usado' : 'Seleccionar'}
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div class="text-center py-4 text-gray-500">
+                        No hay ingresos disponibles para esta factura
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Smooth transitions */
+  .transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Ingresos card styles */
+  .ingreso-card {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ingreso-card:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Hide all ingresos containers by default */
+  .ingresos-container {
+    display: none;
+  }
+
+  /* Show active ingresos container */
+  .ingresos-container.active {
+    display: block;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize usedIngresos if it doesn't exist
+    if (!window.usedIngresos) {
+      window.usedIngresos = new Set();
+    }
+
+    // Get all justify buttons
+    const justifyButtons = document.querySelectorAll(".justificar-btn");
+    
+    // Function to update the UI to show used ingresos
+    function updateUsedIngresosUI() {
+      document.querySelectorAll('.ingreso-card').forEach((card: Element) => {
+        const ingresoId = card.getAttribute('data-ingreso-id');
+        if (ingresoId && usedIngresos.has(parseInt(ingresoId))) {
+          card.classList.add('opacity-50');
+          const button = card.querySelector('.seleccionar-btn') as HTMLButtonElement | null;
+          if (button) {
+            button.disabled = true;
+            button.textContent = 'Ya usado';
+            button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            button.classList.add('bg-gray-400', 'cursor-not-allowed');
+          }
+        }
+      });
+    }
+    
+    // Initial UI update
+    updateUsedIngresosUI();
+
+    // Add click event to each button
+    Array.from(justifyButtons).forEach((button: Element) => {
+      button.addEventListener("click", function (this: HTMLElement, e: Event) {
+        e.stopPropagation();
+        const facturaNumero = this.getAttribute("data-factura-numero");
+        const container = this.nextElementSibling as HTMLElement | null;
+        if (!container) return;
+
+        // Close all other containers
+        document.querySelectorAll(".ingresos-container").forEach((c: Element) => {
+          if (c !== container) {
+            (c as HTMLElement).classList.remove("active");
+          }
+        });
+
+        // Toggle current container if it exists
+        container.classList.toggle("active");
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function (e: Event) {
+      const target = e.target as HTMLElement;
+      if (target.closest(".ingresos-container") || target.closest(".justificar-btn")) {
+        return;
+      }
+
+      const containers = document.querySelectorAll(".ingresos-container");
+      containers.forEach((container: Element) => {
+        (container as HTMLElement).classList.remove("active");
+      });
+    });
+
+    // Handle seleccionar button click
+    document.addEventListener("click", function (e: Event) {
+      const target = (e.target as HTMLElement).closest(".seleccionar-btn") as HTMLButtonElement | null;
+      if (!target || target.disabled) return;
+
+      e.stopPropagation();
+      const ingresoId = target.getAttribute("data-ingreso-id");
+      const facturaNumero = target.getAttribute("data-factura-numero");
+
+      if (!ingresoId || !facturaNumero) return;
+
+      // Mark the ingreso as used
+      const ingresoIdNum = parseInt(ingresoId);
+      if (!usedIngresos.has(ingresoIdNum)) {
+        usedIngresos.add(ingresoIdNum);
+        
+        // Save to localStorage
+        localStorage.setItem('usedIngresos', JSON.stringify(Array.from(usedIngresos)));
+        
+        // Update all instances of this ingreso in the UI
+        document.querySelectorAll(`[data-ingreso-id="${ingresoId}"]`).forEach((card: Element) => {
+          card.classList.add('opacity-50');
+          const button = card.querySelector('.seleccionar-btn') as HTMLButtonElement | null;
+          if (button) {
+            button.disabled = true;
+            button.textContent = 'Ya usado';
+            button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            button.classList.add('bg-gray-400', 'cursor-not-allowed');
+          }
+        });
+      }
+
+      // Find the factura item
+      const facturaItem = document.querySelector(`[data-factura-numero="${facturaNumero}"]`);
+      if (facturaItem) {
+        // Update status to justified
+        const statusCircle = facturaItem.querySelector(".rounded-full");
+        const actionButton = facturaItem.querySelector(".justificar-btn");
+        const statusLabel = `
+          <div class="bg-green-100 text-green-800 px-6 py-2 rounded">
+            Justificado
+          </div>
+        `;
+        
+        if (statusCircle) {
+          statusCircle.classList.remove('bg-gray-300');
+          statusCircle.classList.add('bg-green-500');
+        }
+        
+        if (actionButton && actionButton.parentElement) {
+          actionButton.parentElement.outerHTML = statusLabel;
+        }
+        
+        // Close the dropdown
+        const container = facturaItem.querySelector('.ingresos-container') as HTMLElement;
+        if (container) {
+          container.classList.remove('active');
+        }
+      }
+    });
+  });
+</script>

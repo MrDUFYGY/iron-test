@@ -172,62 +172,31 @@ interface MenuItem {
 }
 const items: MenuItem[] = [
   {
-    title: "Facturas del día",
-    description: "Facturas del día",
+    title: "Relacion de Facturas",
+    description: "Relacion de Facturas VDM con Ingresos",
     icon: "receipt",
-    link: "/facturas-del-dia",
-    modalSide: "left" as const,
-    isOpen: true,
-  },
-  {
-    title: "Resumen de documentos",
-    description: "Resumen de documentos",
-    icon: "receipt",
-    link: "/resumen-de-documentos",
-    modalSide: "center" as const,
+    link: "/estacion/est_valija_12RelacionFacturasIngresos", // Asegúrate de que esta ruta sea correcta
+    modalSide: "mov" as const,
+    isOpen: false,
+    sugerencia: true,
+    backgroundColor: "#1e293b",
+    iconColor: "white",
+    textColor: "white",
   },
   {
     title: "Ayuda",
     description: "Ayuda",
     icon: "receipt",
-    link: "/ayuda",
-    modalSide: "right" as const,
-    isOpen: true,
-  },
-  {
-    title: "Resumen otro",
-    description: "Resumen de procesos",
-    icon: "receipt",
-    link: "/resumen-de-procesos",
+    link: "/estacion/form_ayuda",
     modalSide: "center" as const,
+    isOpen: false,
+    backgroundColor: "oklch(0.637 0.237 25.331)",
+    iconColor: "white",
+    textColor: "white",
   },
-  {
-    title:"Otro",
-    description: "Otro",
-    icon: "receipt",
-    link: "/otro",
-    modalSide: "center" as const,
-    sugerencia: true,
-    backgroundColor: "yellow",
-    iconColor: "black",
-    textColor: "black",
-    
-  },
-  {
-  title: "Mi Modal Móvil",
-  description: "Este es un modal móvil arrastrable",
-  icon: "touch_app",
-  link: "/estacion/contenido", // Asegúrate de que esta ruta sea correcta
-  modalSide: "mov" as const,
-  //isOpen: true,
-},
-{
-    title: "Mi Modal",
-    description: "Descripción del modal",
-    icon: "info",
-    link: "/ruta/al/contenido",
-    modalSide: "center",
-  }
+
+
+
 
 ];
 
@@ -375,7 +344,7 @@ const items: MenuItem[] = [
         leftPanelId: 'left-panel',
         containerId: 'resizable-container',
         minWidth: 30,
-        maxWidth: 70
+        maxWidth: 90
       });
     });
 

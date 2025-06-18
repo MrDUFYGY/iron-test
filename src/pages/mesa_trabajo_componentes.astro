@@ -4,6 +4,8 @@ import Layout from '../layouts/Layout.astro';
 import SubidaComprobacionHL from '../components/ResumenProcesos/CORP-1-subidaComprobacionHL.astro';
 import ProgressTracker from '../components/ResumenProcesos/ProgressTracker.svelte';
 import ResumenProcesosModal from '../components/ResumenProcesos/ResumenProcesosModal.svelte';
+import MenuHerramientas from '../components/MenuHerramientas.astro';
+
 
 // Datos para el modal de resumen
 const resumenProcesos = {
@@ -42,6 +44,78 @@ function abrirModal() {
 function cerrarModal() {
   mostrarModal = false;
 }
+
+
+
+
+
+
+
+
+
+
+
+interface MenuItem {
+  title: string;
+  description: string;
+  icon: string;
+  link: string;
+  modalSide?: 'left' | 'right' | 'center' | 'mov';
+  isOpen?: boolean;
+  sugerencia?: boolean;
+  backgroundColor?: string;
+  iconColor?: string;
+  textColor?: string;
+}
+const items: MenuItem[] = [
+  {
+    title: "Facturas del día",
+    description: "Facturas del día",
+    icon: "receipt",
+    link: "/facturas-del-dia",
+    modalSide: "left" as const,
+  },
+  {
+    title: "Ayuda",
+    description: "Ayuda",
+    icon: "receipt",
+    link: "/ayuda",
+    modalSide: "right" as const,
+  },
+  {
+    title: "Resumen de documentos",
+    description: "Resumen de documentos",
+    icon: "receipt",
+    link: "/resumen-de-documentos",
+    modalSide: "center" as const,
+  },
+  {
+    title:"Otro",
+    description: "Otro",
+    icon: "receipt",
+    link: "/otro",
+    modalSide: "center" as const,
+    sugerencia: true,
+    backgroundColor: "yellow",
+    iconColor: "black",
+    textColor: "black",
+    
+  },
+  {
+  title: "Relacion de Facturas",
+  description: "Relacion de Facturas VDM con Ingresos",
+  icon: "receipt",
+  link: "/estacion/est_valija_12RelacionFacturasIngresos", // Asegúrate de que esta ruta sea correcta
+  modalSide: "mov" as const,
+  isOpen: true,
+  sugerencia: true,
+  backgroundColor: "yellow",
+  iconColor: "black",
+  textColor: "black",
+},
+
+
+];
 ---
 
 <Layout>
@@ -112,6 +186,8 @@ function cerrarModal() {
 
 
       </div>
+
+      <MenuHerramientas items={items} />
     </section>
   </div>
 

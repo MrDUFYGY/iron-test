@@ -9,58 +9,79 @@ import imagen from "../assets/logo_hidrosina.png";
 
 <Layout>
   <Separador texto="MENU DE ESTACIONES" />
-  <div class="mt-10 flex items-center justify-center">
+  <div class="mt-6 flex items-center justify-center">
     <div class="flex max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden">
       
       <!-- Banner Izquierdo -->
       <div class="w-1/2 bg-cover bg-center" style={`background-image: url(${imagen.src})`}></div>
 
       <!-- Formulario de Login -->
-      <div class="w-1/2 p-10 flex flex-col justify-center">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6">¡Bienvenido!</h2>
-        <form class="space-y-4" id="loginForm">
-          <div>
+      <div class="w-1/2 p-8 flex flex-col justify-center">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">¡Bienvenido!</h2>
+        <form class="space-y-3" id="loginForm">
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-600">Correo electrónico</label>
-            <input
-              type="text"
-              id="username"
-              placeholder="Nombre de usuario"
-              value="dev-test"
-              class="w-full px-4 py-2 mt-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            <span class="text-xs text-gray-500">@hidrosina.com.mx</span>
+            <div class="relative">
+              <input
+                type="text"
+                id="username"
+                placeholder="Nombre de usuario"
+                value="dev-test"
+                class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+              />
+              <span class="absolute right-3 top-2.5 text-xs text-gray-500">@hidrosina.com.mx</span>
+            </div>
           </div>
-          <div>
+          
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-600">Contraseña</label>
             <input
               type="password"
               id="password"
               placeholder="••••••••"
               value="password01"
-              class="w-full px-4 py-2 mt-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
             />
           </div>
-          <div class="flex justify-between items-center text-sm mt-2">
-            <label class="flex items-center space-x-2">
-              <input type="checkbox" class="form-checkbox text-blue-500" />
+          
+          <div class="flex justify-between items-center text-xs mt-1">
+            <label class="flex items-center space-x-1.5">
+              <input type="checkbox" class="form-checkbox h-3.5 w-3.5 text-blue-500" />
               <span>Recordarme</span>
             </label>
-            <a href="#" class="text-blue-500 hover:underline">¿Olvidaste tu contraseña?</a>
+            <a href="#" class="text-blue-500 hover:underline text-xs">¿Olvidaste tu contraseña?</a>
           </div>
 
-          <button
-            type="submit"
-            class="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600 transition duration-300"
-          >Iniciar sesión</button>
+          <div class="space-y-2.5 pt-1">
+            <button
+              type="submit"
+              class="w-full bg-blue-500 text-white py-1.5 rounded-lg hover:bg-blue-600 transition duration-200 text-sm font-medium"
+            >
+              Iniciar sesión
+            </button>
 
-          <!-- Botón para iniciar sesión con huella -->
-          <button
-            type="button"
-            onclick="document.getElementById('huellaLogin-modal').showModal()"
-            class="w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition duration-300"
-          >
-            Iniciar sesión con huella
-          </button>
+            <button
+              type="button"
+              onclick="document.getElementById('huellaLogin-modal').showModal()"
+              class="w-full bg-green-500 text-white py-1.5 rounded-lg hover:bg-green-600 transition duration-200 text-sm font-medium"
+            >
+              Iniciar con huella
+            </button>
+
+            <div class="flex items-center my-2">
+              <hr class="flex-grow border-t border-gray-200" />
+              <span class="px-2 text-gray-400 text-xs">o</span>
+              <hr class="flex-grow border-t border-gray-200" />
+            </div>
+
+            <button
+              type="button"
+              class="w-full bg-white text-gray-700 py-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200 text-sm font-medium flex items-center justify-center gap-2"
+            >
+              <img src="https://www.google.com/favicon.ico" alt="Google" class="w-4 h-4" />
+              Acceder con Google
+            </button>
+          </div>
 
         </form>
           <!-- Por si en algun punto los usuarios pueden resgistrase para tener una cuenta e iniciar sesion -->
