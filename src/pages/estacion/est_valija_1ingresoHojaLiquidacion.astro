@@ -3,17 +3,36 @@ import "../../styles/global.css";
 import Layout from "../../layouts/LayoutRight.astro";
 import Huella from "../../components/ConfirmHuella.astro";
 import Input from "../../components/ConfirmInput.astro";
+import CustomPdfInput from "../../components/customInput/CustomPdfInput.svelte";
 ---
 
 <Layout>
+
   <!-- Contenedor principal con mejor diseño -->
   <div
     id="hl-contenedor-principal"
     class="max-w-2xl mx-auto mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200"
   >
-    <h2 class="text-xl font-bold mb-4 text-gray-800">
-      Ingreso de Hoja de Liquidación
-    </h2>
+  <h2 class="text-xl font-bold mb-4 text-gray-800">
+    Ingreso de Hoja de Liquidación
+  </h2>
+  
+  <div class="mt-8 grid grid-cols-3 gap-4">
+    <div>
+      <h3 class="mb-2">Turno 1</h3>
+      <CustomPdfInput groupId="ventas" title="Ventas" client:visible confirmado={true} />
+    </div>
+    <div>
+      <h3 class="mb-2">Turno 2</h3>
+      <CustomPdfInput groupId="ventas" title="Ventas" client:visible confirmado={true} />
+    </div>
+    <div>
+      <h3 class="mb-2">Turno 3</h3>
+      <CustomPdfInput groupId="ventas" title="Ventas" client:visible confirmado={true} />
+    </div>
+  </div>
+
+<br>
 
     <!-- Input de archivo PDF con mejor diseño -->
     <div id="hl-contenedor-input" class="mb-6">
