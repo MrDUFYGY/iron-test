@@ -1,418 +1,205 @@
 ---
-import "../../styles/global.css";
-import Layout from "../../layouts/Layout.astro";
-import Huella from "../../components/ConfirmHuella.astro";
-import Input from "../../components/ConfirmInput.astro";
+import Layout from '../../layouts/Layout.astro';
+import Huella from '../../components/ConfirmHuella.astro';
+import CustomPdfInput from '../../components/customInput/CustomPdfInput.svelte';
 
 ---
 
 <Layout>
-  <!-- Contenedor principal con mejor diseño -->
-
-  <div
-    id="hl-contenedor-principal"
-    class="max-w-2xl mx-auto mb-8 p-6 bg-white rounded-lg shadow-md border border-gray-200"
-  >
-    <h2 class="text-xl font-bold mb-4 text-gray-800">Cortes de teminales con vouchers</h2>
 
 
 
-    <!-- Script para manejar el toggle del desplegable -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btnToggle = document.getElementById("btn-toggle");
-        const checkboxContainer = document.getElementById("checkbox-container");
 
-        if (btnToggle && checkboxContainer) {
-          btnToggle.addEventListener("click", function () {
-            checkboxContainer.classList.toggle("show");
-            if (checkboxContainer.classList.contains("show")) {
-              btnToggle.textContent = "Ocultar opciones";
-            } else {
-              btnToggle.textContent = "Mostrar opciones";
-            }
-          });
-        }
-      });
-    </script>
+  
+<div class="container mx-auto p-6 bg-white shadow-md font-sans">
 
-    <!-- Input de archivo PDF con mejor diseño -->
-    <div id="hl-contenedor-input" class="mb-6">
-      <label
-        class="block text-sm font-medium text-gray-700 mb-2"
-        for="input-hojaLiquidacion"
-      >
-        Seleccione el archivo PDF del Voucher
-      </label>
-      <div
-        id="hl-input-wrapper"
-        class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 transition-all duration-200 hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200"
-      >
-        <input
-          id="input-hojaLiquidacion"
-          type="file"
-          accept=".pdf"
-          class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-        />
-        <p class="mt-2 text-xs text-gray-500">Formatos aceptados: PDF</p>
-      </div>
-    </div>
-
-    <!-- Indicadores de estado -->
-    <div id="hl-indicadores" class="flex items-center mb-6">
-      <div class="flex items-center mr-6">
-        <div
-          id="punto1-hojaLiquidacion"
-          class="w-4 h-4 bg-gray-300 rounded-full mr-2 shadow-sm"
-        >
+    <!-- Modal para visualizar PDF de ventas por periodo -->
+    <div id="dialog-ventas-periodo" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 overflow-hidden">
+      <div class="bg-white rounded-lg p-2 max-w-4xl w-full h-full relative z-50 ">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold" id="title-ventas-periodo">Corte de terminales con voucher</h3>
+          <button onclick="closeDialogVentasPeriodo()" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-        <span class="text-sm text-gray-600">Archivo seleccionado</span>
-      </div>
-      <div class="flex items-center">
-        <div
-          id="punto2-hojaLiquidacion"
-          class="w-4 h-4 bg-gray-300 rounded-full mr-2 shadow-sm"
-        >
+        <div class="w-full h-[60vh] border border-gray-200 rounded-lg overflow-hidden">
+          <iframe id="viewer-ventas-periodo" class="w-full h-full border-0" title="Visor PDF"></iframe>
         </div>
-        <span class="text-sm text-gray-600">Archivo confirmado</span>
-      </div>
-    </div>
-
-
-    <!-- Modal para visualizar el PDF -->
-    <dialog id="modal-pdf" class="rounded-lg p-0 w-full max-w-[80%]">
-      <div class="p-6 bg-white rounded-lg shadow-lg relative">
-        <!-- Encabezado -->
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">
-          Vista previa de la Hoja de Vales por Empresa
-        </h2>
-
-        <!-- Simulación PDF -->
-        <div class="mb-4 border rounded overflow-hidden h-80">
-          <iframe
-            src="/assets/simulacion.pdf"
-            class="w-full h-full"
-            title="Vista previa PDF"></iframe>
-        </div>
-
-        <!-- Confirmación -->
-        <p class="text-sm text-gray-700 mb-4">
-          ¿Desea confirmar esta Hoja de Vales?
-        </p>
-
-        <!-- Botones -->
-        <div class="flex justify-end space-x-2">
-          <button
-            id="btn-cancelar"
-            class="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
-          >
+        <div class="flex justify-end gap-4 mt-4">
+          <button onclick="closeDialogVentasPeriodo()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors">
             Cancelar
           </button>
-          <button
-            id="btn-confirmar"
-            class="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700"
-          >
+          <button onclick="confirmarVentasPeriodo()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
             Confirmar
           </button>
         </div>
       </div>
-    </dialog>
+    </div>
 
-    <script>
-      // Boton de enviar funcione
-      const envioTextarea = document.getElementById("input-envio");
-      const envioEstado = document.getElementById("envio-estado");
-      const seccionComprobante = document.getElementById("seccion-comprobante");
+    <section>
+        <h2 class="text-lg font-semibold text-center mb-3 text-gray-700">Corte de terminales con voucher</h2>
+        <div class="overflow-x-auto shadow-sm border border-gray-200 rounded">
+        </div>
+        <div class="mt-8 grid grid-cols-3 gap-4">
+          <div>
+            <h3 class="mb-2">Turno 1</h3>
+            <CustomPdfInput groupId="ventas" title="Ventas" client:visible confirmado={true} />
+          </div>
+          <div>
+            <h3 class="mb-2">Turno 2</h3>
+            <CustomPdfInput groupId="ventas" title="Ventas" client:visible confirmado={true} />
+          </div>
+          <div>
+            <h3 class="mb-2">Turno 3</h3>
+            <CustomPdfInput groupId="ventas" title="Ventas" client:visible confirmado={true} />
+          </div>
+        </div>
+          <Huella />
+    </section>
 
-      const charCount = document.getElementById("char-count");
-      const btnEnviar = document.getElementById("btn-enviar");
+</div>
 
-      // Función para manejar el conteo de caracteres y habilitar el botón
-      envioTextarea.addEventListener("input", (e) => {
-        const currentLength = e.target.value.trim().length;
-        charCount.textContent = `${currentLength} / 100 caracteres`;
+<style>
+    /* Puedes añadir CSS personalizado aquí si es necesario */
+    /* Por ejemplo, para controlar saltos de línea específicos */
+    /* td { white-space: nowrap; } */ /* Evitaría saltos de línea en celdas */
+</style>
 
-        // Habilitar o deshabilitar el botón según el conteo de caracteres
-        if (currentLength >= 100) {
-          btnEnviar.disabled = false;
-        } else {
-          btnEnviar.disabled = true;
+<script type="module">
+  // Variables globales
+  let ventasPeriodoFileUrl = null;
+  let currentFileInput = null;
+
+  // Función para manejar la carga de archivos
+  function handleFileUpload(fileInput, file) {
+    if (file && file.type === 'application/pdf') {
+      currentFileInput = fileInput;
+      const container = fileInput.closest('.file-upload-container');
+      const fileNameDisplay = container.querySelector('.file-name');
+      
+      // Actualizar el nombre del archivo
+      fileNameDisplay.textContent = file.name;
+      
+      // Mostrar el visor PDF
+      showVentasPeriodoViewer(file);
+    } else {
+      alert('Por favor, seleccione un archivo PDF válido.');
+    }
+  }
+
+  // Función para mostrar el visor PDF
+  function showVentasPeriodoViewer(file) {
+    ventasPeriodoFileUrl = URL.createObjectURL(file);
+    
+    const dialog = document.getElementById('dialog-ventas-periodo');
+    const viewer = document.getElementById('viewer-ventas-periodo');
+    const title = document.getElementById('title-ventas-periodo');
+    
+    if (dialog && viewer && title) {
+      viewer.src = ventasPeriodoFileUrl;
+      title.textContent = `Visualización: ${currentFileInput.id.replace('-', ' ').toUpperCase()}`;
+      dialog.classList.remove('hidden');
+    }
+  }
+
+  // Función para cerrar el dialog
+  window.closeDialogVentasPeriodo = function() {
+    const dialog = document.getElementById('dialog-ventas-periodo');
+    const viewer = document.getElementById('viewer-ventas-periodo');
+    
+    if (!dialog || !viewer) return;
+    
+    dialog.classList.add('hidden');
+    viewer.src = '';
+
+    // Si se cierra sin confirmar, limpiamos el input actual
+    if (currentFileInput) {
+      const container = currentFileInput.closest('.file-upload-container');
+      const fileNameDisplay = container.querySelector('.file-name');
+      fileNameDisplay.textContent = '';
+      currentFileInput.value = '';
+    }
+    
+    // Liberar memoria de la URL del objeto
+    if (ventasPeriodoFileUrl) {
+      URL.revokeObjectURL(ventasPeriodoFileUrl);
+      ventasPeriodoFileUrl = null;
+    }
+    currentFileInput = null;
+  }
+
+  // Función para confirmar el documento seleccionado
+  window.confirmarVentasPeriodo = function() {
+    if (currentFileInput) {
+      const container = currentFileInput.closest('.file-upload-container');
+      const status1 = container.querySelector('[id$="-status1"]');
+      const status2 = container.querySelector('[id$="-status2"]');
+      const inputContainer = container.querySelector('.relative');
+      
+      if (container && status1 && status2 && inputContainer) {
+        // Actualizar estados visuales
+        status1.classList.remove('bg-gray-200');
+        status1.classList.add('bg-green-500');
+        status2.classList.remove('bg-gray-200');
+        status2.classList.add('bg-green-500');
+        inputContainer.classList.remove('border-gray-300', 'border-blue-500');
+        inputContainer.classList.add('border-green-500');
+      }
+    }
+    closeDialogVentasPeriodo();
+  }
+
+  // Event listeners cuando el DOM esté cargado
+  document.addEventListener('DOMContentLoaded', function() {
+    // Configurar los event listeners para los inputs de archivo
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    
+    fileInputs.forEach(input => {
+      input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleFileUpload(input, file);
         }
       });
 
-      // Función para manejar el envío
-      btnEnviar.addEventListener("click", () => {
-        // Deshabilitar textarea y botón durante el envío
-        envioTextarea.disabled = true;
-        btnEnviar.disabled = true;
+      // Permitir arrastrar y soltar archivos
+      const container = input.closest('.relative');
+      if (container) {
+        container.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          container.classList.add('border-blue-500');
+        });
 
-        // Mostrar animación de carga
-        envioEstado.classList.remove("hidden");
+        container.addEventListener('dragleave', () => {
+          container.classList.remove('border-blue-500');
+        });
 
-        // Simular envío con timeout
-        setTimeout(() => {
-          envioEstado.classList.add("hidden");
-          seccionComprobante.classList.remove("hidden");
-        }, 5000);
-      });
-
-      // Variables para el manejo del archivo
-      let archivoSeleccionado = false;
-      const inputHojaLiquidacion = document.getElementById(
-        "input-hojaLiquidacion",
-      );
-      const punto1 = document.getElementById("punto1-hojaLiquidacion");
-      const punto2 = document.getElementById("punto2-hojaLiquidacion");
-      const removeFileBtn = document.getElementById(
-        "removeFile-hojaLiquidacion",
-      );
-      const modalPdf = document.getElementById("modal-pdf");
-      const btnCancelar = document.getElementById("btn-cancelar");
-      const btnConfirmar = document.getElementById("btn-confirmar");
-      const contenidoHojaLiquidacion = document.getElementById(
-        "contenido-hojaLiquidacion",
-      );
-
-      // Referencia al contenedor del input
-      const inputWrapper = document.getElementById("hl-input-wrapper");
-
-      // Evento para cuando se selecciona un archivo
-      inputHojaLiquidacion?.addEventListener("change", function (e) {
-        const target = e.target as HTMLInputElement;
-        const file = target?.files?.[0];
-        if (file && file.type === "application/pdf") {
-          archivoSeleccionado = true;
-          // Actualizar indicador visual
-          punto1?.classList.remove("bg-gray-300");
-          punto1?.classList.add("activo");
-          // Mostrar botón de eliminar
-          removeFileBtn?.classList.remove("hidden");
-          // Aplicar estilo de archivo seleccionado
-          inputWrapper?.classList.add("archivo-seleccionado");
-          // Abrir el modal automáticamente al seleccionar un archivo PDF
-          if (modalPdf instanceof HTMLDialogElement) {
-            modalPdf.showModal();
+        container.addEventListener('drop', (e) => {
+          e.preventDefault();
+          container.classList.remove('border-blue-500');
+          const file = e.dataTransfer.files[0];
+          if (file) {
+            handleFileUpload(input, file);
           }
-        } else if (file) {
-          alert("Por favor, selecciona solo archivos PDF");
-          if (inputHojaLiquidacion instanceof HTMLInputElement) {
-            inputHojaLiquidacion.value = "";
-          }
-        }
-      });
+        });
+      }
+    });
+  });
+</script>
 
-      // Evento para eliminar el archivo
-      removeFileBtn?.addEventListener("click", function () {
-        archivoSeleccionado = false;
-        if (inputHojaLiquidacion instanceof HTMLInputElement) {
-          inputHojaLiquidacion.value = "";
-        }
-        // Restablecer indicadores visuales
-        punto1?.classList.remove("activo");
-        punto1?.classList.add("bg-gray-300");
-        punto2?.classList.remove("activo");
-        punto2?.classList.add("bg-gray-300");
-        // Ocultar botón de eliminar
-        removeFileBtn?.classList.add("hidden");
-        // Ocultar contenido de la hoja de liquidación
-        contenidoHojaLiquidacion?.classList.add("hidden");
-        // Restablecer estilos del contenedor
-        inputWrapper?.classList.remove(
-          "archivo-seleccionado",
-          "archivo-confirmado",
-        );
-      });
+<script>
+  // Detectar si estamos en un iframe
+  const isInIframe = window.self !== window.top;
+  
+  if (isInIframe) {
+    console.log('Esta página está siendo mostrada dentro de un iframe');
+    // Aquí puedes agregar cualquier lógica específica para cuando esté en iframe
+    // Por ejemplo: document.body.classList.add('iframe-mode');
+  } else {
+    console.log('Esta página está siendo mostrada directamente en el navegador');
+  }
+</script>
 
-      // Evento para cancelar en el modal
-      btnCancelar?.addEventListener("click", function () {
-        if (modalPdf instanceof HTMLDialogElement) {
-          modalPdf.close();
-        }
-        archivoSeleccionado = false;
-        if (inputHojaLiquidacion instanceof HTMLInputElement) {
-          inputHojaLiquidacion.value = "";
-        }
-        // Restablecer indicadores visuales
-        punto1?.classList.remove("activo");
-        punto1?.classList.add("bg-gray-300");
-        // Ocultar botón de eliminar
-        removeFileBtn?.classList.add("hidden");
-        // Restablecer estilos del contenedor
-        inputWrapper?.classList.remove(
-          "archivo-seleccionado",
-          "archivo-confirmado",
-        );
-      });
-
-      // Evento para confirmar en el modal
-      btnConfirmar?.addEventListener("click", function () {
-        if (modalPdf instanceof HTMLDialogElement) {
-          modalPdf.close();
-        }
-        // Actualizar indicadores visuales
-        punto2?.classList.remove("bg-gray-300");
-        punto2?.classList.add("activo");
-        // Aplicar estilo de archivo confirmado
-        inputWrapper?.classList.remove("archivo-seleccionado");
-        inputWrapper?.classList.add("archivo-confirmado");
-        // Mostrar contenido de la hoja de liquidación
-        contenidoHojaLiquidacion?.classList.remove("hidden");
-      });
-    </script>
-
-    <Huella />
-    <style>
-      /* Estilos específicos para esta página */
-      #checkbox-container {
-        max-height: 400px;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: #3b82f6 #f1f1f1;
-        display: none; /* Initially hidden, shown via JavaScript */
-      }
-      
-      #checkbox-container.show {
-        display: grid; /* Shown when toggled */
-      }
-      
-      #checkbox-container::-webkit-scrollbar {
-        width: 6px;
-      }
-      
-      #checkbox-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-      }
-      
-      #checkbox-container::-webkit-scrollbar-thumb {
-        background-color: #3b82f6;
-        border-radius: 10px;
-      }
-      #hl-input-wrapper.archivo-seleccionado {
-        border-color: #10b981; /* verde */
-        background-color: rgba(16, 185, 129, 0.05);
-      }
-
-      #hl-input-wrapper.archivo-confirmado {
-        border-color: #059669; /* verde más oscuro */
-        background-color: rgba(5, 150, 105, 0.1);
-        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
-      }
-
-      #punto1-hojaLiquidacion.activo {
-        background-color: #10b981;
-        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-      }
-
-      #punto2-hojaLiquidacion.activo {
-        background-color: #059669;
-        box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
-      }
-
-      /* Animación sutil para los cambios de estado */
-      #hl-input-wrapper,
-      #punto1-hojaLiquidacion,
-      #punto2-hojaLiquidacion {
-        transition: all 0.3s ease-in-out;
-      }
-
-      .spinner {
-        width: 50px;
-        height: 50px;
-        border: 5px solid #f3f3f3;
-        border-top: 5px solid #3498db;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-
-
-    <Huella />
-    <style>
-      /* Estilos específicos para esta página */
-      #checkbox-container {
-        max-height: 400px;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: #3b82f6 #f1f1f1;
-        display: none; /* Initially hidden, shown via JavaScript */
-      }
-      
-      #checkbox-container.show {
-        display: grid; /* Shown when toggled */
-      }
-      
-      #checkbox-container::-webkit-scrollbar {
-        width: 6px;
-      }
-      
-      #checkbox-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-      }
-      
-      #checkbox-container::-webkit-scrollbar-thumb {
-        background-color: #3b82f6;
-        border-radius: 10px;
-      }
-      #hl-input-wrapper.archivo-seleccionado {
-        border-color: #10b981; /* verde */
-        background-color: rgba(16, 185, 129, 0.05);
-      }
-
-      #hl-input-wrapper.archivo-confirmado {
-        border-color: #059669; /* verde más oscuro */
-        background-color: rgba(5, 150, 105, 0.1);
-        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
-      }
-
-      #punto1-hojaLiquidacion.activo {
-        background-color: #10b981;
-        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-      }
-
-      #punto2-hojaLiquidacion.activo {
-        background-color: #059669;
-        box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.3);
-      }
-
-      /* Animación sutil para los cambios de estado */
-      #hl-input-wrapper,
-      #punto1-hojaLiquidacion,
-      #punto2-hojaLiquidacion {
-        transition: all 0.3s ease-in-out;
-      }
-
-      .spinner {
-        width: 50px;
-        height: 50px;
-        border: 5px solid #f3f3f3;
-        border-top: 5px solid #3498db;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </div>
 </Layout>
-
-      
-
-
