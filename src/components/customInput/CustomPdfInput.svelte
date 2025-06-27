@@ -30,7 +30,7 @@
       }
       isModalOpen = true;
       document.body.style.overflow = 'hidden';
-    } else if (fileInput.files?.[0]) {
+    } else if (fileInput?.files?.[0]) {
       // In edit mode, create a new URL for the selected file
       if (pdfUrl && !pdfUrl.startsWith('/assets/')) {
         URL.revokeObjectURL(pdfUrl);
@@ -69,7 +69,7 @@
   }
 
   function confirmSelection() {
-    const file = fileInput.files?.[0] || null;
+    const file = fileInput?.files?.[0] || null;
     if (file) {
       // If there was a previous URL, clean it up if it's not the default PDF
       if (pdfUrl && !pdfUrl.startsWith('/assets/')) {
@@ -92,7 +92,7 @@
   function handleReplaceClick() {
     // Trigger file input click to select a new file
     if (!soloConsulta) {
-      fileInput.click();
+      fileInput?.click();
     }
   }
 
@@ -148,7 +148,7 @@
     dropArea.addEventListener('dragleave', handleDragLeaveFn);
     dropArea.addEventListener('drop', handleDropFn);
     dropArea.addEventListener('click', () => {
-      if (!soloConsulta) fileInput.click();
+      if (!soloConsulta) fileInput?.click();
     });
     
     // Cleanup function
@@ -156,7 +156,7 @@
       dropArea.removeEventListener('dragover', handleDragOverFn);
       dropArea.removeEventListener('dragleave', handleDragLeaveFn);
       dropArea.removeEventListener('drop', handleDropFn);
-      dropArea.removeEventListener('click', () => fileInput.click());
+      dropArea.removeEventListener('click', () => fileInput?.click());
     };
 
 
