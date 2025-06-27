@@ -8,6 +8,9 @@ import CustomPdfInput from '../../components/customInput/CustomPdfInput.svelte';
 <Layout>
 
 
+
+
+  
 <div class="container mx-auto p-6 bg-white shadow-md font-sans">
 
     <!-- Modal para visualizar PDF de ventas por periodo -->
@@ -259,6 +262,19 @@ import CustomPdfInput from '../../components/customInput/CustomPdfInput.svelte';
       }
     });
   });
+</script>
+
+<script>
+  // Detectar si estamos en un iframe
+  const isInIframe = window.self !== window.top;
+  
+  if (isInIframe) {
+    console.log('Esta página está siendo mostrada dentro de un iframe');
+    // Aquí puedes agregar cualquier lógica específica para cuando esté en iframe
+    // Por ejemplo: document.body.classList.add('iframe-mode');
+  } else {
+    console.log('Esta página está siendo mostrada directamente en el navegador');
+  }
 </script>
 
 </Layout>

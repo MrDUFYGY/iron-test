@@ -65,6 +65,7 @@
     '1 - Vales por empresa':'modal-vales-empresa-contador',
     '2 - Corte de terminales con vouchers':'modal-corte-terminales-contador',
     '3 - Lista de placas con tag':'modal-placas-tag-contador',
+    'zzzz':'zzzz',
     
   };
   
@@ -92,6 +93,7 @@
     'modal-vales-empresa-contador' : '/corp_valija_11valesEmpresa', //9
     'modal-corte-terminales-contador' : '/corp_valija_10terminalesVoucher', //10
     'modal-placas-tag-contador' : '/corp_valija_11placasTag', //11
+    'zzzz' : '/zzzz', //12
     };
   // Determinar el ID del modal basado en el título
   $: modalId = modalTarget || (titulo in titleToModalMap ? titleToModalMap[titulo] : '');

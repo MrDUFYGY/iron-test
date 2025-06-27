@@ -18,6 +18,7 @@ const modalUrlMap: Record<string, string> = {
   'modal-jarreo': '/estacion/est_valija_9jarreo',
   'modal-vales-empresa': '/estacion/est_valija_10valesEmpresa',
   'modal-corte-terminales': '/estacion/est_valija_11terminalesVoucher',
+  'zzzz': '/zzzz',
 };
 
 export function modalRightArea() {

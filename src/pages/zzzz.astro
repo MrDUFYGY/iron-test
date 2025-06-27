@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CustomPdfInput from '../components/customInput/CustomPdfInput.svelte';
+import Separador from '../components/Separador.astro';
+import ContenidoAMostrar from '../components/ContenidoAMostrar.astro';
 ---
 
 <Layout title="Prueba de Carga de PDF">
-    <CustomPdfInput
+    <!-- <CustomPdfInput
     inputId="docPrincipal"
     label="Documento Principal"
     on:pdfConfirmed="alert('PDF confirmado')"
@@ -12,6 +14,20 @@ import CustomPdfInput from '../components/customInput/CustomPdfInput.svelte';
     soloConsulta={true}
     borderColor="border-green-500"
     client:visible
+  /> -->
+
+  <ContenidoAMostrar>
+    <Separador
+    texto="MENÚ DE ESTACIÓN"
+    operadora="CR 88 SAPI DE CV"
+    estacion="45"
+    usuario={{
+      nombre: "LUIS ALVARO VILLEGAS",
+    }}
   />
+  </ContenidoAMostrar>
+
+
+  
 
 </Layout>
