@@ -5,7 +5,7 @@ import Huella from "../../components/ConfirmHuella.astro";
 import Input from "../../components/ConfirmInput.astro";
 
 // Datos de las empresas
-const empresas = [
+/*const empresas = [
   { id: 'hidrosina', nombre: 'Hidrosina' },
   { id: 'cogasa', nombre: 'Cogasa' },
   { id: 'cr88', nombre: 'CR88' },
@@ -19,7 +19,7 @@ const empresas = [
   { id: 'combuserv', nombre: 'Combuserv' },
   { id: 'risco', nombre: 'Risco' },
   { id: 'menorca', nombre: 'Menorca' }
-];
+];*/
 ---
 
 <Layout>
@@ -31,51 +31,7 @@ const empresas = [
   >
     <h2 class="text-xl font-bold mb-4 text-gray-800">Vales por empresa</h2>
 
-    <!-- Input para seleccionar empresa -->
-    <div id="hl-contenedor-input" class="mb-6">
-      <label
-        class="block text-sm font-medium text-gray-700 mb-2"
-        for="input-hojaLiquidacion"
-      >
-        Seleccione la empresa
-      </label>
-      <div
-        id="hl-input-wrapper"
-        class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 transition-all duration-200 hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200"
-      >
-        <p>Selecciona las empresas:</p><br>
 
-        <!-- Botón para desplegar las opciones -->
-        <button
-          id="btn-toggle"
-          class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mb-4 focus:outline-none"
-        >
-          Mostrar opciones
-        </button>
-
-        <!-- Contenedor desplegable con las opciones en grid -->
-        <div
-          id="checkbox-container"
-          class="sm:grid sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4 transition-all duration-300 ease-in-out"
-        >
-          {empresas.map((empresa) => (
-            <label 
-              id={empresa.id}
-              class="flex items-center p-2 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors duration-200"
-            >   
-              <input
-                type="checkbox"
-                id={empresa.id}
-                name="empresas"
-                value={empresa.id}
-                class="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-              />
-              <span class="ml-2 text-sm font-medium text-gray-700">{empresa.nombre}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </div>
 
     <!-- Script para manejar el toggle del desplegable -->
     <script>

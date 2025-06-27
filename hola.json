@@ -1,0 +1,109 @@
+{
+  "historicoDia": {
+    "fecha": "2025-06-26",
+    "estacion": {
+      "numeroEstacion": 0,
+      "tipoEstacion": "",
+      "ubicacion": ""
+    }
+  },
+  "Sesiones": [
+    {
+      "sesion-1": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "usuario": "usuario1",
+        "tiempo": "00:30:00",
+        "pasosRealizados": 5,
+        "horaIngreso": "2025-06-26T13:34:52-06:00",
+        "horaSalida": "2025-06-26T13:34:52-06:00",
+        "turno": 1,
+        "sesionConcluida": false
+      },
+      "sesion-2": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "usuario": "usuario1",
+        "tiempo": "00:30:00",
+        "pasosRealizados": 5,
+        "horaIngreso": "2025-06-26T13:34:52-06:00",
+        "horaSalida": "2025-06-26T13:34:52-06:00",
+        "turno": 1,
+        "sesionConcluida": false
+      }
+    }
+  ],
+  "Errores": [
+    {
+      "Error": "Error 1",
+      "Error2": "Error 2"
+    }
+  ],
+  "Documentacion": [
+    {
+      "documentacion-1": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "proceso": "Proceso 1",
+        "estatusSubida": "true"
+      },
+      "documentacion-2": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "proceso": "Proceso 2",
+        "estatusSubida": "true"
+      },
+      "documentacion-3": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "proceso": "Proceso 3",
+        "estatusSubida": "true"
+      }
+    }
+  ],
+  "Ayuda": [
+    {
+      "ayuda-1": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "proceso": "Proceso 1",
+        "descripcion": "Descripcion 1",
+        "evidenciaAdjunta": "0x1"
+      },
+      "ayuda-2": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "proceso": "Proceso 2",
+        "descripcion": "Descripcion 2",
+        "evidenciaAdjunta": "0x2"
+      },
+      "ayuda-3": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "proceso": "Proceso 3",
+        "descripcion": "Descripcion 3",
+        "evidenciaAdjunta": "0x3"
+      }
+    }
+  ],
+  "Correos": [
+    {
+      "correos-1": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "quienManda": "usuario1",
+        "asunto": "Revisión de documento",
+        "descripcion": "Descripcion 1",
+        "evidenciaDocumento": "0x1",
+        "procesoLigado": "Proceso 1"
+      },
+      "correos-2": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "quienManda": "usuario1",
+        "asunto": "Revisión de documento",
+        "descripcion": "Descripcion 2",
+        "evidenciaDocumento": "0x2",
+        "procesoLigado": "Proceso 1"
+      },
+      "correos-3": {
+        "fechaHora": "2025-06-26T13:34:52-06:00",
+        "quienManda": "usuario1",
+        "asunto": "Revisión de documento",
+        "descripcion": "Descripcion 3",
+        "evidenciaDocumento": "0x3",
+        "procesoLigado": "Proceso 1"
+      }
+    }
+  ]
+}
