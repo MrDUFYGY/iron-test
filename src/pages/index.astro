@@ -115,10 +115,40 @@ import Separador from "../components/Separador.astro";
     </div>
   </div>
   
+  <button id="ask-for-info-button">Pide información</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
   <script type="text/javascript">
     document.getElementById('menuButton').addEventListener('click', function() {
       const submenu = document.getElementById('submenu');
       submenu.classList.toggle('visible');
     });
+
+
+
+
+
+// Supongamos que tienes un botón en tu página de Netlify
+const myButton = document.getElementById('ask-for-info-button');
+myButton.addEventListener('click', () => {
+    // Envías un objeto con una acción y datos
+    window.chrome.webview.postMessage({ 
+        action: 'showInfo', 
+        data: 'Este es un mensaje desde la página web!' 
+    });
+});
+
+
   </script>
 </Layout>
