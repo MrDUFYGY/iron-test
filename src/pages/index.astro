@@ -2,6 +2,32 @@
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
 import Separador from "../components/Separador.astro";
+
+
+
+
+
+/*
+const apiUrl = "https://1dxmlrlf-44345.usw3.devtunnels.ms/api/Valija/GetDocumentos?id=1&proceso=p1";
+let apiData = null;
+let error = null;
+
+try {
+  const response = await fetch(apiUrl);
+  const responseText = await response.text(); // Obtenemos la respuesta como texto primero
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
+  }
+  try {
+    apiData = JSON.parse(responseText); // Intentamos convertir el texto a JSON
+  } catch (parseError) {
+    throw new Error(`Error al parsear JSON: ${parseError.message}. Respuesta recibida: ${responseText}`);
+  }
+} catch (e) {
+  error = e; // Usamos e.message para obtener un string limpio
+  console.error(e);
+}
+*/
 ---
 
 <style>
@@ -75,6 +101,24 @@ import Separador from "../components/Separador.astro";
   .submenu-button:hover {
     background-color: #10b981;
   }
+
+
+.api-result {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 80%;
+    max-width: 800px;
+    word-wrap: break-word;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+
 </style>
 
 <Layout>
@@ -118,10 +162,28 @@ import Separador from "../components/Separador.astro";
   <button class="submenu-button" id="ask-for-info-button">Pide información</button>
 
 
+  <button id="scan-fingerprint-button" class="menu-button secondary-button">Escanear Huella</button>
 
 
 
 
+  <h1>Prueba de API Valija</h1>
+<!-- 
+  <div class="api-result">
+    <h2>Resultado de la Petición (Servidor)</h2>
+    {error && <p><strong>Error:</strong> <pre>{error}</pre></p>}
+    {apiData && (
+      <div>
+        <p><strong>Petición exitosa.</strong></p>
+        <pre>{JSON.stringify(apiData, null, 2)}</pre>
+      </div>
+    )}
+  </div> -->
+
+
+
+  <button id="fetch-from-client-button" class="menu-button primary-button">Consultar API desde Cliente</button>
+  <div id="client-result" class="api-result"></div>
 
 
 
@@ -151,4 +213,77 @@ myButton.addEventListener('click', () => {
 
 
   </script>
+
+
+
+<script type="text/javascript">
+  const fetchButton = document.getElementById('fetch-from-client-button');
+  const resultDiv = document.getElementById('client-result');
+  const apiUrl = "https://localhost:44345//api/Valija/GetDocumentos?id=1&proceso=p1";
+
+  fetchButton.addEventListener('click', async () => {
+    resultDiv.innerHTML = '<p>Cargando...</p>';
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+      const data = await response.json();
+      resultDiv.innerHTML = `
+        <h2>Resultado de la Petición (Cliente)</h2>
+        <p><strong>Petición exitosa.</strong></p>
+        <pre>${JSON.stringify(data, null, 2)}</pre>
+      `;
+    } catch (error) {
+      console.error('Error en fetch del cliente:', error);
+      resultDiv.innerHTML = `
+        <h2>Resultado de la Petición (Cliente)</h2>
+        <p><strong>Error:</strong></p>
+        <pre>${error.message}</pre>
+      `;
+    }
+  });
+  const scanButton = document.getElementById('scan-fingerprint-button');
+  if (scanButton) {
+    scanButton.addEventListener('click', () => {
+      console.log('Enviando mensaje para escanear huella...');
+      window.chrome.webview.postMessage({ 
+          accion: 'escanearHuella'
+      });
+    });
+  }
+
+      // Escuchar mensajes desde la aplicación WinForms
+  window.chrome.webview.addEventListener('message', event => {
+    console.log('Mensaje recibido desde WinForms:', event.data);
+    const resultDiv = document.getElementById('client-result');
+    
+    // El resultado del escáner de huella se mostrará aquí
+    try {
+      const data = JSON.parse(event.data); // El JSON se recibe como string
+      if (data.exito) {
+        resultDiv.innerHTML = `
+          <h2>Resultado del Escaneo</h2>
+          <p><strong>¡Huella capturada con éxito!</strong></p>
+          <p>Plantilla:</p>
+          <pre style="font-size: 0.8em; word-wrap: break-word;">${data.plantilla}</pre>
+        `;
+      } else {
+        resultDiv.innerHTML = `
+          <h2>Resultado del Escaneo</h2>
+          <p><strong>Error al escanear:</strong></p>
+          <pre>${data.error}</pre>
+        `;
+      }
+    } catch (e) {
+      // Manejar otros mensajes que no sean JSON
+      console.log("Mensaje no es JSON, mostrando como texto plano.");
+      resultDiv.innerHTML = `<p>Mensaje recibido: ${event.data}</p>`;
+    }
+  });
+</script>
+
+
+
 </Layout>
