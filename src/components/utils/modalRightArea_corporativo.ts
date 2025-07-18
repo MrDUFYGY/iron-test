@@ -45,13 +45,11 @@ export function initResumenProcesos() {
   });
 }
 
-
-
 export function modalRightArea() {
   // Función para abrir el contenido en el panel del modal
   document.addEventListener("click", function (event) {
     const target = (event.target as HTMLElement).closest(
-      "[data-modal-target]"
+      "[data-modal-target]" 
     );
     
     if (!target) return;
