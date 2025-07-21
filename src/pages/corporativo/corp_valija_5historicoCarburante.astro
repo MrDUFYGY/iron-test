@@ -1,171 +1,309 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from "../../layouts/Layout.astro";
 
 const fechaActual = new Date();
-const fechaFormateada = fechaActual.toLocaleDateString('es-MX', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+const fechaFormateada = fechaActual.toLocaleDateString("es-MX", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
 });
-const horaActual = fechaActual.toLocaleTimeString('es-MX', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
+const horaActual = fechaActual.toLocaleTimeString("es-MX", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
 });
 ---
 
 <Layout>
-<div class="mx-auto bg-white rounded-xl shadow-md p-6">
-    <div class="border-b-2 border-gray-200 pb-4 mb-6">
-        <div class="flex justify-between items-start mb-4">
-            <h1 class="text-xl font-bold uppercase">Histórico de movimientos de carburante</h1>
-            <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded">HD-141</span>
-        </div>
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="font-semibold mr-2">Operadora:</span>
-                <span class="bg-gray-100 px-3 py-1 rounded font-medium">HIDROSINA PLUS SAPI DE C.V.</span>
+    <div class="mx-auto bg-white rounded-xl shadow-md p-6">
+        <div class="border-b-2 border-gray-200 pb-4 mb-6">
+            <div class="flex justify-between items-start mb-4">
+                <h1 class="text-xl font-bold uppercase">
+                    Histórico de movimientos de carburante
+                </h1>
+                <span
+                    class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded"
+                    >HD-141</span
+                >
             </div>
-            <div class="text-right">
-                <span class="font-semibold">Fecha:</span>
-                <span class="ml-2">19 de abril de 2025</span>
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="font-semibold mr-2">Operadora:</span>
+                    <span class="bg-gray-100 px-3 py-1 rounded font-medium"
+                        >HIDROSINA PLUS SAPI DE C.V.</span
+                    >
+                </div>
+                <div class="text-right">
+                    <span class="font-semibold">Fecha:</span>
+                    <span class="ml-2">19 de abril de 2025</span>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Input de archivo -->
-    <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="text-green-600">✓</span>
-                <span class="font-medium">Archivo subido correctamente</span>
-            </div>
-            <button onclick="abrirPDF()" class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50">
-                Visualizar
-            </button>
-        </div>
-    </div>
 
         <!-- Input de archivo -->
-    <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="text-green-600">✓</span>
-                <span class="font-medium">Archivo subido correctamente</span>
+        <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div class="flex justify-end gap-4 mb-4 items-center">
+                <!-- Checkbox -->
+                <div class="form-check flex items-center gap-1">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="checkDefault1"
+                        onclick="toggleRadio(1)"
+                    />
+                    <label for="checkDefault1" class="text-sm">Casita</label>
+                </div>
+
+                <!-- Radio -->
+                <div
+                    id="radioContainer1"
+                    class="hidden form-check flex items-center gap-1"
+                >
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="radioGroup1"
+                        id="radioNoLabel1"
+                        onclick="disableCheckbox(1)"
+                    />
+                    <label for="radioNoLabel1" class="text-sm">Contador</label>
+                </div>
             </div>
-            <button onclick="abrirPDF()" class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50">
-                Visualizar
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span class="font-medium">Archivo subido correctamente</span
+                    >
+                </div>
+                <button
+                    onclick="abrirPDF()"
+                    class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50"
+                >
+                    Visualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Input de archivo -->
+        <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div class="flex justify-end gap-4 mb-4 items-center">
+                <!-- Checkbox -->
+                <div class="form-check flex items-center gap-1">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="checkDefault2"
+                        onclick="toggleRadio(2)"
+                    />
+                    <label for="checkDefault2" class="text-sm">Casita</label>
+                </div>
+                <!-- Radio -->
+                <div
+                    id="radioContainer2"
+                    class="hidden form-check flex items-center gap-1"
+                >
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="radioGroup2"
+                        id="radioNoLabel2"
+                        onclick="disableCheckbox(2)"
+                    />
+                    <label for="radioNoLabel2" class="text-sm">Contador</label>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-green-600">✓</span>
+                    <span class="font-medium">Archivo subido correctamente</span
+                    >
+                </div>
+                <button
+                    onclick="abrirPDF()"
+                    class="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 rounded-lg border border-blue-600 hover:bg-blue-50"
+                >
+                    Visualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabla de movimientos -->
+        <div
+            class="overflow-x-auto border border-gray-300 rounded-lg shadow-sm"
+        >
+            <table class="min-w-full text-sm text-left text-gray-800">
+                <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                    <tr>
+                        <th class="px-4 py-2 font-medium">Fecha</th>
+                        <th class="px-4 py-2 font-medium">Liquidación</th>
+                        <th class="px-4 py-2 font-medium">Tienda</th>
+                        <th class="px-4 py-2 font-medium">Tipo</th>
+                        <th class="px-4 py-2 font-medium">N° documento</th>
+                        <th class="px-4 py-2 font-medium">Proveedor</th>
+                        <th class="px-4 py-2 font-medium">Tanque</th>
+                        <th class="px-4 py-2 font-medium">Producto</th>
+                        <th class="px-4 py-2 font-medium text-right">Volumen</th
+                        >
+                        <th class="px-4 py-2 font-medium text-right"
+                            >Volumen a 15°</th
+                        >
+                        <th class="px-4 py-2 font-medium text-right"
+                            >Importe total</th
+                        >
+                        <th class="px-4 py-2 font-medium text-right"
+                            >IVA retenido flete</th
+                        >
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-4 py-2">06/03/2025 02:59:55</td>
+                        <td class="px-4 py-2">06/03/2025-P1-C1</td>
+                        <td class="px-4 py-2">HD-45</td>
+                        <td class="px-4 py-2">Recepciones</td>
+                        <td class="px-4 py-2">2344865</td>
+                        <td class="px-4 py-2"
+                            >VDM ADMINISTRADORA DE FRANQUICIAS S.A. DE C.V.</td
+                        >
+                        <td class="px-4 py-2">Tanque 6</td>
+                        <td class="px-4 py-2">34006.DIESEL</td>
+                        <td class="px-4 py-2 text-right">9,990.00</td>
+                        <td class="px-4 py-2 text-right">9,990.00</td>
+                        <td class="px-4 py-2 text-right">235,486.53</td>
+                        <td class="px-4 py-2 text-right">0.005</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-2">06/03/2025 02:50:46</td>
+                        <td class="px-4 py-2">06/03/2025-P1-C1</td>
+                        <td class="px-4 py-2">HD-45</td>
+                        <td class="px-4 py-2">Recepciones</td>
+                        <td class="px-4 py-2">2344855</td>
+                        <td class="px-4 py-2"
+                            >VDM ADMINISTRADORA DE FRANQUICIAS S.A. DE C.V.</td
+                        >
+                        <td class="px-4 py-2">Tanque 6</td>
+                        <td class="px-4 py-2">34006.DIESEL</td>
+                        <td class="px-4 py-2 text-right">9,989.00</td>
+                        <td class="px-4 py-2 text-right">9,989.00</td>
+                        <td class="px-4 py-2 text-right">235,462.95</td>
+                        <td class="px-4 py-2 text-right">0.005</td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                    <tr>
+                        <td
+                            colspan="8"
+                            class="px-4 py-2 font-semibold text-right"
+                            >Total:</td
+                        >
+                        <td class="px-4 py-2 text-right font-semibold"
+                            >19,979.00</td
+                        >
+                        <td class="px-4 py-2 text-right font-semibold"
+                            >19,979.00</td
+                        >
+                        <td class="px-4 py-2 text-right font-bold bg-yellow-50"
+                            >470,949.48</td
+                        >
+                        <td class="px-4 py-2 text-right font-semibold">0.005</td
+                        >
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex justify-center space-x-4 mt-6">
+            <button
+                class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition"
+            >
+                Volver
+            </button>
+            <button
+                class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+            >
+                Confirmar
             </button>
         </div>
     </div>
 
-    <!-- Tabla de movimientos -->
-    <div class="overflow-x-auto border border-gray-300 rounded-lg shadow-sm">
-        <table class="min-w-full text-sm text-left text-gray-800">
-            <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
-                <tr>
-                    <th class="px-4 py-2 font-medium">Fecha</th>
-                    <th class="px-4 py-2 font-medium">Liquidación</th>
-                    <th class="px-4 py-2 font-medium">Tienda</th>
-                    <th class="px-4 py-2 font-medium">Tipo</th>
-                    <th class="px-4 py-2 font-medium">N° documento</th>
-                    <th class="px-4 py-2 font-medium">Proveedor</th>
-                    <th class="px-4 py-2 font-medium">Tanque</th>
-                    <th class="px-4 py-2 font-medium">Producto</th>
-                    <th class="px-4 py-2 font-medium text-right">Volumen</th>
-                    <th class="px-4 py-2 font-medium text-right">Volumen a 15°</th>
-                    <th class="px-4 py-2 font-medium text-right">Importe total</th>
-                    <th class="px-4 py-2 font-medium text-right">IVA retenido flete</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                <tr>
-                    <td class="px-4 py-2">06/03/2025 02:59:55</td>
-                    <td class="px-4 py-2">06/03/2025-P1-C1</td>
-                    <td class="px-4 py-2">HD-45</td>
-                    <td class="px-4 py-2">Recepciones</td>
-                    <td class="px-4 py-2">2344865</td>
-                    <td class="px-4 py-2">VDM ADMINISTRADORA DE FRANQUICIAS S.A. DE C.V.</td>
-                    <td class="px-4 py-2">Tanque 6</td>
-                    <td class="px-4 py-2">34006.DIESEL</td>
-                    <td class="px-4 py-2 text-right">9,990.00</td>
-                    <td class="px-4 py-2 text-right">9,990.00</td>
-                    <td class="px-4 py-2 text-right">235,486.53</td>
-                    <td class="px-4 py-2 text-right">0.005</td>
-                </tr>
-                <tr>
-                    <td class="px-4 py-2">06/03/2025 02:50:46</td>
-                    <td class="px-4 py-2">06/03/2025-P1-C1</td>
-                    <td class="px-4 py-2">HD-45</td>
-                    <td class="px-4 py-2">Recepciones</td>
-                    <td class="px-4 py-2">2344855</td>
-                    <td class="px-4 py-2">VDM ADMINISTRADORA DE FRANQUICIAS S.A. DE C.V.</td>
-                    <td class="px-4 py-2">Tanque 6</td>
-                    <td class="px-4 py-2">34006.DIESEL</td>
-                    <td class="px-4 py-2 text-right">9,989.00</td>
-                    <td class="px-4 py-2 text-right">9,989.00</td>
-                    <td class="px-4 py-2 text-right">235,462.95</td>
-                    <td class="px-4 py-2 text-right">0.005</td>
-                </tr>
-            </tbody>
-            <tfoot class="bg-gray-50">
-                <tr>
-                    <td colspan="8" class="px-4 py-2 font-semibold text-right">Total:</td>
-                    <td class="px-4 py-2 text-right font-semibold">19,979.00</td>
-                    <td class="px-4 py-2 text-right font-semibold">19,979.00</td>
-                    <td class="px-4 py-2 text-right font-bold bg-yellow-50">470,949.48</td>
-                    <td class="px-4 py-2 text-right font-semibold">0.005</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-
-    <!-- Botones de acción -->
-    <div class="flex justify-center space-x-4 mt-6">
-        <button class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition">
-            Volver
-        </button>
-        <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
-            Confirmar
-        </button>
-    </div>
-</div>
-
-<!-- Diálogo para visualizar PDF -->
-<div id="pdfDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden">
-    <div class="absolute inset-0 flex items-center justify-center">
-        <div class="bg-white rounded-lg p-4 w-3/4 h-3/4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-medium">Visualizar Histórico de Carburante</h3>
-                <button onclick="cerrarPDF()" class="text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+    <!-- Diálogo para visualizar PDF -->
+    <div id="pdfDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-4 w-3/4 h-3/4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium">
+                        Visualizar Histórico de Carburante
+                    </h3>
+                    <button
+                        onclick="cerrarPDF()"
+                        class="text-gray-500 hover:text-gray-700"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <iframe id="pdfViewer" class="w-full h-full border-0"></iframe>
             </div>
-            <iframe id="pdfViewer" class="w-full h-full border-0"></iframe>
         </div>
     </div>
-</div>
 
-<script>
-    function abrirPDF() {
-        const dialog = document.getElementById('pdfDialog');
-        const viewer = document.getElementById('pdfViewer') as HTMLIFrameElement;
-        if (dialog && viewer) {
-            dialog.classList.remove('hidden');
-            viewer.src = '/assets/historico_carburante.pdf';
-        }
-    }
+    <script is:inline>
+        function toggleRadio(id) {
+            const checkbox = document.getElementById(`checkDefault${id}`);
+            const radioContainer = document.getElementById(
+                `radioContainer${id}`,
+            );
+            const radio = document.getElementById(`radioNoLabel${id}`);
 
-    function cerrarPDF() {
-        const dialog = document.getElementById('pdfDialog');
-        const viewer = document.getElementById('pdfViewer') as HTMLIFrameElement;
-        if (dialog && viewer) {
-            dialog.classList.add('hidden');
-            viewer.src = '';
+            if (checkbox.checked) {
+                radioContainer.classList.remove("hidden");
+            } else {
+                radioContainer.classList.add("hidden");
+                radio.checked = false;
+                checkbox.disabled = false;
+            }
         }
-    }
-</script>
-</Layout> 
+
+        function disableCheckbox(id) {
+            const checkbox = document.getElementById(`checkDefault${id}`);
+            checkbox.disabled = true;
+        }
+    </script>
+
+    <script>
+        function abrirPDF() {
+            const dialog = document.getElementById("pdfDialog");
+            const viewer = document.getElementById(
+                "pdfViewer",
+            ) as HTMLIFrameElement;
+            if (dialog && viewer) {
+                dialog.classList.remove("hidden");
+                viewer.src = "/assets/historico_carburante.pdf";
+            }
+        }
+
+        function cerrarPDF() {
+            const dialog = document.getElementById("pdfDialog");
+            const viewer = document.getElementById(
+                "pdfViewer",
+            ) as HTMLIFrameElement;
+            if (dialog && viewer) {
+                dialog.classList.add("hidden");
+                viewer.src = "";
+            }
+        }
+    </script>
+</Layout>
+
