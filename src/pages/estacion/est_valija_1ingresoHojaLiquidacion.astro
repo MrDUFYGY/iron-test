@@ -16,6 +16,117 @@ import CustomPdfInput from "../../components/customInput/CustomPdfInput.svelte";
       Ingreso de Hoja de Liquidación
     </h2>
 
+    <!-- Tabla 1: Ventas de combustible -->
+    <div
+      class="overflow-x-auto border border-gray-300 rounded-lg shadow-sm mb-6"
+    >
+      <table class="min-w-full text-sm text-center text-gray-800">
+        <caption class="text-base font-semibold text-gray-900 py-2"
+          >Ventas de combustible</caption
+        >
+        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-2 font-medium">Devoluciones</th>
+            <th class="px-4 py-2 font-medium">Ventas Netas</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr>
+            <td class="px-4 py-2">0.00$</td>
+            <td class="px-4 py-2 text-green-600">271,706.94$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">0.00$</td>
+            <td class="px-4 py-2 text-green-600">31,532.61$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">0.00$</td>
+            <td class="px-4 py-2 text-green-600">95,154.41$</td>
+          </tr>
+        </tbody>
+        <tfoot class="bg-gray-50">
+          <tr>
+            <td class="px-4 py-2 font-semibold text-center"
+              >Total de carburante:</td
+            >
+            <td class="px-4 py-2 font-bold text-green-600 text-center"
+              >398,393.96$</td
+            >
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Tabla 2: Arqueos de caja -->
+    <div class="overflow-x-auto border border-gray-300 rounded-lg shadow-sm">
+      <table class="min-w-full text-sm text-center text-gray-800">
+        <caption class="text-base font-semibold text-gray-900 py-2"
+          >Arqueos de caja</caption
+        >
+        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-2 font-medium">Forma de cobro</th>
+            <th class="px-4 py-2 font-medium">Importe teórico</th>
+            <th class="px-4 py-2 font-medium">Recaudación</th>
+            <th class="px-4 py-2 font-medium">Diferencia</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr>
+            <td class="px-4 py-2">Efectivo</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-green-600">0.00$</td>
+            <td class="px-4 py-2 text-green-600">299.88$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-green-600">7,035.00$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-red-600">–23,715.48$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-green-600">0.00$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-green-600">0.52$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-red-600">–0.00$</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2">–</td>
+            <td class="px-4 py-2 text-green-600">16,388.64$</td>
+          </tr>
+        </tbody>
+        <tfoot class="bg-gray-50 font-bold">
+          <tr>
+            <td class="px-4 py-2 text-center text-black-600">Total:</td>
+            <td class="px-4 py-2 text-center text-green-600">139,022.97$</td>
+            <td class="px-4 py-2 text-center text-green-600">139,512,53$</td>
+            <td class="px-4 py-2 text-center text-green-600">8,565.00$</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <br />
+
     <!-- Input de archivo PDF con mejor diseño -->
     <div id="hl-contenedor-input" class="mb-6">
       <label
