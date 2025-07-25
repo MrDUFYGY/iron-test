@@ -2,11 +2,13 @@
 import "../../styles/menus.css";
 
 import Layout from "../../layouts/Layout.astro";
+import ScrollPanelButtons from "../../components/scroll/ScrollPanelButtons.astro";
 import Separador from "../../components/Separador.astro";
 import ProgressTracker from "../../components/ResumenProcesos/ProgressTracker.svelte";
 import ResumenProcesosModal from "../../components/ResumenProcesos/ResumenProcesosModal.svelte";
 import ResumenProcesosModal_Resumen from "../../components/ResumenProcesos/ResumenProcesosModal_Resumen.svelte";
 import MenuHerramientas from "../../components/MenuHerramientas.astro";
+import ScrollPanelButtons from "../../components/scroll/ScrollPanelButtons.astro";
 
 const resumenProcesos = {
   usuario: {
@@ -215,6 +217,7 @@ const items: MenuItem[] = [
     iconColor: "white",
     textColor: "white",
   },
+  
 ];
 ---
 
@@ -227,6 +230,10 @@ const items: MenuItem[] = [
       nombre: resumenProcesos.usuario.nombre,
     }}
   />
+  
+  <ScrollPanelButtons
+  scrollTargetId="observaciones-section"
+  scrollContainerId="left-panel"/>
 
   <div
     id="resizable-container"
@@ -237,7 +244,7 @@ const items: MenuItem[] = [
       style="width: 50%; height: 90dvh; overflow-y: auto; padding: 0px; scrollbar-width: thin; scrollbar-color: #333 #e0e0f0; position: relative;"
     >
       <div class="mx-auto bg-white rounded-xl shadow-md p-3">
-        <div class="flex items-center mb-6 w-full">
+        <div id="inicio-resumen" class="flex items-center mb-6 w-full">
           <h1 class="text-2xl font-bold uppercase">Resumen de Pólizas</h1>
           <ResumenProcesosModal
             data={JSON.stringify(resumenProcesos)}
@@ -246,22 +253,13 @@ const items: MenuItem[] = [
             buttonClass="ml-4 bg-gray-500 hover:bg-gray-600 text-white font-medium py-1.5 px-4 rounded transition"
           />
         </div>
-
         <form id="formulario" class="space-y-8">
           <div
             class="bg-white p-4 rounded-xl border border-gray-200 mb-6 shadow-sm"
           >
             <div
-              id="resumen-procesos-header"
-              class="cursor-pointer flex justify-between items-center p-3 rounded-lg hover:bg-gray-50"
-            >
-              <h2 class="font-bold text-gray-800">Resumen de procesos</h2>
-              <span id="resumen-procesos-icon" class="text-gray-500">▼</span>
-            </div>
-            <div
               id="resumen-procesos-content"
-              class="overflow-hidden transition-all duration-300 ease-in-out text-sm max-h-[1000px] pb-2"
-              style="max-height: 1000px;"
+              class="transition-all duration-300 ease-in-out text-sm pb-2"
             >
               {
                 resumenProcesos.procesos.map((proceso) => {
@@ -292,12 +290,16 @@ const items: MenuItem[] = [
             </div>
           </div>
 
-          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+          <div
+            id="observaciones-section"
+            class="bg-gray-50 p-4 rounded-xl border border-gray-200"
+          >
             <label
               for="observaciones"
               class="block font-medium text-sm mb-2 text-gray-800"
               >Observaciones:</label
             >
+            
             <textarea
               id="observaciones"
               class="w-full border border-gray-300 rounded p-2 text-sm"
@@ -321,7 +323,7 @@ const items: MenuItem[] = [
             </div>
           </div>
 
-          <div class="flex items-center justify-center bg-gray-100">
+          <div class="flex items-center justify-center bg-gray-100 relative">
             <a
               href="/estacion/boton_Master"
               class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300"
@@ -345,7 +347,7 @@ const items: MenuItem[] = [
     </div>
     <div
       id="modal-container"
-      style="flex: 1; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0;"
+      style="flex: 1; height: 100%; overflow-y: hidden; padding: 5px; background-color: #f0f0f0; position: relative;"
     >
       <div class="bg-white px-5 py-2 rounded-lg border border-gray-200">
         <h2 class="text-lg font-semibold">Menu de opciones.</h2>
@@ -367,25 +369,31 @@ const items: MenuItem[] = [
       <li>
         ● Botón "Subir": <kbd
           >Este botón solo aparece cuando aún no se ha realizado ninguna carga
-          de archivos.</kbd>
-      </li><br>
+          de archivos.</kbd
+        >
+      </li><br />
       <li>
         ● Botón "❯": <kbd
           >Este botón aparece únicamente después de haber realizado una carga de
-          archivos.</kbd>
-      </li> <br>
+          archivos.</kbd
+        >
+      </li>
+      <br />
       <li>
         ● Identificador "Pendiente": <kbd
-          >No se ha realizado ninguna carga de archivos.</kbd>
-      </li><br>
+          >No se ha realizado ninguna carga de archivos.</kbd
+        >
+      </li><br />
       <li>
         ● Identificador "Iniciado": <kbd
-          >Ya se han cargado algunos archivos, pero aún faltan por subir.</kbd>
-      </li><br>
+          >Ya se han cargado algunos archivos, pero aún faltan por subir.</kbd
+        >
+      </li><br />
       <li>
         ● Identificador "Realizado": <kbd
-          >Todos los archivos se han cargado correctamente.</kbd>
-      </li><br>
+          >Todos los archivos se han cargado correctamente.</kbd
+        >
+      </li><br />
     </ul>
   </div>
   <style>
@@ -491,73 +499,6 @@ const items: MenuItem[] = [
         maxWidth: 90,
       });
     });
-
-    // prueba
-    function initResumenProcesos() {
-      const header = document.getElementById("resumen-procesos-header");
-      const content = document.getElementById("resumen-procesos-content");
-      const icon = document.getElementById("resumen-procesos-icon");
-
-      if (!header || !content || !icon) return;
-
-      let isOpen = true;
-      content.style.maxHeight = content.scrollHeight + "px";
-      content.classList.add("pb-2");
-      icon.textContent = "▲";
-
-      header.addEventListener("click", () => {
-        isOpen = !isOpen;
-
-        if (isOpen) {
-          content.style.maxHeight = content.scrollHeight + "px";
-          content.classList.add("pb-2");
-          icon.textContent = "▲";
-        } else {
-          content.style.maxHeight = "0";
-          content.classList.remove("pb-2");
-          icon.textContent = "▼";
-        }
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      initResumenProcesos();
-    });
-
-    function calcularDiferencia() {
-      const importeTrasladoInput = document.getElementById("importeTraslado");
-      const importeResumenInput = document.getElementById("importeResumen");
-      const diferenciaInput = document.getElementById("diferencia");
-
-      if (!importeTrasladoInput || !importeResumenInput || !diferenciaInput)
-        return;
-
-      const importeTraslado = parseFloat(importeTrasladoInput.value) || 0;
-      const importeResumen = parseFloat(importeResumenInput.value) || 0;
-      const diferencia = importeTraslado - importeResumen;
-
-      diferenciaInput.value = diferencia.toFixed(2);
-
-      if (diferencia === 0) {
-        diferenciaInput.classList.remove("text-red-600", "text-green-600");
-        diferenciaInput.classList.add("text-gray-600");
-      } else if (diferencia > 0) {
-        diferenciaInput.classList.remove("text-red-600", "text-gray-600");
-        diferenciaInput.classList.add("text-green-600");
-      } else {
-        diferenciaInput.classList.remove("text-green-600", "text-gray-600");
-        diferenciaInput.classList.add("text-red-600");
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const importeTrasladoInput = document.getElementById("importeTraslado");
-      const importeResumenInput = document.getElementById("importeResumen");
-
-      if (importeTrasladoInput)
-        importeTrasladoInput.addEventListener("input", calcularDiferencia);
-      if (importeResumenInput)
-        importeResumenInput.addEventListener("input", calcularDiferencia);
-    });
   </script>
 </Layout>
+
