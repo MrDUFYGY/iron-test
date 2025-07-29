@@ -2,12 +2,12 @@
 import "../../styles/menus.css";
 
 import Layout from "../../layouts/Layout.astro";
-import ScrollPanelButtons from "../../components/scroll/ScrollPanelButtons.astro";
 import Separador from "../../components/Separador.astro";
 import ProgressTracker from "../../components/ResumenProcesos/ProgressTracker.svelte";
 import ResumenProcesosModal from "../../components/ResumenProcesos/ResumenProcesosModal.svelte";
 import ResumenProcesosModal_Resumen from "../../components/ResumenProcesos/ResumenProcesosModal_Resumen.svelte";
 import MenuHerramientas from "../../components/MenuHerramientas.astro";
+// Importar el boton
 import ScrollPanelButtons from "../../components/scroll/ScrollPanelButtons.astro";
 
 const resumenProcesos = {
@@ -217,7 +217,6 @@ const items: MenuItem[] = [
     iconColor: "white",
     textColor: "white",
   },
-  
 ];
 ---
 
@@ -230,8 +229,11 @@ const items: MenuItem[] = [
       nombre: resumenProcesos.usuario.nombre,
     }}
   />
+<<<<<<< HEAD
   
 
+=======
+>>>>>>> c867ce7 (Se ajusto el boton de los scroll)
 
   <div
     id="resizable-container"
@@ -300,7 +302,7 @@ const items: MenuItem[] = [
               class="block font-medium text-sm mb-2 text-gray-800"
               >Observaciones:</label
             >
-            
+
             <textarea
               id="observaciones"
               class="w-full border border-gray-300 rounded p-2 text-sm"
@@ -359,6 +361,12 @@ const items: MenuItem[] = [
       <MenuHerramientas items={items} />
     </div>
   </div>
+
+  <!-- Componente del boton para hacer scroll ↑ ↓  -->
+  <ScrollPanelButtons
+    scrollTargetId="observaciones-section"
+    scrollContainerId="left-panel"
+  />
 
   <!-- Círculo con el símbolo de pregunta -->
   <div class="help-circle">?</div>
@@ -502,4 +510,3 @@ const items: MenuItem[] = [
     });
   </script>
 </Layout>
-

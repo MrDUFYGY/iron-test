@@ -1,4 +1,4 @@
-<script lang="ts">
+resumen-procesos-content<script lang="ts">
   import { onMount } from 'svelte';
   import ProgressTracker from './ProgressTracker.svelte';
   
