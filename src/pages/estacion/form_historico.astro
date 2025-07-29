@@ -1,0 +1,134 @@
+---
+const { usuario } = Astro.props;
+---
+
+<div class="bg-gray-100 p-6 flex flex-col sm:py-12">
+  <ul class="list-none">
+    <li class="rounded-lg group cursor-pointer">
+      <div class="flex flex-row">
+        <div class="items-center flex flex-col justify-around">
+          <div class="border-l-2 h-full border-gray-400"></div>
+          <!-- Botón estilizado igual a burbuja verde con icono lápiz -->
+          <button
+          id="btnAbrirModal"
+          class="bg-green-400 border-2 border-gray-400 rounded-full h-8 w-8 flex justify-center items-center group-hover:bg-green-500 transition-colors"
+          aria-label="Abrir modal para enviar mensaje"
+          type="button"
+        >
+          <svg
+            class="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2z"
+            />
+          </svg>
+        </button>
+        
+          <div class="border-l-2 h-full border-gray-400"></div>
+        </div>
+        <div class="flex flex-col group-hover:bg-white ml-2 p-2 pr-6 rounded-xl transition-colors">
+          <div class="ml-4 text-xl font-medium">Primera incidencia</div>
+          <div class="ml-4 mb-2 text-xs">24 Oct 12:42 - 27 Oct 12:15</div>
+          <div class="ml-4 text-sm">Nóminas</div>
+        </div>
+      </div>
+    </li>
+    <!-- Puedes replicar más li aquí -->
+  </ul>
+</div>
+
+<!-- Modal -->
+<div
+  id="modal-mensaje"
+  class="hidden fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitulo"
+>
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+    <h2 id="modalTitulo" class="text-xl font-semibold mb-4">Enviar mensaje</h2>
+    <form id="form-mensaje">
+      <input type="hidden" id="inputDestinatario" name="destinatario" />
+      <input type="hidden" id="inputProceso" name="proceso" />
+
+      <label
+        for="inputMensaje"
+        class="block mb-1 font-medium text-sm text-gray-700"
+        >Mensaje</label
+      >
+      <textarea
+        id="inputMensaje"
+        name="mensaje"
+        rows="4"
+        class="w-full border border-gray-300 p-2 rounded-md mb-4 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+        placeholder="Escribe tu mensaje..."
+      ></textarea>
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          id="btnCancelarModal"
+          class="text-gray-600 hover:underline"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+        >
+          Enviar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btnAbrir = document.getElementById("btnAbrirModal");
+    const modal = document.getElementById("modal-mensaje");
+    const btnCancelar = document.getElementById("btnCancelarModal");
+    const formMensaje = document.getElementById("form-mensaje");
+    const inputDestinatario = document.getElementById("inputDestinatario") as HTMLInputElement | null;
+    const inputProceso = document.getElementById("inputProceso") as HTMLInputElement | null;
+    const inputMensaje = document.getElementById("inputMensaje") as HTMLTextAreaElement | null;
+
+    // Verificar que todos los elementos existen antes de continuar
+    if (!btnAbrir || !modal || !btnCancelar || !formMensaje || !inputDestinatario || !inputProceso || !inputMensaje) {
+      console.error('Algunos elementos del DOM no se encontraron');
+      return;
+    }
+
+    btnAbrir.addEventListener("click", () => {
+      // Aquí asigna los valores que quieras
+      inputDestinatario.value = "Juan Pérez";
+      inputProceso.value = "Nóminas";
+      inputMensaje.value = "";
+      modal.classList.remove("hidden");
+    });
+
+    btnCancelar.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+
+    formMensaje.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!inputMensaje.value.trim()) {
+        alert("Por favor, escribe un mensaje antes de enviar.");
+        return;
+      }
+
+      alert(
+        `Mensaje enviado a ${inputDestinatario.value} (Proceso: ${inputProceso.value}):\n\n${inputMensaje.value}`
+      );
+      modal.classList.add("hidden");
+    });
+  });
+</script>
